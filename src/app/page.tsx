@@ -1,10 +1,6 @@
-import Container from "@/components/container";
 import { Metadata } from "next";
 import { Hero } from "@/components/hero";
 import { Separator } from "@/components/ui/separator";
-
-import HeroImage from "@/assets/img/hero.png";
-import HeroProfile from "@/assets/img/profpic.png";
 import { Book, Info, GraduationCap, Server, Smartphone } from "lucide-react";
 import { EducationAndLinks } from "@/components/education";
 import { SelfHostedServices } from "@/components/selfhosted";

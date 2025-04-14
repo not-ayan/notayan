@@ -56,7 +56,7 @@ export default function AxionAOSP() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Recovery :</p>
-                    <p className="text-sm mt-2">Please extract the recovery from rom's payload with something like mt manager.</p>
+                    <p className="text-sm mt-2">Please extract the recovery from rom&apos;s payload with something like mt manager.</p>
                   </div>
                 </div>
 
@@ -196,7 +196,7 @@ export default function AxionAOSP() {
                           <li>Use the volume key to select Recovery and press power button to boot into recovery.</li>
                           <li>After recovery is shown,</li>
                           <li>Format data (must for those who are flashing for the first time or switching roms).</li>
-                          <li>Select the "Apply update" option.</li>
+                          <li>Select the &quot;Apply update&quot; option.</li>
                           <li>Select either ADB sideload or external storage sideload.
                             <ul className="list-disc list-inside ml-4 mt-1">
                               <li>For ADB, connect the phone to the PC, open the command prompt, and type &quot;adb sideload (select rom zip).&quot;</li>
