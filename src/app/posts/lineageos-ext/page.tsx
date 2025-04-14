@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Github, Plus, Info, Smartphone } from "lucide-react";
+import { ArrowLeft, Github, Plus, Info, Smartphone, Download } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
