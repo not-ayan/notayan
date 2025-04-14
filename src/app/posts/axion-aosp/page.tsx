@@ -157,7 +157,7 @@ export default function AxionAOSP() {
                         </div>
 
                         <div className="bg-muted/50 p-3 rounded-md text-sm">
-                          <strong>Note:</strong> Any slot must not be empty, means if u have ever used blankflash or flashed stock ROM using RSA then make sure u got any ota. Else don't flash.
+                          <strong>Note:</strong> Any slot must not be empty, means if u have ever used blankflash or flashed stock ROM using RSA then make sure u got any ota. Else don&apos;t flash.
                         </div>
 
                         <div>
@@ -199,7 +199,7 @@ export default function AxionAOSP() {
                           <li>Select the "Apply update" option.</li>
                           <li>Select either ADB sideload or external storage sideload.
                             <ul className="list-disc list-inside ml-4 mt-1">
-                              <li>For ADB, connect the phone to the PC, open the command prompt, and type "adb sideload (select rom zip)."</li>
+                              <li>For ADB, connect the phone to the PC, open the command prompt, and type &quot;adb sideload (select rom zip).&quot;</li>
                               <li>For external storage, select the file location and flash.</li>
                             </ul>
                           </li>
