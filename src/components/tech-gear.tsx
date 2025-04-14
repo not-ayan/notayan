@@ -46,7 +46,7 @@ export const TechGear = () => {
                 </li>
                 <li className="flex justify-between">
                   <span className="text-muted-foreground">Display</span>
-                  <span>6.5&quot; FHD+ 120Hz</span>
+                  <span>6.5" FHD+ 120Hz</span>
                 </li>
               </ul>
             </div>

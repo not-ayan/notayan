@@ -1,14 +1,31 @@
 "use client";
 
+import Container from "@/components/container";
 import { MoreVertical, ArrowLeft, Info, Smartphone } from "lucide-react";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Separator } from "@/components/ui/separator";
 import AxionThumb from "@/assets/img/axion.png";
 import LineageThumb from "@/assets/img/lineage.png";
 import { Button } from "@/components/ui/button";
 
-const pinnedPosts = [
+interface Post {
+  category: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  image: string | any;
+  href: string;
+  date: string;
+  author?: {
+    name: string;
+    image: string;
+    initials: string;
+  };
+}
+
+const pinnedPosts: Post[] = [
   {
     category: "Custom ROM",
     title: "AXION.md",
@@ -29,7 +46,7 @@ const pinnedPosts = [
   },
 ];
 
-const posts = [
+const posts: Post[] = [
   {
     category: "Typography",
     title: "Font Pairing Guide",
@@ -83,7 +100,7 @@ export default function Posts() {
                 href="/"
                 className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                <ArrowLeft className="size-4" />
+                <ArrowLeft className="size-4" aria-hidden="true" />
                 Back to home
               </Link>
             </Button>
@@ -94,7 +111,7 @@ export default function Posts() {
             <div className="w-full bg-background rounded-lg border border-border overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                  <Smartphone className="size-4" />
+                  <Smartphone className="size-4" aria-hidden="true" />
                   <span className="text-sm font-mono">PINNED.md</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-[80%]">
@@ -110,13 +127,14 @@ export default function Posts() {
                           <div className="relative w-[42px] h-[42px] bg-muted rounded-xl overflow-hidden flex-shrink-0">
                             <Image
                               src={post.image}
-                              alt={post.subtitle}
+                              alt={post.subtitle || post.title}
                               fill
                               className="object-cover"
+                              sizes="42px"
                             />
                           </div>
                           <div>
-                            <h3 className="font-medium text-base leading-none mb-1">{post.subtitle}</h3>
+                            <h3 className="font-medium text-base leading-none mb-1">{post.subtitle || post.title}</h3>
                             <span className="text-sm text-muted-foreground">5 days ago</span>
                           </div>
                         </div>
@@ -145,7 +163,7 @@ export default function Posts() {
             <div className="w-full bg-background rounded-lg border border-border overflow-hidden">
               <div className="p-6">
                 <div className="flex items-center gap-2 text-muted-foreground mb-4">
-                  <Info className="size-4" />
+                  <Info className="size-4" aria-hidden="true" />
                   <span className="text-sm font-mono">POSTS.md</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
@@ -157,7 +175,7 @@ export default function Posts() {
                       style={{ viewTransitionName: `post-${index}` }}
                     >
                       <div className="w-full flex items-center gap-3 text-muted-foreground px-3 py-1.5 border-b border-border">
-                        <Info className="size-4" />
+                        <Info className="size-4" aria-hidden="true" />
                         <span className="text-sm font-mono">INFO.md</span>
                       </div>
                       <div className="p-3 space-y-2">
@@ -167,6 +185,7 @@ export default function Posts() {
                             alt={post.title}
                             fill
                             className="object-cover"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                           />
                         </div>
                         <div>
@@ -177,16 +196,19 @@ export default function Posts() {
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
                             <Avatar className="size-4 sm:size-5">
-                              <AvatarImage src={post.author.image} alt={post.author.name} />
-                              <AvatarFallback>{post.author.initials}</AvatarFallback>
+                              <AvatarImage src={post.author?.image || ""} alt={post.author?.name || ""} />
+                              <AvatarFallback>{post.author?.initials || "AB"}</AvatarFallback>
                             </Avatar>
                             <div>
-                              <p className="text-xs font-medium">{post.author.name}</p>
+                              <p className="text-xs font-medium">{post.author?.name || "Ayan Biswas"}</p>
                               <p className="text-xs text-muted-foreground">{post.date}</p>
                             </div>
                           </div>
-                          <button className="opacity-0 group-hover:opacity-100">
-                            <MoreVertical className="size-4" />
+                          <button 
+                            className="opacity-0 group-hover:opacity-100"
+                            aria-label="More options"
+                          >
+                            <MoreVertical className="size-4" aria-hidden="true" />
                           </button>
                         </div>
                       </div>

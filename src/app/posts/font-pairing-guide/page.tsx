@@ -1,10 +1,12 @@
 "use client";
 
-import { ArrowLeft, Github, Plus, Info, Smartphone } from "lucide-react";
+import { ArrowLeft, Github, Download, Plus, Info, Smartphone } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import Image from "next/image";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default function FontPairingGuide() {
   return (
@@ -85,7 +87,7 @@ export default function FontPairingGuide() {
                 <div className="prose dark:prose-invert max-w-none">
                   <h2>Understanding Typeface Categories</h2>
                   <p>
-                    Before pairing fonts, it&apos;s important to understand the main typeface categories:
+                    Before pairing fonts, it's important to understand the main typeface categories:
                   </p>
                   <ul>
                     <li>Serif - Traditional, formal fonts with decorative strokes</li>

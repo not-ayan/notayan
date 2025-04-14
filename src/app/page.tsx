@@ -1,6 +1,10 @@
+import Container from "@/components/container";
 import { Metadata } from "next";
 import { Hero } from "@/components/hero";
 import { Separator } from "@/components/ui/separator";
+
+import HeroImage from "@/assets/img/hero.png";
+import HeroProfile from "@/assets/img/profpic.png";
 import { Book, Info, GraduationCap, Server, Smartphone } from "lucide-react";
 import { EducationAndLinks } from "@/components/education";
 import { SelfHostedServices } from "@/components/selfhosted";
@@ -36,7 +40,7 @@ export default function Home() {
                   <span className="text-sm font-mono">DESCRIPTION.md</span>
                 </h2>
                 <p className="px-5 py-3">
-                  I&apos;m not trying to sound all fancy here. Welcome to my personal site. I&apos;m Ayan Biswas, a graphic designer based in Assam, India. I&apos;m 22. For work inquiries, feel free to hit me up through my social media handles.
+                  I'm not trying to sound all fancy here. Welcome to my personal site. I'm Ayan Biswas, a graphic designer based in Assam, India. I'm 22. For work inquiries, feel free to hit me up through my social media handles.
                 </p>
               </div>
               <div className="w-full bg-background rounded-lg border border-border">

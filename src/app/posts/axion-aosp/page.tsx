@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Github, Plus, Info, Smartphone, Download } from "lucide-react";
+import { ArrowLeft, Github, Download, Plus, Info, Smartphone } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -56,7 +56,7 @@ export default function AxionAOSP() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Recovery :</p>
-                    <p className="text-sm mt-2">Please extract the recovery from rom&apos;s payload with something like mt manager.</p>
+                    <p className="text-sm mt-2">Please extract the recovery from rom's payload with something like mt manager.</p>
                   </div>
                 </div>
 
@@ -157,7 +157,7 @@ export default function AxionAOSP() {
                         </div>
 
                         <div className="bg-muted/50 p-3 rounded-md text-sm">
-                          <strong>Note:</strong> Any slot must not be empty, means if u have ever used blankflash or flashed stock ROM using RSA then make sure u got any ota. Else don&apos;t flash.
+                          <strong>Note:</strong> Any slot must not be empty, means if u have ever used blankflash or flashed stock ROM using RSA then make sure u got any ota. Else don't flash.
                         </div>
 
                         <div>
@@ -196,10 +196,10 @@ export default function AxionAOSP() {
                           <li>Use the volume key to select Recovery and press power button to boot into recovery.</li>
                           <li>After recovery is shown,</li>
                           <li>Format data (must for those who are flashing for the first time or switching roms).</li>
-                          <li>Select the &quot;Apply update&quot; option.</li>
+                          <li>Select the "Apply update" option.</li>
                           <li>Select either ADB sideload or external storage sideload.
                             <ul className="list-disc list-inside ml-4 mt-1">
-                              <li>For ADB, connect the phone to the PC, open the command prompt, and type &quot;adb sideload (select rom zip).&quot;</li>
+                              <li>For ADB, connect the phone to the PC, open the command prompt, and type "adb sideload (select rom zip)."</li>
                               <li>For external storage, select the file location and flash.</li>
                             </ul>
                           </li>
