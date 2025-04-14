@@ -3,6 +3,7 @@
 import ThemeToggleButton from "./ui/theme-toggle-button";
 import { Link } from "next-view-transitions";
 import { Button } from "./ui/button";
+import { PageContainer } from "./page-container";
 
 export interface FlatNavLinkProps {
   href: string;
@@ -30,25 +31,23 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="w-full flex justify-center">
-        <div className="w-[80%] lg:w-[60%]">
-          <div className="flex h-14 items-center">
-            <Link href="/" className="font-bold">
-              notayan.
-            </Link>
-            <div className="flex flex-1 items-center justify-end">
-              <nav className="flex items-center gap-2">
-                {links.map((link, index) => (
-                  <Button key={index} variant="ghost" asChild>
-                    <Link href={link.href}>{link.text}</Link>
-                  </Button>
-                ))}
-                <ThemeToggleButton variant="circle-blur" start="top-right" />
-              </nav>
-            </div>
+      <PageContainer>
+        <div className="flex h-14 items-center">
+          <Link href="/" className="font-bold">
+            notayan.
+          </Link>
+          <div className="flex flex-1 items-center justify-end">
+            <nav className="flex items-center gap-2">
+              {links.map((link, index) => (
+                <Button key={index} variant="ghost" asChild>
+                  <Link href={link.href}>{link.text}</Link>
+                </Button>
+              ))}
+              <ThemeToggleButton variant="circle-blur" start="top-right" />
+            </nav>
           </div>
         </div>
-      </div>
+      </PageContainer>
     </header>
   );
 }

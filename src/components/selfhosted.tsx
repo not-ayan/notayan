@@ -14,6 +14,7 @@ import {
   MessageCircleQuestion,
   ShoppingBag,
   Wallpaper,
+  ChevronRight,
 } from "lucide-react";
 import { ForwardRefExoticComponent, RefAttributes } from "react";
 
@@ -26,31 +27,45 @@ export function SelfHostItem(props: {
   sr: string;
   leftClassName?: string;
   rightClassName?: string;
+  hideChevronOnDesktop?: boolean;
 }) {
   return (
     <>
-      <div
-        className={cn(
-          "w-full px-5 py-3 gap-3 flex md:justify-start justify-center items-center",
-          props.leftClassName
-        )}
-      >
-        <props.icon className="size-5" />
-        <p>{props.title}</p>
+      <div className={cn(
+        "w-full flex items-center",
+        props.leftClassName
+      )}>
+        <a
+          href={props.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="w-full px-5 py-3 flex items-center justify-between hover:bg-muted/50 transition-colors group"
+        >
+          <div className="flex items-center gap-3">
+            <props.icon className="size-5" />
+            <p>{props.title}</p>
+          </div>
+          <ChevronRight className={cn(
+            "size-4 text-muted-foreground group-hover:translate-x-1 transition-transform",
+            props.hideChevronOnDesktop ? "md:hidden" : ""
+          )} />
+        </a>
       </div>
-      <a
-        className={cn(
-          "w-full px-5 py-3 bg-background text-foreground hover:bg-primary hover:text-primary-foreground transition-colors flex gap-3 items-center justify-center",
-          props.rightClassName
-        )}
-        href={props.url}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <Link className="size-5" />
-        <span>Visit Site</span>
-        <span className="sr-only">{props.sr}</span>
-      </a>
+      <div className={cn(
+        "hidden md:block",
+        props.rightClassName
+      )}>
+        <a
+          className="w-full px-5 py-3 bg-background text-foreground hover:bg-primary hover:text-primary-foreground transition-colors flex gap-3 items-center justify-center"
+          href={props.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Link className="size-5" />
+          <span>Visit Site</span>
+          <span className="sr-only">{props.sr}</span>
+        </a>
+      </div>
     </>
   );
 }
@@ -66,6 +81,7 @@ export function SelfHostedServices() {
           title="Wallwidgy"
           url="https://www.wallwidgy.me/"
           sr="Visit Wallwidgy"
+          hideChevronOnDesktop
         />
         <SelfHostItem
           icon={GalleryThumbnailsIcon}
@@ -74,6 +90,7 @@ export function SelfHostedServices() {
           title="Project Showcase"
           url="https://aleem.studio"
           sr="Visit Aleem Studio"
+          hideChevronOnDesktop
         />
         <SelfHostItem
           icon={ShoppingBag}
@@ -82,6 +99,7 @@ export function SelfHostedServices() {
           title="Something soon?"
           url=""
           sr="Visit Nothing"
+          hideChevronOnDesktop
         />
       </div>
     </div>

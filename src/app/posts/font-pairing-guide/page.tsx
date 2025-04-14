@@ -7,15 +7,19 @@ import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { PageContainer } from "@/components/page-container";
 
 export default function FontPairingGuide() {
   return (
-    <div className="w-full flex justify-center py-6">
-      <div className="w-[95%] lg:w-[60%] space-y-4">
-        <Button variant="ghost" className="gap-2 -ml-2" asChild>
-          <Link href="/posts">
-            <ArrowLeft className="size-4" />
-            Back
+    <PageContainer className="py-6">
+      <div className="space-y-4">
+        <Button variant="outline" className="gap-2 bg-background/50 hover:bg-background" asChild>
+          <Link
+            href="/posts"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+          >
+            <ArrowLeft className="size-4" aria-hidden="true" />
+            Back to posts
           </Link>
         </Button>
 
@@ -173,6 +177,6 @@ export default function FontPairingGuide() {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 } 

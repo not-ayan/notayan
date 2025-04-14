@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { Metadata } from "next";
+import { PageContainer } from "@/components/page-container";
 
 export const metadata: Metadata = {
   title: "Projects | Ayan Biswas",
@@ -11,8 +12,8 @@ export const metadata: Metadata = {
 
 export default function Projects() {
   return (
-    <div className="w-full flex justify-center py-6">
-      <div className="w-[80%] lg:w-[60%] space-y-4">
+    <PageContainer className="py-6">
+      <div className="space-y-4">
         <Button variant="ghost" className="gap-2 -ml-2" asChild>
           <Link href="/">
             <ArrowLeft className="size-4" />
@@ -40,6 +41,6 @@ export default function Projects() {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 } 
