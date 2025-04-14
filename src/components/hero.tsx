@@ -17,7 +17,7 @@ export function Hero() {
               Hey,
             </h1>
             <h1 className="text-5xl md:text-6xl font-light">
-              I'm Ayan Biswas
+              I&apos;m Ayan Biswas
             </h1>
           </div>
           
@@ -120,7 +120,7 @@ export function Hero() {
               Hey,
             </h1>
             <h1 className="text-3xl font-light">
-              I'm Ayan Biswas
+              I&apos;m Ayan Biswas
             </h1>
           </div>
           
