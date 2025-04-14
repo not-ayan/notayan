@@ -115,7 +115,7 @@ export default function Posts() {
                   <Smartphone className="size-4" aria-hidden="true" />
                   <span className="text-sm font-mono">PINNED.md</span>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-[80%]">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full sm:w-[80%]">
                   {pinnedPosts.map((post, index) => (
                     <Link
                       key={index}
