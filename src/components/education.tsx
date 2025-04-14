@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { MessageCircle, Paintbrush, Smartphone, Users, BellRing, Music, Image } from "lucide-react";
+import { Paintbrush, Smartphone, Users, BellRing, Music, Image } from "lucide-react";
 import { useState } from "react";
 import { Timeline } from "./Timeline";
 

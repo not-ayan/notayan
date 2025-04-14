@@ -6,7 +6,6 @@ import {
   Code2,
   Home,
   Info,
-  Newspaper,
   X,
   FileText,
 } from "lucide-react";
@@ -16,7 +15,6 @@ import Link from "next/link";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import Image from "next/image";
 import Hero from "@/assets/img/fab-hero.png";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 
 export function FAB() {
   const [open, setOpen] = useState(false);
