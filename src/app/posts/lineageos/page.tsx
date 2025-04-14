@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { CopyableCommand } from "@/components/ui/copyable-command";
 
-export default function AxionAOSP() {
+export default function LineageOS() {
   return (
     <div className="w-full flex justify-center py-6">
       <div className="w-[95%] lg:w-[60%] space-y-4">
@@ -27,7 +27,7 @@ export default function AxionAOSP() {
             </div>
             <div className="px-5 space-y-6">
               <div>
-                <h1 className="text-2xl font-bold">Axion AOSP</h1>
+                <h1 className="text-2xl font-bold">LineageOS</h1>
                 <p className="text-muted-foreground">for Motorola G54 (cancunf)</p>
               </div>
 
@@ -44,7 +44,7 @@ export default function AxionAOSP() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Release :</p>
-                    <p className="font-medium">monthly</p>
+                    <p className="font-medium">weekly</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Maintainer :</p>
@@ -99,7 +99,7 @@ export default function AxionAOSP() {
                 <div className="flex flex-col gap-3">
                   <Button variant="outline" className="w-full justify-between" asChild>
                     <a 
-                      href="https://github.com/Axion-AOSP" 
+                      href="https://github.com/LineageOS" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex items-center justify-between"
@@ -110,7 +110,7 @@ export default function AxionAOSP() {
                   </Button>
                   <Button variant="outline" className="w-full justify-between" asChild>
                     <a 
-                      href="https://github.com/yaap/ota-info/blob/full-signed/cancunf/Changelog.txt" 
+                      href="https://github.com/LineageOS/android_device_motorola_cancunf" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex items-center justify-between"
