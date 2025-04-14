@@ -4,6 +4,7 @@ import Container from "@/components/container";
 import { MoreVertical, ArrowLeft, Info, Smartphone } from "lucide-react";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
+import { StaticImageData } from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import AxionThumb from "@/assets/img/axion.png";
@@ -15,7 +16,7 @@ interface Post {
   title: string;
   subtitle?: string;
   description: string;
-  image: string | any;
+  image: string | StaticImageData;
   href: string;
   date: string;
   author?: {

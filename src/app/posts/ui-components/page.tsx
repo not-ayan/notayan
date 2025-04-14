@@ -101,7 +101,7 @@ export default function UIComponents() {
                     Popular component libraries to consider:
                   </p>
                   <ul>
-                    <li>Material UI - Google's design system</li>
+                    <li>Material UI - Google&apos;s design system</li>
                     <li>Tailwind UI - Utility-first components</li>
                     <li>Chakra UI - Accessible React components</li>
                     <li>Shadcn/ui - Customizable components</li>

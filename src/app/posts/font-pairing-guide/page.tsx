@@ -87,7 +87,7 @@ export default function FontPairingGuide() {
                 <div className="prose dark:prose-invert max-w-none">
                   <h2>Understanding Typeface Categories</h2>
                   <p>
-                    Before pairing fonts, it's important to understand the main typeface categories:
+                    Before pairing fonts, it&apos;s important to understand the main typeface categories:
                   </p>
                   <ul>
                     <li>Serif - Traditional, formal fonts with decorative strokes</li>

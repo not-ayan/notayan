@@ -7,13 +7,14 @@ import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Image from "next/image";
 import LineageOSImage from "@/assets/img/lineage.png";
+import { StaticImageData } from "next/image";
 
 interface Post {
   category: string;
   title: string;
   subtitle?: string;
   description: string;
-  image: string | any;
+  image: string | StaticImageData;
   href: string;
   date: string;
   author?: {

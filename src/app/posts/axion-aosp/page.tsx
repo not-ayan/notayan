@@ -56,7 +56,7 @@ export default function AxionAOSP() {
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Recovery :</p>
-                    <p className="text-sm mt-2">Please extract the recovery from rom's payload with something like mt manager.</p>
+                    <p className="text-sm mt-2">Please extract the recovery from rom&apos;s payload with something like mt manager.</p>
                   </div>
                 </div>
 
