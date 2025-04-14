@@ -1,11 +1,9 @@
 "use client";
 
-import Container from "@/components/container";
 import { MoreVertical, ArrowLeft, Info, Smartphone } from "lucide-react";
 import { Link } from "next-view-transitions";
 import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Separator } from "@/components/ui/separator";
 import AxionThumb from "@/assets/img/axion.png";
 import LineageThumb from "@/assets/img/lineage.png";
 import { Button } from "@/components/ui/button";
