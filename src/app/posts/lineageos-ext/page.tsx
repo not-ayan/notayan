@@ -139,6 +139,13 @@ export default function LineageOSExt() {
                       <li>Reboot</li>
                     </ol>
                   </div>
+
+                  <div className="flex items-center justify-between pt-2">
+                    <span className="text-base font-medium">Download</span>
+                    <Button variant="default" size="sm" className="h-9 px-4 rounded-xl">
+                      Download
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
