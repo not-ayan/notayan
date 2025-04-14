@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "./ui/button";
-import { MessageCircle, Paintbrush, Smartphone, Users, BellRing, Music, Image } from "lucide-react";
+import { MessageCircle, Paintbrush, Smartphone, Users, BellRing, Music, Image as ImageIcon } from "lucide-react";
 import { useState } from "react";
 import { Timeline } from "./Timeline";
 
@@ -20,20 +20,20 @@ export const EducationAndLinks = () => {
           onClick={() => setIsDesignOpen(!isDesignOpen)}
         >
           <div className="flex items-center gap-2">
-            <Paintbrush className="size-4" />
+            <Paintbrush className="size-4" aria-hidden="true" />
             <span className="font-semibold">Design Community</span>
           </div>
         </Button>
         <div className={`${isDesignOpen ? '' : 'hidden'} p-5 space-y-3`}>
           <Button variant="outline" size="sm" className="gap-2 w-full justify-start" asChild>
             <a href="https://t.me/designverse_zero" target="_blank" rel="noopener noreferrer">
-              <BellRing className="size-4" />
+              <BellRing className="size-4" aria-hidden="true" />
               Channel Updates
             </a>
           </Button>
           <Button variant="outline" size="sm" className="gap-2 w-full justify-start" asChild>
             <a href="https://t.me/designverse_chat" target="_blank" rel="noopener noreferrer">
-              <Users className="size-4" />
+              <Users className="size-4" aria-hidden="true" />
               Community Chat
             </a>
           </Button>
@@ -47,20 +47,20 @@ export const EducationAndLinks = () => {
           onClick={() => setIsRomsOpen(!isRomsOpen)}
         >
           <div className="flex items-center gap-2">
-            <Smartphone className="size-4" />
+            <Smartphone className="size-4" aria-hidden="true" />
             <span className="font-semibold">ROMs & Support</span>
           </div>
         </Button>
         <div className={`${isRomsOpen ? '' : 'hidden'} p-5 space-y-3`}>
           <Button variant="outline" size="sm" className="gap-2 w-full justify-start" asChild>
             <a href="https://t.me/ayan_builds" target="_blank" rel="noopener noreferrer">
-              <BellRing className="size-4" />
+              <BellRing className="size-4" aria-hidden="true" />
               ROM Updates
             </a>
           </Button>
           <Button variant="outline" size="sm" className="gap-2 w-full justify-start" asChild>
             <a href="https://t.me/ayanot69" target="_blank" rel="noopener noreferrer">
-              <Users className="size-4" />
+              <Users className="size-4" aria-hidden="true" />
               Support Chat
             </a>
           </Button>
@@ -69,14 +69,14 @@ export const EducationAndLinks = () => {
 
       <Button variant="outline" className="gap-2 w-full justify-start py-6" asChild>
         <a href="https://t.me/ayandumps_music" target="_blank" rel="noopener noreferrer">
-          <Music className="size-4" />
+          <Music className="size-4" aria-hidden="true" />
           <span>Music Collection</span>
         </a>
       </Button>
 
       <Button variant="outline" className="gap-2 w-full justify-start py-6" asChild>
         <a href="https://t.me/wallwidgy" target="_blank" rel="noopener noreferrer">
-          <Image className="size-4" />
+          <ImageIcon className="size-4" aria-hidden="true" />
           <span>Wallpaper Collection</span>
         </a>
       </Button>
