@@ -99,7 +99,7 @@ export default function AxionAOSP() {
                 <div className="flex flex-col gap-3">
                   <Button variant="outline" className="w-full justify-between" asChild>
                     <a 
-                      href="https://github.com/Axion-AOSP" 
+                      href="https://github.com/AxionAOSP/axion_changelogs" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex items-center justify-between"
