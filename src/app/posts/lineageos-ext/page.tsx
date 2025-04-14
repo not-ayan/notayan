@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import Image from "next/image";
-import LineageOSImage from "@/public/images/lineageos.png";
+import LineageOSImage from "@/assets/img/lineage.png";
 
 interface Post {
   category: string;
