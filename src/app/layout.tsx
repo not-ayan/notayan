@@ -20,10 +20,10 @@ export const metadata: Metadata = {
     default: "notayan.",
     template: "%s | notayan.",
   },
-  description: "Stuffs I put.",
+  description: "Definetly not a developer.",
   metadataBase: new URL(
     process.env.NODE_ENV === "production"
-      ? "https://irvanma.eu.org"
+      ? "https://notayan.studio"
       : "http://localhost:3000"
   ),
   openGraph: {
@@ -31,14 +31,23 @@ export const metadata: Metadata = {
       default: "notayan.",
       template: "%s | notayan.",
     },
-    description: "Stuffs I put.",
+    description: "Definetly not a developer.",
     type: "website",
     locale: "en_US",
+    images: [
+      {
+        url: "/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: "notayan. - Personal Website",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    site: "@irvanmalik48",
-    creator: "@irvanmalik48",
+    site: "@notayan99",
+    creator: "@notayan99",
+    images: ["/opengraph-image.png"],
   },
   icons: {
     apple: "/apple-touch-icon.png",
