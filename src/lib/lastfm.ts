@@ -37,6 +37,27 @@ interface LastFMStats {
   weeklyPlaycount?: string;
 }
 
+// Add specific interfaces for API responses
+interface LastFMRecentTrack {
+  name: string;
+  artist: {
+    "#text": string;
+  };
+  url: string;
+  "@attr"?: {
+    nowplaying: "true" | "false";
+  };
+}
+
+interface LastFMTopTrack {
+  name: string;
+  artist: {
+    name: string;
+  };
+  url: string;
+  playcount: string;
+}
+
 async function getRecentTrack(): Promise<LastFMTrack | null> {
   try {
     const response = await fetch(
@@ -98,14 +119,19 @@ export async function getLastFMStats(): Promise<LastFMStats | null> {
       ).then((res) => res.json()),
     ]);
 
-    const recentTracksList = recentTracks?.recenttracks?.track?.map((track: any) => ({
+    const recentTracksList = recentTracks?.recenttracks?.track?.map((track: LastFMRecentTrack) => ({
       name: track.name,
       artist: track.artist,
       url: track.url,
       "@attr": track["@attr"],
     }));
     const topArtist = topArtists?.topartists?.artist?.[0];
-    const topTracksList = topTracks?.toptracks?.track;
+    const topTracksList = topTracks?.toptracks?.track?.map((track: LastFMTopTrack) => ({
+      name: track.name,
+      artist: track.artist,
+      url: track.url,
+      playcount: track.playcount,
+    }));
     const weeklyPlaycount = weeklyChart?.weeklytrackchart?.["@attr"]?.total;
 
     return {
@@ -116,16 +142,11 @@ export async function getLastFMStats(): Promise<LastFMStats | null> {
         playcount: topArtist.playcount,
         url: topArtist.url,
       } : undefined,
-      topTracks: topTracksList?.map((track: any) => ({
-        name: track.name,
-        artist: track.artist,
-        url: track.url,
-        playcount: track.playcount,
-      })),
+      topTracks: topTracksList,
       weeklyPlaycount,
     };
   } catch (error) {
     console.error("Error fetching LastFM stats:", error);
     return null;
   }
-} 
+}

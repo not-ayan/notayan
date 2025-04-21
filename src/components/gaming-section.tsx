@@ -57,7 +57,7 @@ export function GamingSection() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-3">
                   <h3 className="text-white text-base font-medium">Clash of Clans</h3>
-                  <p className="text-slate-300 text-xs">Supercell's strategy game</p>
+                  <p className="text-slate-300 text-xs">Supercell&apos;s strategy game</p>
                 </div>
               </div>
             </div>
