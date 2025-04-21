@@ -79,7 +79,7 @@ export const TechGear = () => {
                 </li>
                 <li className="flex justify-between">
                   <span className="text-muted-foreground">RAM</span>
-                  <span>8GB DDR4 2666MHz</span>
+                  <span>16GB DDR4 3200MHz</span>
                 </li>
                 <li className="flex justify-between">
                   <span className="text-muted-foreground">Storage</span>

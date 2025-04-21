@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { SiteLoader } from "@/components/site-loader";
+import { PageTransition } from "@/components/page-transition";
 
 interface ClientLayoutProps {
   children: React.ReactNode;
@@ -9,18 +10,22 @@ interface ClientLayoutProps {
 
 export function ClientLayout({ children }: ClientLayoutProps) {
   const [isLoading, setIsLoading] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1300); // Slightly longer than loader duration to ensure smooth transition
+    }, 1300);
 
     return () => clearTimeout(timer);
   }, []);
 
+  if (!isMounted) return null;
+
   return (
     <>
-      <SiteLoader onLoadComplete={() => setIsLoading(false)} />
+      {isLoading && <SiteLoader onLoadComplete={() => setIsLoading(false)} />}
       {!isLoading && children}
     </>
   );

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Logo from "@/assets/img/logo.svg";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface SiteLoaderProps {
   onLoadComplete?: () => void;
@@ -29,14 +30,21 @@ export function SiteLoader({ onLoadComplete }: SiteLoaderProps) {
   if (!isVisible) return null;
 
   return (
-    <div 
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-background transition-opacity duration-300 ${
-        !isLoading ? "opacity-0" : "opacity-100"
-      }`}
+    <motion.div 
+      initial={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-background"
     >
-      <div className={`transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        !isLoading ? "opacity-0 scale-[0.98]" : "opacity-100 scale-100"
-      }`}>
+      <motion.div 
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ 
+          duration: 0.5,
+          ease: [0.22, 1, 0.36, 1]
+        }}
+      >
         <div className="w-[180px] h-[75px] relative">
           <Image
             src={Logo}
@@ -46,7 +54,7 @@ export function SiteLoader({ onLoadComplete }: SiteLoaderProps) {
             priority
           />
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 } 
