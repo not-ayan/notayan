@@ -73,6 +73,7 @@ export function Hero() {
               fill
               className="object-cover"
               priority
+              sizes="500px"
             />
             <div className="absolute top-1/2 -translate-y-1/2 right-8">
               <div className="relative w-[120px] aspect-square overflow-hidden rounded-full border-4 border-background">
@@ -82,6 +83,7 @@ export function Hero() {
                   fill
                   className="object-cover"
                   priority
+                  sizes="120px"
                 />
               </div>
             </div>
@@ -99,6 +101,7 @@ export function Hero() {
               fill
               className="object-cover"
               priority
+              sizes="(max-width: 768px) 100vw, 500px"
             />
           </div>
           <div className="absolute left-1/2 -translate-x-1/2 -bottom-12">
@@ -109,6 +112,7 @@ export function Hero() {
                 fill
                 className="object-cover"
                 priority
+                sizes="100px"
               />
             </div>
           </div>

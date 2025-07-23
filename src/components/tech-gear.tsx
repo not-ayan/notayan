@@ -1,6 +1,6 @@
 "use client";
 
-import { Smartphone, Laptop, Headphones, Keyboard, Cpu, Microchip, ChevronDown } from "lucide-react";
+import { Smartphone, Laptop, Headphones, Keyboard, Cpu, Microchip, ChevronDown, Mouse } from "lucide-react";
 import { useState } from "react";
 
 export const TechGear = () => {
@@ -13,7 +13,7 @@ export const TechGear = () => {
   return (
     <div className="p-0">
       <div className="space-y-2">
-        <h3 className="px-5 py-3 text-sm font-medium text-muted-foreground">Current Devices</h3>
+        <h3 className="px-5 py-3 text-sm font-medium text-muted-foreground border-b border-border">Current Devices</h3>
         <div className="grid">
           <button 
             onClick={() => toggleDevice('phone')}
@@ -91,7 +91,7 @@ export const TechGear = () => {
 
           <button 
             onClick={() => toggleDevice('server')}
-            className="flex items-center justify-between w-full px-5 py-3 hover:bg-muted/50 transition-colors border-b border-border"
+            className="flex items-center justify-between w-full px-5 py-3 hover:bg-muted/50 transition-colors"
           >
             <div className="flex items-center gap-3">
               <div className="p-2 rounded-md bg-muted/50">
@@ -99,13 +99,15 @@ export const TechGear = () => {
               </div>
               <div>
                 <p className="font-medium">HP 245 G7</p>
-                <p className="text-sm text-muted-foreground">Home Server</p>
               </div>
             </div>
             <ChevronDown className={`size-4 text-muted-foreground transition-transform ${expandedDevice === 'server' ? 'rotate-180' : ''}`} />
           </button>
           {expandedDevice === 'server' && (
-            <div className="px-5 py-3 border-b border-border bg-muted/5">
+            <div className="px-5 py-3 bg-muted/5">
+              <div className="mb-2 text-xs text-muted-foreground italic">
+                Currently used as Home Server
+              </div>
               <ul className="space-y-2 text-sm">
                 <li className="flex justify-between">
                   <span className="text-muted-foreground">CPU</span>
@@ -121,7 +123,7 @@ export const TechGear = () => {
                 </li>
                 <li className="flex justify-between">
                   <span className="text-muted-foreground">OS</span>
-                  <span>Ubuntu Server 22.04 LTS</span>
+                  <span>Arch + hyprland</span>
                 </li>
               </ul>
             </div>
@@ -130,7 +132,7 @@ export const TechGear = () => {
       </div>
 
       <div className="mt-2">
-        <h3 className="px-5 py-3 text-sm font-medium text-muted-foreground">Current Gear</h3>
+        <h3 className="px-5 py-3 text-sm font-medium text-muted-foreground border-t border-b border-border">Current Gear</h3>
         <div className="grid">
           <div className="flex items-center gap-3 px-5 py-3 hover:bg-muted/50 transition-colors border-b border-border">
             <div className="p-2 rounded-md bg-muted/50">
@@ -159,6 +161,16 @@ export const TechGear = () => {
             <div>
               <p className="font-medium">Aula F75</p>
               <p className="text-sm text-muted-foreground">75% Wireless Gasket Mounted Keyboard</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3 px-5 py-3 hover:bg-muted/50 transition-colors">
+            <div className="p-2 rounded-md bg-muted/50">
+              <Mouse className="size-4 text-muted-foreground" />
+            </div>
+            <div>
+              <p className="font-medium">Ant Esports GM810 Pro</p>
+              <p className="text-sm text-muted-foreground">Tri-connectivity Wireless Mouse</p>
             </div>
           </div>
         </div>

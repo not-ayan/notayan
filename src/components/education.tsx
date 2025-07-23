@@ -61,21 +61,41 @@ export const EducationAndLinks = () => {
             </Button>
           </AccordionContent>
         </AccordionItem>
+
+        <AccordionItem value="music" className="border-0">
+          <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-muted/50 rounded-lg border">
+            <div className="flex items-center gap-2">
+              <Music className="size-4" aria-hidden="true" />
+              <span className="font-semibold">Music Collection</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="pt-2 space-y-2">
+            <Button variant="outline" size="sm" className="gap-2 w-full justify-start" asChild>
+              <a href="https://t.me/ayandumps_music" target="_blank" rel="noopener noreferrer">
+                <Music className="size-4" aria-hidden="true" />
+                Music Collection
+              </a>
+            </Button>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="wallpapers" className="border-0">
+          <AccordionTrigger className="px-4 py-4 hover:no-underline hover:bg-muted/50 rounded-lg border">
+            <div className="flex items-center gap-2">
+              <ImageIcon className="size-4" aria-hidden="true" />
+              <span className="font-semibold">Wallpaper Collection</span>
+            </div>
+          </AccordionTrigger>
+          <AccordionContent className="pt-2 space-y-2">
+            <Button variant="outline" size="sm" className="gap-2 w-full justify-start" asChild>
+              <a href="https://t.me/wallwidgy" target="_blank" rel="noopener noreferrer">
+                <ImageIcon className="size-4" aria-hidden="true" />
+                Wallpaper Collection
+              </a>
+            </Button>
+          </AccordionContent>
+        </AccordionItem>
       </Accordion>
-
-      <Button variant="outline" className="gap-2 w-full justify-start py-4" asChild>
-        <a href="https://t.me/ayandumps_music" target="_blank" rel="noopener noreferrer">
-          <Music className="size-4" aria-hidden="true" />
-          <span>Music Collection</span>
-        </a>
-      </Button>
-
-      <Button variant="outline" className="gap-2 w-full justify-start py-4" asChild>
-        <a href="https://t.me/wallwidgy" target="_blank" rel="noopener noreferrer">
-          <ImageIcon className="size-4" aria-hidden="true" />
-          <span>Wallpaper Collection</span>
-        </a>
-      </Button>
     </div>
   );
 }; 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, Github, Download, Plus, Info, Smartphone } from "lucide-react";
+import { ArrowLeft, Github, Download, Plus, Info, Smartphone, Loader2, FileDown } from "lucide-react";
 import { Link } from "next-view-transitions";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -10,6 +10,7 @@ import Image from "next/image";
 import AxionImage from "@/assets/img/axion.png";
 import { StaticImageData } from "next/image";
 import { PageContainer } from "@/components/page-container";
+import { useAxionData, formatFileSize, formatDate, parseChangelog } from "@/hooks/useAxionData";
 
 interface Post {
   category: string;
@@ -27,6 +28,41 @@ interface Post {
 }
 
 export default function AxionAOSP() {
+  const { data: axionData, isLoading, error } = useAxionData();
+  const changelog = axionData ? parseChangelog(axionData.changelog) : null;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <PageContainer>
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="size-4 animate-spin" />
+              <span>Loading Axion data...</span>
+            </div>
+          </div>
+        </PageContainer>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <PageContainer>
+          <div className="flex items-center justify-center min-h-[50vh]">
+            <div className="text-center">
+              <p className="text-muted-foreground mb-4">Failed to load Axion data</p>
+              <Button variant="outline" onClick={() => window.location.reload()}>
+                Retry
+              </Button>
+            </div>
+          </div>
+        </PageContainer>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <PageContainer>
@@ -52,32 +88,110 @@ export default function AxionAOSP() {
                 <span className="text-sm font-mono">INFO.md</span>
               </div>
               <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="relative w-[42px] h-[42px] bg-muted rounded-xl overflow-hidden flex-shrink-0">
-                    <Image
-                      src={AxionImage}
-                      alt="Axion AOSP"
-                      fill
-                      className="object-cover"
-                      sizes="42px"
-                    />
+                {/* Desktop Layout: Side by side, Mobile: Stacked */}
+                <div className="flex flex-col lg:flex-row lg:items-center lg:gap-8">
+                  {/* Left side: ROM Info */}
+                  <div className="flex-1 space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-[42px] h-[42px] bg-muted rounded-xl overflow-hidden flex-shrink-0">
+                        <Image
+                          src={AxionImage}
+                          alt="Axion AOSP"
+                          fill
+                          className="object-cover"
+                          sizes="42px"
+                        />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-base leading-none mb-1">
+                          Axion AOSP {axionData?.gms?.version ? `v${axionData.gms.version}` : 'v1.6'}
+                        </h3>
+                        <span className="text-sm text-muted-foreground">
+                          Build Date: {axionData?.gms ? formatDate(axionData.gms.datetime) : '08/07/2025'}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      <span className="text-sm bg-secondary/30 px-3 py-1 rounded-lg">Android 15</span>
+                      <span className="text-sm bg-secondary/30 px-3 py-1 rounded-lg">Official</span>
+                    </div>
                   </div>
-                  <div>
-                    <h3 className="font-medium text-base leading-none mb-1">Axion AOSP</h3>
-                    <span className="text-sm text-muted-foreground">Latest Build</span>
-                  </div>
-                </div>
-                
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-sm bg-secondary/30 px-3 py-1 rounded-lg">Custom ROM</span>
-                  <span className="text-sm bg-secondary/30 px-3 py-1 rounded-lg">Android 15</span>
+
+                  {/* Right side: Version Banner */}
+                  {axionData?.bannerUrl && (
+                    <div className="lg:flex-1 lg:max-w-md mt-6 lg:mt-0">
+                      <div className="relative w-full aspect-[2/1] max-h-32 rounded-xl overflow-hidden">
+                        <Image
+                          src={axionData.bannerUrl}
+                          alt={`Axion AOSP ${axionData?.gms?.version || axionData?.vanilla?.version || 'v1.6'} Banner`}
+                          fill
+                          className="object-cover object-top"
+                          priority
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                        />
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                <div className="flex items-center justify-between pt-2">
-                  <span className="text-base font-medium">Download</span>
-                  <Button variant="default" size="sm" className="h-9 px-4 rounded-xl">
-                    Download
-                  </Button>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border border-blue-200/50 dark:border-blue-800/30 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                        <FileDown className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                      </div>
+                      <div>
+                        <span className="text-base font-semibold text-blue-900 dark:text-blue-100">Download GMS</span>
+                        <p className="text-xs text-blue-600 dark:text-blue-300">
+                          {axionData?.gms ? formatFileSize(axionData.gms.size) : '2.07 GB'} • With Google Services
+                        </p>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="default" 
+                      size="sm" 
+                      className="h-10 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 group" 
+                      asChild
+                    >
+                      <Link 
+                        href={axionData?.gms?.url || "#"} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <Download className="h-4 w-4 mr-2 group-hover:animate-bounce" />
+                        Download
+                      </Link>
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20 border border-green-200/50 dark:border-green-800/30 rounded-xl">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/20">
+                        <FileDown className="h-4 w-4 text-green-600 dark:text-green-400" />
+                      </div>
+                      <div>
+                        <span className="text-base font-semibold text-green-900 dark:text-green-100">Download Vanilla</span>
+                        <p className="text-xs text-green-600 dark:text-green-300">
+                          {axionData?.vanilla ? formatFileSize(axionData.vanilla.size) : '1.62 GB'} • Pure Android Experience
+                        </p>
+                      </div>
+                    </div>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-10 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 group" 
+                      asChild
+                    >
+                      <Link 
+                        href={axionData?.vanilla?.url || "#"} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                      >
+                        <Download className="h-4 w-4 mr-2 group-hover:animate-bounce" />
+                        Download
+                      </Link>
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -93,16 +207,39 @@ export default function AxionAOSP() {
                 <span className="text-sm font-mono">CHANGELOGS.md</span>
               </div>
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Changelogs</h3>
-                <div className="flex gap-3">
+                <div>
+                  <h3 className="text-lg font-medium mb-3">
+                    {changelog?.version || 'AxionAosp v1.6'} Changelog
+                  </h3>
+                  <div className="text-sm text-muted-foreground mb-2">
+                    {changelog?.credits || 'Credits: @cyberknight777 & @sarthakroy2002'}
+                  </div>
+                  <div className="bg-muted/30 p-4 rounded-lg space-y-2 text-sm">
+                    {changelog?.items?.map((item, index) => (
+                      <div 
+                        key={index}
+                        className={item.toLowerCase().includes('important') ? 'text-red-500 font-medium' : ''}
+                      >
+                        • {item}
+                      </div>
+                    )) || (
+                      <>
+                        <div className="text-red-500 font-medium">• [IMPORTANT] To be able to seamlessly update to Android 15 Firmware based Axion 2.x, you must update to this build!</div>
+                        <div>• Drop ATCI service as it is useless.</div>
+                        <div>• Enable hide cutout emulations for full screen within games.</div>
+                        <div>• Silence HWUI logspam.</div>
+                        <div>• Fixed an issue where Google Lens crashed in Moto Camera.</div>
+                        <div>• Implement dynamic sensors HAL for peripherals that support head-tracking.</div>
+                        <div>• Fixed an issue where DriveDroid stopped working.</div>
+                        <div>• Add symlinks for UFS preloader boot regions to support A/B OTA updates.</div>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="flex gap-3 pt-2">
                   <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl" asChild>
                     <Link href="https://github.com/AxionAOSP/axion_changelogs" target="_blank" rel="noopener noreferrer">
                       Source Changelog
-                    </Link>
-                  </Button>
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl" asChild>
-                    <Link href="https://github.com/yaap/ota-info/blob/full-signed/cancunf/Changelog.txt" target="_blank" rel="noopener noreferrer">
-                      Device Changelog
                     </Link>
                   </Button>
                 </div>
