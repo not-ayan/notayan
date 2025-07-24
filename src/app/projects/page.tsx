@@ -1,25 +1,19 @@
 // Add animation styles for project transitions
 // You can move these to your global CSS if preferred
 "use client";
+
+// Subtle fade animation for project transitions (optimized)
 const style = `
 @layer utilities {
-  .animate-fade-slide-left {
-    animation: fadeSlideLeft 0.35s cubic-bezier(0.4,0,0.2,1);
+  .animate-fade-project {
+    animation: fadeProject 0.18s cubic-bezier(0.4,0,0.2,1);
   }
-  .animate-fade-slide-right {
-    animation: fadeSlideRight 0.35s cubic-bezier(0.4,0,0.2,1);
-  }
-  @keyframes fadeSlideLeft {
-    0% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateX(-40px); }
-  }
-  @keyframes fadeSlideRight {
-    0% { opacity: 1; transform: translateX(0); }
-    100% { opacity: 0; transform: translateX(40px); }
+  @keyframes fadeProject {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
   }
 }
 `;
-
 if (typeof window !== 'undefined' && !document.getElementById('project-anim-style')) {
   const s = document.createElement('style');
   s.id = 'project-anim-style';
@@ -155,21 +149,21 @@ export default function Projects() {
   const currentFeatured = featuredProjects[currentProject] || featuredProjects[0];
 
   const nextProject = () => {
-    setProjectAnim("fade-slide-left");
+    setProjectAnim("fade-project");
     setTimeout(() => {
       setCurrentProject((prev) => (prev + 1) % featuredProjects.length);
       setCurrentScreenshot(0);
       setProjectAnim("");
-    }, 350);
+    }, 180);
   };
 
   const prevProject = () => {
-    setProjectAnim("fade-slide-right");
+    setProjectAnim("fade-project");
     setTimeout(() => {
       setCurrentProject((prev) => (prev - 1 + featuredProjects.length) % featuredProjects.length);
       setCurrentScreenshot(0);
       setProjectAnim("");
-    }, 350);
+    }, 180);
   };
 
   const nextScreenshot = () => {
@@ -224,8 +218,8 @@ export default function Projects() {
 
               {/* Featured Project Display */}
               {currentFeatured && (
-                <div className={`flex flex-col xl:flex-row gap-8 md:gap-12 mb-8 md:mb-12 min-h-[340px] xl:min-h-[420px] transition-all duration-500 ${
-                  projectAnim === "fade-slide-left" ? "animate-fade-slide-left" : projectAnim === "fade-slide-right" ? "animate-fade-slide-right" : ""
+                <div className={`flex flex-col xl:flex-row gap-8 md:gap-12 mb-8 md:mb-12 min-h-[340px] xl:min-h-[420px] transition-all duration-300 ${
+                  projectAnim ? "animate-fade-project" : ""
                 }`}>
                   {/* Project Preview with Screenshots */}
                   <div className="relative flex-1 min-w-0 flex items-stretch rounded-2xl overflow-hidden order-2 xl:order-1">
