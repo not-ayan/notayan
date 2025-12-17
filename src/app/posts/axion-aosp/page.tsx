@@ -1,64 +1,39 @@
 "use client";
 
-import { ArrowLeft, Github, Download, Plus, Info, Smartphone, Loader2, FileDown } from "lucide-react";
-import { Link } from "next-view-transitions";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { CopyableCommand } from "@/components/ui/copyable-command";
+import Link from "next/link";
 import Image from "next/image";
-import AxionImage from "@/assets/img/axion.png";
-import { StaticImageData } from "next/image";
+import { Button } from "@/components/ui/button";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { ArrowLeft, Download, Github, Info, Plus, Smartphone } from "lucide-react";
 import { PageContainer } from "@/components/page-container";
 import { useAxionData, formatFileSize, formatDate, parseChangelog } from "@/hooks/useAxionData";
-
-interface Post {
-  category: string;
-  title: string;
-  subtitle?: string;
-  description: string;
-  image: string | StaticImageData;
-  href: string;
-  date: string;
-  author?: {
-    name: string;
-    image: string;
-    initials: string;
-  };
-}
+import AxionImage from "@/assets/img/axion.png";
+import { CopyableCommand } from "@/components/ui/copyable-command";
 
 export default function AxionAOSP() {
-  const { data: axionData, isLoading, error } = useAxionData();
-  const changelog = axionData ? parseChangelog(axionData.changelog) : null;
+  const { data: axionData, loading, error } = useAxionData();
+  const changelog = axionData?.changelog ? parseChangelog(axionData.changelog) : null;
 
-  if (isLoading) {
+  if (loading) {
     return (
-      <div className="min-h-screen bg-background">
-        <PageContainer>
-          <div className="flex items-center justify-center min-h-[50vh]">
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Loader2 className="size-4 animate-spin" />
-              <span>Loading Axion data...</span>
-            </div>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]" role="status">
+            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">Loading...</span>
           </div>
-        </PageContainer>
+          <p className="mt-4 text-sm text-muted-foreground">Loading Axion AOSP data...</p>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-background">
-        <PageContainer>
-          <div className="flex items-center justify-center min-h-[50vh]">
-            <div className="text-center">
-              <p className="text-muted-foreground mb-4">Failed to load Axion data</p>
-              <Button variant="outline" onClick={() => window.location.reload()}>
-                Retry
-              </Button>
-            </div>
-          </div>
-        </PageContainer>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <p className="text-sm text-red-500">Failed to load Axion AOSP data</p>
+          <p className="mt-2 text-xs text-muted-foreground">{error}</p>
+        </div>
       </div>
     );
   }
@@ -67,130 +42,193 @@ export default function AxionAOSP() {
     <div className="min-h-screen bg-background">
       <PageContainer>
         {/* Page Title */}
-        <div className="mb-6 pt-8 pb-4">
-          <Button variant="outline" className="gap-2 bg-background/50 hover:bg-background" asChild>
+        <div className="mb-8 pt-8 pb-4">
+          <Button variant="ghost" className="gap-2 mb-6 hover:bg-accent/50 -ml-2" asChild>
             <Link
               href="/posts"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
               <ArrowLeft className="size-4" aria-hidden="true" />
               Back to posts
             </Link>
           </Button>
+          
+          {/* Hero Banner */}
+          {axionData?.bannerUrl && (
+            <div className="relative w-full aspect-[3/1] max-h-[240px] rounded-xl overflow-hidden border border-border/60 mb-6">
+              <Image
+                src={axionData.bannerUrl}
+                alt={`Axion AOSP ${axionData?.gms?.version || 'v2.2.1'} Banner`}
+                fill
+                className="object-cover object-center opacity-90"
+                priority
+                sizes="(max-width: 1024px) 100vw, 1024px"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+              <div className="absolute bottom-5 left-5 right-5 md:bottom-6 md:left-6 md:right-6">
+                <h1 className="text-2xl md:text-3xl font-semibold text-white mb-1.5">
+                  Axion AOSP {axionData?.gms?.version ? `v${axionData.gms.version}` : 'v2.2.1'}
+                </h1>
+                <p className="text-white/80 text-xs md:text-sm">
+                  Official Build for Moto G54 (cancunf) • {axionData?.gms ? formatDate(axionData.gms.datetime) : 'December 13, 2025'}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Device Info */}
-        <div className="mb-8">
-          <div className="w-full bg-background rounded-lg border border-border overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center gap-2 text-muted-foreground mb-4">
+        <div className="mb-6">
+          <div className="w-full bg-card rounded-xl border border-border/60 overflow-hidden">
+            <div className="p-5 md:p-6">
+              <div className="flex items-center gap-2 text-muted-foreground mb-5">
                 <Smartphone className="size-4" aria-hidden="true" />
-                <span className="text-sm font-mono">INFO.md</span>
+                <span className="text-xs font-mono">DEVICE_INFO.md</span>
               </div>
-              <div className="space-y-4">
-                {/* Desktop Layout: Side by side, Mobile: Stacked */}
-                <div className="flex flex-col lg:flex-row lg:items-center lg:gap-8">
-                  {/* Left side: ROM Info */}
-                  <div className="flex-1 space-y-4">
-                    <div className="flex items-center gap-3">
-                      <div className="relative w-[42px] h-[42px] bg-muted rounded-xl overflow-hidden flex-shrink-0">
-                        <Image
-                          src={AxionImage}
-                          alt="Axion AOSP"
-                          fill
-                          className="object-cover"
-                          sizes="42px"
-                        />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-base leading-none mb-1">
-                          Axion AOSP {axionData?.gms?.version ? `v${axionData.gms.version}` : 'v1.6'}
-                        </h3>
-                        <span className="text-sm text-muted-foreground">
-                          Build Date: {axionData?.gms ? formatDate(axionData.gms.datetime) : '08/07/2025'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-wrap gap-2">
-                      <span className="text-sm bg-secondary/30 px-3 py-1 rounded-lg">Android 15</span>
-                      <span className="text-sm bg-secondary/30 px-3 py-1 rounded-lg">Official</span>
+              <div className="space-y-5">
+                <div className="flex items-center gap-3.5">
+                  <div className="relative w-[48px] h-[48px] bg-muted rounded-xl overflow-hidden flex-shrink-0">
+                    <Image
+                      src={AxionImage}
+                      alt="Axion AOSP"
+                      fill
+                      className="object-cover p-2"
+                      sizes="48px"
+                    />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-lg md:text-xl leading-none mb-1.5">
+                      Axion AOSP {axionData?.gms?.version ? `v${axionData.gms.version}` : 'v2.2.1'}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-2.5 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1.5">
+                        <div className="w-1 h-1 rounded-full bg-foreground/40" />
+                        Moto G54 (cancunf)
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <div className="w-1 h-1 rounded-full bg-foreground/40" />
+                        {axionData?.gms ? formatDate(axionData.gms.datetime) : 'December 13, 2025'}
+                      </span>
                     </div>
                   </div>
-
-                  {/* Right side: Version Banner */}
-                  {axionData?.bannerUrl && (
-                    <div className="lg:flex-1 lg:max-w-md mt-6 lg:mt-0">
-                      <div className="relative w-full aspect-[2/1] max-h-32 rounded-xl overflow-hidden">
-                        <Image
-                          src={axionData.bannerUrl}
-                          alt={`Axion AOSP ${axionData?.gms?.version || axionData?.vanilla?.version || 'v1.6'} Banner`}
-                          fill
-                          className="object-cover object-top"
-                          priority
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                        />
-                      </div>
-                    </div>
-                  )}
+                </div>
+                
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-xs bg-muted/60 border border-border/40 px-3 py-1.5 rounded-lg">
+                    Android 15
+                  </span>
+                  <span className="text-xs bg-muted/60 border border-border/40 px-3 py-1.5 rounded-lg">
+                    Official Build
+                  </span>
+                  <span className="text-xs bg-muted/60 border border-border/40 px-3 py-1.5 rounded-lg">
+                    OTA Supported
+                  </span>
                 </div>
 
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-blue-100/50 dark:from-blue-950/30 dark:to-blue-900/20 border border-blue-200/50 dark:border-blue-800/30 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-blue-500/10 border border-blue-500/20">
-                        <FileDown className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <div className="grid md:grid-cols-2 gap-3 mt-5">
+                  {/* GMS Download Card */}
+                  <div className="group rounded-xl bg-muted/30 border border-border/60 hover:border-border transition-all duration-200">
+                    <div className="p-4 md:p-5">
+                      <div className="flex items-center gap-2.5 mb-4">
+                        <div className="p-2 rounded-lg bg-foreground/5">
+                          <Download className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-sm">GMS Build</h4>
+                          <p className="text-xs text-muted-foreground">With Google Services</p>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-base font-semibold text-blue-900 dark:text-blue-100">Download GMS</span>
-                        <p className="text-xs text-blue-600 dark:text-blue-300">
-                          {axionData?.gms ? formatFileSize(axionData.gms.size) : '2.07 GB'} • With Google Services
-                        </p>
+                      
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">File Size</span>
+                          <span className="font-mono font-medium">
+                            {axionData?.gms ? formatFileSize(axionData.gms.size) : '2.09 GB'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">Version</span>
+                          <span className="font-mono font-medium">
+                            {axionData?.gms?.version || '2.2.1'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">Build Type</span>
+                          <span className="px-2 py-0.5 rounded bg-foreground/5 text-xs">
+                            OFFICIAL
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <Button 
-                      variant="default" 
-                      size="sm" 
-                      className="h-10 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 group" 
-                      asChild
-                    >
-                      <Link 
-                        href={axionData?.gms?.url || "#"} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
+                      
+                      <Button 
+                        size="sm"
+                        className="w-full h-9 rounded-lg font-medium" 
+                        asChild
                       >
-                        <Download className="h-4 w-4 mr-2 group-hover:animate-bounce" />
-                        Download
-                      </Link>
-                    </Button>
+                        <Link 
+                          href={axionData?.gms?.url || "#"} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Download className="h-3.5 w-3.5" />
+                          Download GMS
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-green-100/50 dark:from-green-950/30 dark:to-green-900/20 border border-green-200/50 dark:border-green-800/30 rounded-xl">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 rounded-lg bg-green-500/10 border border-green-500/20">
-                        <FileDown className="h-4 w-4 text-green-600 dark:text-green-400" />
+
+                  {/* Vanilla Download Card */}
+                  <div className="group rounded-xl bg-muted/30 border border-border/60 hover:border-border transition-all duration-200">
+                    <div className="p-4 md:p-5">
+                      <div className="flex items-center gap-2.5 mb-4">
+                        <div className="p-2 rounded-lg bg-foreground/5">
+                          <Download className="h-4 w-4" />
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-sm">Vanilla Build</h4>
+                          <p className="text-xs text-muted-foreground">Pure AOSP Experience</p>
+                        </div>
                       </div>
-                      <div>
-                        <span className="text-base font-semibold text-green-900 dark:text-green-100">Download Vanilla</span>
-                        <p className="text-xs text-green-600 dark:text-green-300">
-                          {axionData?.vanilla ? formatFileSize(axionData.vanilla.size) : '1.62 GB'} • Pure Android Experience
-                        </p>
+                      
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">File Size</span>
+                          <span className="font-mono font-medium">
+                            {axionData?.vanilla ? formatFileSize(axionData.vanilla.size) : '1.65 GB'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">Version</span>
+                          <span className="font-mono font-medium">
+                            {axionData?.vanilla?.version || '2.2.1'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between text-xs">
+                          <span className="text-muted-foreground">Build Type</span>
+                          <span className="px-2 py-0.5 rounded bg-foreground/5 text-xs">
+                            OFFICIAL
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-10 px-6 rounded-xl bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white border-0 shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 group" 
-                      asChild
-                    >
-                      <Link 
-                        href={axionData?.vanilla?.url || "#"} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
+                      
+                      <Button 
+                        size="sm"
+                        variant="outline"
+                        className="w-full h-9 rounded-lg font-medium" 
+                        asChild
                       >
-                        <Download className="h-4 w-4 mr-2 group-hover:animate-bounce" />
-                        Download
-                      </Link>
-                    </Button>
+                        <Link 
+                          href={axionData?.vanilla?.url || "#"} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2"
+                        >
+                          <Download className="h-3.5 w-3.5" />
+                          Download Vanilla
+                        </Link>
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -199,47 +237,61 @@ export default function AxionAOSP() {
         </div>
 
         {/* Changelogs */}
-        <div className="mb-8">
-          <div className="w-full bg-background rounded-lg border border-border overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center gap-2 text-muted-foreground mb-4">
+        <div className="mb-6">
+          <div className="w-full bg-card rounded-xl border border-border/60 overflow-hidden">
+            <div className="p-5 md:p-6">
+              <div className="flex items-center gap-2 text-muted-foreground mb-5">
                 <Info className="size-4" aria-hidden="true" />
-                <span className="text-sm font-mono">CHANGELOGS.md</span>
+                <span className="text-xs font-mono">CHANGELOG.md</span>
               </div>
               <div className="space-y-4">
                 <div>
-                  <h3 className="text-lg font-medium mb-3">
-                    {changelog?.version || 'AxionAosp v1.6'} Changelog
-                  </h3>
-                  <div className="text-sm text-muted-foreground mb-2">
-                    {changelog?.credits || 'Credits: @cyberknight777 & @sarthakroy2002'}
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-base md:text-lg font-semibold">
+                      {changelog?.version || 'AxionAosp v2.2.1'} Changelog
+                    </h3>
+                    <span className="text-[10px] font-mono text-muted-foreground bg-muted/60 px-2.5 py-1 rounded-md">
+                      {changelog?.buildDate || 'Build Date: 14/12/2025'}
+                    </span>
                   </div>
-                  <div className="bg-muted/30 p-4 rounded-lg space-y-2 text-sm">
-                    {changelog?.items?.map((item, index) => (
-                      <div 
-                        key={index}
-                        className={item.toLowerCase().includes('important') ? 'text-red-500 font-medium' : ''}
-                      >
-                        • {item}
-                      </div>
-                    )) || (
+                  
+                  <div className="flex items-center gap-1.5 mb-3 text-xs">
+                    <span className="text-muted-foreground">Credits:</span>
+                    <span className="font-medium">
+                      {changelog?.credits || '@cyberknight777 & @sarthakroy2002'}
+                    </span>
+                  </div>
+                  
+                  <div className="bg-muted/30 border border-border/40 p-4 rounded-lg space-y-2">
+                    {changelog?.items && changelog.items.length > 0 ? (
+                      changelog.items.map((item, index) => (
+                        <div 
+                          key={index}
+                          className="flex items-start gap-2 text-xs md:text-sm leading-relaxed"
+                        >
+                          <span className="text-muted-foreground mt-1 flex-shrink-0">•</span>
+                          <span>{item}</span>
+                        </div>
+                      ))
+                    ) : (
                       <>
-                        <div className="text-red-500 font-medium">• [IMPORTANT] To be able to seamlessly update to Android 15 Firmware based Axion 2.x, you must update to this build!</div>
-                        <div>• Drop ATCI service as it is useless.</div>
-                        <div>• Enable hide cutout emulations for full screen within games.</div>
-                        <div>• Silence HWUI logspam.</div>
-                        <div>• Fixed an issue where Google Lens crashed in Moto Camera.</div>
-                        <div>• Implement dynamic sensors HAL for peripherals that support head-tracking.</div>
-                        <div>• Fixed an issue where DriveDroid stopped working.</div>
-                        <div>• Add symlinks for UFS preloader boot regions to support A/B OTA updates.</div>
+                        <div className="flex items-start gap-2 text-xs md:text-sm leading-relaxed">
+                          <span className="text-muted-foreground mt-1 flex-shrink-0">•</span>
+                          <span>Update Wi-Fi HAL interfaces combination to match MediaTek BSP behaviour.</span>
+                        </div>
+                        <div className="flex items-start gap-2 text-xs md:text-sm leading-relaxed">
+                          <span className="text-muted-foreground mt-1 flex-shrink-0">•</span>
+                          <span>Kernel state at r2a1.</span>
+                        </div>
                       </>
                     )}
                   </div>
                 </div>
-                <div className="flex gap-3 pt-2">
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl" asChild>
-                    <Link href="https://github.com/AxionAOSP/axion_changelogs" target="_blank" rel="noopener noreferrer">
-                      Source Changelog
+                <div className="pt-1">
+                  <Button variant="outline" size="sm" className="h-8 px-4 rounded-lg text-xs" asChild>
+                    <Link href="https://github.com/AxionAOSP/axion_changelogs" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
+                      <Github className="size-3.5" />
+                      <span>View Full Changelog</span>
                     </Link>
                   </Button>
                 </div>
@@ -249,58 +301,67 @@ export default function AxionAOSP() {
         </div>
 
         {/* Instructions */}
-        <div className="mb-8">
-          <div className="w-full bg-background rounded-lg border border-border overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center gap-2 text-muted-foreground mb-4">
+        <div className="mb-6">
+          <div className="w-full bg-card rounded-xl border border-border/60 overflow-hidden">
+            <div className="p-5 md:p-6">
+              <div className="flex items-center gap-2 text-muted-foreground mb-5">
                 <Info className="size-4" aria-hidden="true" />
-                <span className="text-sm font-mono">INSTRUCTIONS.md</span>
+                <span className="text-xs font-mono">INSTALLATION.md</span>
               </div>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <Collapsible>
                   <CollapsibleTrigger className="w-full">
-                    <Button variant="outline" className="w-full justify-between p-4 group" asChild>
+                    <Button variant="ghost" className="w-full justify-between p-4 group rounded-lg hover:bg-muted/50 transition-all" asChild>
                       <div className="flex items-center justify-between">
-                        <span className="font-semibold">Steps to flash Custom Roms:</span>
+                        <span className="font-medium text-sm">Steps to Flash Custom ROM</span>
                         <Plus className="size-4 transition-transform group-data-[state=open]:rotate-45" />
                       </div>
                     </Button>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <div className="p-4 space-y-4 mt-2 border rounded-md bg-muted/30">
-                      <div>
-                        <h5 className="font-medium mb-2">Required Firmware:</h5>
-                        <p className="text-sm">Android 14 U1TD34M.94-12-7 or newer</p>
+                    <div className="px-4 pb-4 space-y-4 mt-2">
+                      <div className="bg-muted/40 border border-border/40 p-3 rounded-lg">
+                        <div className="flex items-start gap-2">
+                          <div className="mt-0.5 text-xs">⚠️</div>
+                          <div>
+                            <h5 className="font-medium text-xs mb-1">Required Firmware</h5>
+                            <p className="text-xs text-muted-foreground">
+                              Android 14 U1TD34M.94-12-7 or newer
+                            </p>
+                          </div>
+                        </div>
                       </div>
 
                       <div>
-                        <h5 className="font-medium mb-2">Steps:</h5>
-                        <ol className="list-decimal list-inside text-sm space-y-1">
-                          <li>Unlock the bootloader.</li>
-                          <li>Enable USB debugging.</li>
+                        <h5 className="font-medium text-xs mb-2">Prerequisites</h5>
+                        <ol className="list-decimal list-inside text-xs space-y-1.5 ml-2 text-muted-foreground">
+                          <li>Unlock the bootloader</li>
+                          <li>Enable USB debugging in Developer Options</li>
                         </ol>
                       </div>
 
-                      <div className="bg-muted/50 p-3 rounded-md text-sm">
-                        <strong>Note:</strong> Any slot must not be empty, means if u have ever used blankflash or flashed stock ROM using RSA then make sure u got any ota. Else don&apos;t flash.
+                      <div className="bg-muted/40 border border-border/40 p-3 rounded-lg">
+                        <strong className="text-xs block mb-1">Important Note:</strong>
+                        <p className="text-xs text-muted-foreground leading-relaxed">
+                          Any slot must not be empty. If you have ever used blankflash or flashed stock ROM using RSA, make sure you got any OTA update. Otherwise don&apos;t flash.
+                        </p>
                       </div>
 
                       <div>
-                        <h5 className="font-medium mb-2">To flash custom recovery:</h5>
-                        <ol className="list-decimal list-inside text-sm space-y-1">
-                          <li>Connect your phone to the PC.</li>
-                          <li>Power off the device.</li>
-                          <li>Press the volume down and power buttons simultaneously to enter fastboot mode.</li>
-                          <li>Open the command prompt.</li>
-                          <li>Execute following commands
+                        <h5 className="font-medium text-xs mb-2">Flash Custom Recovery</h5>
+                        <ol className="list-decimal list-inside text-xs space-y-2 ml-2 text-muted-foreground">
+                          <li>Connect your phone to the PC</li>
+                          <li>Power off the device</li>
+                          <li>Press <strong>volume down</strong> + <strong>power</strong> to enter fastboot</li>
+                          <li>Open the command prompt or terminal</li>
+                          <li>
+                            Execute the following commands:
                             <CopyableCommand 
-                              command="fastboot reboot fastboot\nfastboot flash vendor_boot vendor_boot.img" 
-                              className="mt-1"
+                              command="fastboot reboot fastboot&#10;fastboot flash vendor_boot vendor_boot.img" 
+                              className="mt-2"
                             />
-                            <p className="text-xs text-muted-foreground mt-1">(attach vendor_boot.img in place of vendor_boot.img)</p>
                           </li>
-                          <li>Press Enter.</li>
-                          <li>Done</li>
+                          <li>Wait for the process to complete</li>
                         </ol>
                       </div>
                     </div>
@@ -309,37 +370,49 @@ export default function AxionAOSP() {
 
                 <Collapsible>
                   <CollapsibleTrigger className="w-full">
-                    <Button variant="outline" className="w-full justify-between p-4 group" asChild>
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-sm sm:text-base truncate max-w-[80%]">For sideloading zip files (e.g. Magisk, custom ROM):</span>
+                    <Button variant="ghost" className="w-full justify-between p-4 group rounded-lg hover:bg-muted/50 transition-all" asChild>
+                      <div className="flex items-center justify-between gap-4">
+                        <span className="font-medium text-sm text-left">Sideload ROM via ADB</span>
                         <Plus className="size-4 flex-shrink-0 transition-transform group-data-[state=open]:rotate-45" />
                       </div>
                     </Button>
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <div className="p-4 space-y-4 mt-2 border rounded-md bg-muted/30">
-                      <p className="text-sm mb-2">After flashing recovery,</p>
-                      <ol className="list-decimal list-inside text-sm space-y-1">
-                        <li>Enter fastboot mode.</li>
-                        <li>Use the volume key to select Recovery and press power button to boot into recovery.</li>
-                        <li>After recovery is shown,</li>
-                        <li>Format data (must for those who are flashing for the first time or switching roms).</li>
-                        <li>Select the &quot;Apply update&quot; option.</li>
-                        <li className="space-y-2">
-                          <span>Select either ADB sideload or external storage sideload.</span>
-                          <ul className="list-disc list-inside ml-4 space-y-2">
-                            <li className="space-y-2">
-                              <span>For ADB, connect the phone to the PC, open the command prompt, and type:</span>
+                    <div className="px-4 pb-4 space-y-4 mt-2">
+                      <ol className="list-decimal list-inside text-xs space-y-2.5 ml-2 text-muted-foreground">
+                        <li>Enter fastboot mode</li>
+                        <li>Use <strong>volume keys</strong> to select <strong>Recovery</strong> and press <strong>power</strong></li>
+                        <li>After recovery is shown, proceed to next steps</li>
+                        <li>
+                          <div className="bg-muted/40 border border-border/40 p-2 rounded-lg mt-1.5">
+                            <strong className="text-xs">Format Data</strong>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">
+                              Required for first time or when switching ROMs
+                            </p>
+                          </div>
+                        </li>
+                        <li>Select the <strong>&quot;Apply update&quot;</strong> option</li>
+                        <li>
+                          <span className="block mb-2">Select either method:</span>
+                          <div className="space-y-2 ml-4">
+                            <div className="bg-muted/40 border border-border/40 p-2.5 rounded-lg">
+                              <h6 className="font-medium text-xs mb-1.5">Option A: ADB Sideload</h6>
+                              <p className="text-[10px] text-muted-foreground mb-2">Connect phone to PC and run:</p>
                               <CopyableCommand 
-                                command="adb sideload rom.zip" 
+                                command="adb sideload axion-2.2.1-NIGHTLY-20251213-OFFICIAL-GMS-cancunf.zip" 
                                 className="mt-1"
                               />
-                              <p className="text-xs text-muted-foreground mt-1">(replace rom.zip with your actual ROM filename)</p>
-                            </li>
-                            <li>For external storage, select the file location and flash.</li>
-                          </ul>
+                            </div>
+                            <div className="bg-muted/40 border border-border/40 p-2.5 rounded-lg">
+                              <h6 className="font-medium text-xs mb-1">Option B: External Storage</h6>
+                              <p className="text-[10px] text-muted-foreground">
+                                Navigate to ROM file location and select it to flash
+                              </p>
+                            </div>
+                          </div>
                         </li>
-                        <li>Reboot the device.</li>
+                        <li>Wait for installation to complete</li>
+                        <li>Reboot and enjoy Axion AOSP</li>
                       </ol>
                     </div>
                   </CollapsibleContent>
@@ -351,23 +424,55 @@ export default function AxionAOSP() {
 
         {/* Support */}
         <div>
-          <div className="w-full bg-background rounded-lg border border-border overflow-hidden">
-            <div className="p-6">
-              <div className="flex items-center gap-2 text-muted-foreground mb-4">
+          <div className="w-full bg-card rounded-xl border border-border/60 overflow-hidden">
+            <div className="p-5 md:p-6">
+              <div className="flex items-center gap-2 text-muted-foreground mb-5">
                 <Info className="size-4" aria-hidden="true" />
-                <span className="text-sm font-mono">SUPPORT.md</span>
+                <span className="text-xs font-mono">SUPPORT.md</span>
               </div>
               <div className="space-y-4">
-                <h3 className="text-lg font-medium">Support Development</h3>
-                <div className="flex gap-3">
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl" asChild>
-                    <Link href="https://paypal.me/ayanbiswas" target="_blank" rel="noopener noreferrer">
-                      PayPal
+                <div>
+                  <h3 className="text-base md:text-lg font-semibold mb-1.5">Support Development</h3>
+                  <p className="text-muted-foreground text-xs md:text-sm">
+                    Consider supporting the developers to keep the project alive.
+                  </p>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-9 px-4 rounded-lg" 
+                    asChild
+                  >
+                    <Link href="https://paypal.me/ayanbiswas" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
+                      <svg className="size-3.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.77.77 0 0 1 .76-.633h8.42c2.985 0 5.037 1.462 5.302 3.874.165 1.518-.226 2.747-.975 3.65-.732.884-1.831 1.49-3.17 1.76-1.044.21-2.19.315-3.416.315H9.93l-.76 4.89a.651.651 0 0 1-.644.532zm3.124-12.31h1.665c1.37 0 2.438-.21 3.088-.606.65-.397.93-1.02.818-1.843-.113-.823-.713-1.222-1.78-1.222H9.784l-.584 3.671z"/>
+                      </svg>
+                      <span className="text-xs font-medium">PayPal</span>
                     </Link>
                   </Button>
-                  <Button variant="outline" size="sm" className="h-9 px-4 rounded-xl" asChild>
-                    <Link href="https://upi.com/ayanbiswas" target="_blank" rel="noopener noreferrer">
-                      UPI
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-9 px-4 rounded-lg" 
+                    asChild
+                  >
+                    <Link href="https://upi.com/ayanbiswas" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
+                      <svg className="size-3.5" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.5 14h-17A1.5 1.5 0 0 0 2 15.5v3A1.5 1.5 0 0 0 3.5 20h17a1.5 1.5 0 0 0 1.5-1.5v-3a1.5 1.5 0 0 0-1.5-1.5zm-17-4h17A1.5 1.5 0 0 0 22 8.5v-3A1.5 1.5 0 0 0 20.5 4h-17A1.5 1.5 0 0 0 2 5.5v3A1.5 1.5 0 0 0 3.5 10z"/>
+                      </svg>
+                      <span className="text-xs font-medium">UPI</span>
+                    </Link>
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-9 px-4 rounded-lg" 
+                    asChild
+                  >
+                    <Link href="https://github.com/AxionAOSP" target="_blank" rel="noopener noreferrer" className="flex items-center gap-1.5">
+                      <Github className="size-3.5" />
+                      <span className="text-xs font-medium">GitHub</span>
                     </Link>
                   </Button>
                 </div>
@@ -378,4 +483,4 @@ export default function AxionAOSP() {
       </PageContainer>
     </div>
   );
-} 
+}

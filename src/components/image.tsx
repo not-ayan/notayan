@@ -31,6 +31,7 @@ export function ImageComponent({
         fill={fill}
         width={!fill ? width : undefined}
         height={!fill ? height : undefined}
+        unoptimized
         {...props}
       />
     </div>
