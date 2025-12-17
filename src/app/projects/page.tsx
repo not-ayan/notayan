@@ -358,6 +358,7 @@ export default function Projects() {
                       <div className="absolute inset-0 z-0 bg-gradient-to-br from-primary/30 via-background/60 to-primary/10" />
                       {/* Main Screenshot Display fills height */}
                       <div className="relative w-full h-full min-h-[320px] xl:min-h-[420px] flex items-center justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={currentFeatured.screenshots[currentScreenshot] || currentFeatured.image}
                           alt={`${currentFeatured.title} - Screenshot ${currentScreenshot + 1}`}
@@ -593,6 +594,7 @@ export default function Projects() {
                       <div className="relative bg-background/80 backdrop-blur-xl hover:bg-background/90 rounded-2xl border border-border/50 hover:border-border/80 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/10 hover:-translate-y-1 h-full flex flex-col">
                         {/* Project Screenshot */}
                         <div className="relative w-full aspect-[4/3] overflow-hidden flex-shrink-0">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={project.image}
                             alt={project.title}

@@ -11,10 +11,10 @@ import AxionImage from "@/assets/img/axion.png";
 import { CopyableCommand } from "@/components/ui/copyable-command";
 
 export default function AxionAOSP() {
-  const { data: axionData, loading, error } = useAxionData();
+  const { data: axionData, isLoading, error } = useAxionData();
   const changelog = axionData?.changelog ? parseChangelog(axionData.changelog) : null;
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
@@ -32,7 +32,7 @@ export default function AxionAOSP() {
       <div className="flex min-h-screen items-center justify-center">
         <div className="text-center">
           <p className="text-sm text-red-500">Failed to load Axion AOSP data</p>
-          <p className="mt-2 text-xs text-muted-foreground">{error}</p>
+          <p className="mt-2 text-xs text-muted-foreground">{error.message}</p>
         </div>
       </div>
     );
