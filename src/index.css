@@ -1,0 +1,66 @@
+@font-face {
+  font-family: 'Aspekta';
+  src: url('/fonts/AspektaVF.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --bg-tan: #cdc8c5;
+  --text-dark: #08060d;
+  --text-muted: #5e5768;
+  --border-color: rgba(8, 6, 13, 0.15);
+  --button-bg: rgba(255, 255, 255, 0.3);
+  --button-hover: rgba(255, 255, 255, 0.5);
+  --button-border: rgba(8, 6, 13, 0.2);
+  --sans: 'Aspekta', system-ui, -apple-system, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--bg-tan);
+  color: var(--text-dark);
+  font-family: var(--sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Hide scrollbar during preloader */
+body.loading {
+  overflow: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 500;
+  line-height: 1.1;
+  color: var(--text-dark);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Smooth selection colors */
+::selection {
+  background: var(--text-dark);
+  color: var(--bg-tan);
+}
+
