@@ -29,10 +29,10 @@ The single-page application is structured within [App.tsx](file:///d:/portfolio-
 - Cycles through multiple language greeting words (`Hello`, `Bonjour`, `Ciao`, etc.) with keyframe word fade-ins and a pulsing progress dot.
 
 ### 2. Hero Section
-- A clean two-column grid.
-- **Left Column**: Title ("I am Ayan"), subtitle ("want sites that sell? i can help you with that"), and custom social link buttons.
-- **Right Column**: Rounded container displaying the main avatar illustration.
-- **Bottom Bar**: Animated repeating striped hatch pattern bar.
+- A borderless layout with the visual banner on top, and details underneath with natural visual spacing.
+- **Top Block (Visual Card)**: A wide banner image card displaying `/hero.jpg` with the original `realm` interactive Lens zoom effect, and an overlapping circular avatar (`/profpic-animated.webp` with fallback) shunted to the left.
+- **Middle Block (Details Row)**: Spacious left-aligned details containing a monospaced section tag (`// PORTFOLIO START`), large title ("I am Ayan"), tagline, and horizontal social buttons on the right.
+- **Bottom Block (Footer)**: A monospaced footer tag (`not_ayan. / 23 y.o. student`) separated by a bottom divider hairline.
 
 ### 3. About Info Grid
 - A 12-column layout displaying cards for:

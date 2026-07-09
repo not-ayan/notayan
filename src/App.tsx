@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { ReactLenis } from 'lenis/react'
 import { PaperTexture } from '@paper-design/shaders-react'
 import { FAB } from './components/FAB'
+import { Hero } from './components/Hero'
 import './App.css'
 
 const WORDS = [
@@ -418,74 +419,7 @@ function App() {
 
       {/* Main Home Page Section */}
       <main className="hero-section" id="home">
-        <div className="hero-main">
-          <div className="hero-content">
-            <h1
-              className={`hero-title reveal-item ${
-                showContent ? 'animate-reveal delay-1' : ''
-              }`}
-            >
-              I am Ayan
-            </h1>
-            <p
-              className={`hero-subtitle reveal-item ${
-                showContent ? 'animate-reveal delay-2' : ''
-              }`}
-            >
-              want sites that sell? i can help you with that
-            </p>
-            <div
-              className={`social-row reveal-item ${
-                showContent ? 'animate-reveal delay-3' : ''
-              }`}
-            >
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-button"
-                aria-label="GitHub"
-              >
-                <img src="/github.svg" alt="GitHub" />
-              </a>
-              <a
-                href="https://x.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-button"
-                aria-label="Twitter/X"
-              >
-                <img src="/twitter.svg" alt="Twitter" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-button"
-                aria-label="Instagram"
-              >
-                <img src="/instagram.png" alt="Instagram" />
-              </a>
-            </div>
-          </div>
-
-          <div
-            className={`avatar-container reveal-item reveal-scale ${
-              showContent ? 'animate-reveal delay-4' : ''
-            }`}
-          >
-            <img src="/avatar.png" alt="Ayan Avatar" className="avatar-image" />
-          </div>
-        </div>
-
-        {/* Decorative hatch striped pattern bar */}
-        <div
-          className={`hatch-box-container reveal-item ${
-            showContent ? 'animate-reveal delay-5' : ''
-          }`}
-        >
-          <div className="hatch-box"></div>
-        </div>
+        <Hero showContent={showContent} />
       </main>
 
       {/* About Info Grid Section */}
