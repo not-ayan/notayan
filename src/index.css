@@ -7,15 +7,55 @@
 }
 
 :root {
-  --bg-tan: #cdc8c5;
+  --bg-tan: #e9e5e2;
   --text-dark: #08060d;
   --text-muted: #5e5768;
-  --border-color: rgba(8, 6, 13, 0.15);
+  --accent: #F1A5A0;
+  --accent-soft: rgba(241, 165, 160, 0.16);
+  --accent-border: rgba(241, 165, 160, 0.45);
+  --accent-glow: rgba(241, 165, 160, 0.55);
+  --border-color: rgba(8, 6, 13, 0.12);
   --button-bg: rgba(255, 255, 255, 0.3);
   --button-hover: rgba(255, 255, 255, 0.5);
-  --button-border: rgba(8, 6, 13, 0.2);
+  --button-border: rgba(8, 6, 13, 0.15);
+  --surface-raised: rgba(255, 255, 255, 0.34);
+  --surface-raised-hover: rgba(255, 255, 255, 0.52);
+  --card-bg: rgba(255, 255, 255, 0.45);
+  --container-bg: rgba(255, 255, 255, 0.25);
+  --preview-bg: rgba(8, 6, 13, 0.04);
+  --avatar-shadow: 0 10px 30px rgba(8, 6, 13, 0.08);
+  --contrib-bg-0: rgba(8, 6, 13, 0.05);
+  --contrib-bg-1: rgba(241, 165, 160, 0.28);
+  --contrib-bg-2: rgba(241, 165, 160, 0.52);
+  --contrib-bg-3: rgba(241, 165, 160, 0.78);
+  --contrib-bg-4: #F1A5A0;
   --sans: 'Aspekta', system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+:root.dark {
+  --bg-tan: #060606;
+  --text-dark: #f3eff2;
+  --text-muted: #b2adb7;
+  --accent: #F1A5A0;
+  --accent-soft: rgba(241, 165, 160, 0.13);
+  --accent-border: rgba(241, 165, 160, 0.38);
+  --accent-glow: rgba(241, 165, 160, 0.5);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --button-bg: #0d0d0d;
+  --button-hover: #151515;
+  --button-border: rgba(255, 255, 255, 0.14);
+  --surface-raised: #111111;
+  --surface-raised-hover: #1a1a1a;
+  --card-bg: #0c0c0c;
+  --container-bg: #090909;
+  --preview-bg: #070707;
+  --avatar-shadow: 0 0 0 1px rgba(241, 165, 160, 0.16), 0 14px 38px rgba(241, 165, 160, 0.18);
+  --contrib-bg-0: rgba(255, 255, 255, 0.06);
+  --contrib-bg-1: rgba(241, 165, 160, 0.22);
+  --contrib-bg-2: rgba(241, 165, 160, 0.42);
+  --contrib-bg-3: rgba(241, 165, 160, 0.68);
+  --contrib-bg-4: #F1A5A0;
 }
 
 * {
@@ -57,6 +97,77 @@ h1, h2, h3, h4, h5, h6 {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.custom-cursor-pointer,
+.custom-cursor-trail,
+.custom-cursor-pulse {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.custom-cursor-pointer {
+  z-index: 99998;
+  background: #fff;
+  mix-blend-mode: difference;
+  view-transition-name: custom-cursor-pointer;
+}
+
+.custom-cursor-trail {
+  z-index: 99999;
+  background: #fff;
+  mix-blend-mode: difference;
+  opacity: 0.8;
+  box-shadow: 0 0 16px var(--accent-glow);
+  view-transition-name: custom-cursor-trail;
+}
+
+.custom-cursor-pulse {
+  width: 40px;
+  height: 40px;
+  margin-left: -20px;
+  margin-top: -20px;
+  z-index: 99997;
+  border: 1.5px solid #fff;
+  mix-blend-mode: difference;
+  transition:
+    transform 0.4s cubic-bezier(0.1, 0.8, 0.3, 1),
+    opacity 0.4s cubic-bezier(0.1, 0.8, 0.3, 1);
+}
+
+@media (pointer: coarse), (max-width: 767px) {
+  .custom-cursor-pointer,
+  .custom-cursor-trail,
+  .custom-cursor-pulse {
+    display: none;
+  }
+}
+
+::view-transition-group(custom-cursor-pointer),
+::view-transition-group(custom-cursor-trail) {
+  animation-duration: 0s !important;
+}
+
+@keyframes fade-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+::view-transition-old(root) {
+  animation: 120ms cubic-bezier(0.4, 0, 1, 1) both fade-out;
+}
+::view-transition-new(root) {
+  animation: 180ms cubic-bezier(0, 0, 0.2, 1) 40ms both fade-in;
 }
 
 /* Smooth selection colors */

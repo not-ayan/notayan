@@ -1,7 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import "./FAB.css";
 
-export function FAB() {
+export function FAB({
+  currentPage,
+  onPageChange,
+}: {
+  currentPage: 'home' | 'about' | 'projects' | 'blogs';
+  onPageChange: (page: 'home' | 'about' | 'projects' | 'blogs') => void;
+}) {
   const [open, setOpen] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -15,15 +21,6 @@ export function FAB() {
       top: 0,
       behavior: "smooth",
     });
-  };
-
-  const handleScrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    e.preventDefault();
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
-    setOpen(false);
   };
 
   // Close popover when clicking outside the FAB container
@@ -82,13 +79,27 @@ export function FAB() {
       {/* Popover Menu Card */}
       {open && (
         <div className="fab-menu-card">
+          {/* Top Banner Grid */}
+          <div className="fab-menu-banner">
+            <div className="fab-menu-banner-pattern" />
+            <span className="fab-menu-banner-logo">ab</span>
+          </div>
+
           <div className="fab-menu-header">
             <span className="menu-header-logo">av</span>
             <span className="menu-header-title">ayan biswas.</span>
           </div>
 
           <nav className="fab-menu-links">
-            <a href="#home" onClick={(e) => handleScrollToSection(e, "home")} className="fab-menu-link">
+            <a
+              href="#home"
+              onClick={(e) => {
+                e.preventDefault();
+                onPageChange("home");
+                setOpen(false);
+              }}
+              className={`fab-menu-link ${currentPage === "home" ? "active" : ""}`}
+            >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="link-icon">
                 <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
                 <polyline points="9 22 9 12 15 12 15 22" />
@@ -97,7 +108,15 @@ export function FAB() {
               <span className="link-arrow">→</span>
             </a>
 
-            <a href="#about" onClick={(e) => handleScrollToSection(e, "about")} className="fab-menu-link">
+            <a
+              href="#about"
+              onClick={(e) => {
+                e.preventDefault();
+                onPageChange("about");
+                setOpen(false);
+              }}
+              className={`fab-menu-link ${currentPage === "about" ? "active" : ""}`}
+            >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="link-icon">
                 <circle cx="12" cy="12" r="10" />
                 <line x1="12" y1="16" x2="12" y2="12" />
@@ -107,7 +126,15 @@ export function FAB() {
               <span className="link-arrow">→</span>
             </a>
 
-            <a href="#projects" onClick={(e) => handleScrollToSection(e, "projects")} className="fab-menu-link">
+            <a
+              href="#projects"
+              onClick={(e) => {
+                e.preventDefault();
+                onPageChange("projects");
+                setOpen(false);
+              }}
+              className={`fab-menu-link ${currentPage === "projects" ? "active" : ""}`}
+            >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="link-icon">
                 <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
@@ -116,22 +143,22 @@ export function FAB() {
               <span className="link-arrow">→</span>
             </a>
 
-            <a href="#skills" onClick={(e) => handleScrollToSection(e, "skills")} className="fab-menu-link">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="link-icon">
-                <line x1="18" y1="20" x2="18" y2="10" />
-                <line x1="12" y1="20" x2="12" y2="4" />
-                <line x1="6" y1="20" x2="6" y2="14" />
-              </svg>
-              <span>Expertise</span>
-              <span className="link-arrow">→</span>
-            </a>
-
-            <a href="#contact" onClick={(e) => handleScrollToSection(e, "contact")} className="fab-menu-link">
+            <a
+              href="#blogs"
+              onClick={(e) => {
+                e.preventDefault();
+                onPageChange("blogs");
+                setOpen(false);
+              }}
+              className={`fab-menu-link ${currentPage === "blogs" ? "active" : ""}`}
+            >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="link-icon">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
+                <path d="M16 8h2" />
+                <path d="M16 12h2" />
+                <path d="M6 8h6v8H6z" />
               </svg>
-              <span>Contact</span>
+              <span>Blogs</span>
               <span className="link-arrow">→</span>
             </a>
           </nav>

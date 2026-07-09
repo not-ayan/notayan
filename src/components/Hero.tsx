@@ -15,7 +15,7 @@ export function Hero({ showContent }: HeroProps) {
       <div className={`hero-visual-card reveal-item reveal-scale ${showContent ? "animate-reveal delay-1" : ""
         }`}>
         <Lens hovering={hovering} setHovering={setHovering} lensSize={180} zoomFactor={1.5}>
-          <img src="/hero.jpg" alt="Hero Banner" className="hero-banner-image" />
+          <img src="/hero.gif" alt="Hero Banner" className="hero-banner-image" />
         </Lens>
       </div>
 
@@ -73,11 +73,7 @@ export function Hero({ showContent }: HeroProps) {
         </div>
       </div>
 
-      {/* Footer Info Row */}
-      <div className={`hero-footer-row reveal-item ${showContent ? "animate-reveal delay-4" : ""
-        }`}>
 
-      </div>
     </div>
   );
 }

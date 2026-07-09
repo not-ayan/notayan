@@ -21,16 +21,24 @@ The site adheres to a sleek, modern, digital grid aesthetic:
 
 ---
 
-## 2. Page Sections
+## 2. Page Layout & Sections
 
-The single-page application is structured within [App.tsx](file:///d:/portfolio-new/src/App.tsx) and styled via [App.css](file:///d:/portfolio-new/src/App.css):
+The single-page application is structured inside a centered blueprint page-wrapper (matching the News page style of WallWidgy) within [App.tsx](file:///d:/portfolio-new/src/App.tsx) and styled via [App.css](file:///d:/portfolio-new/src/App.css):
 
-### 1. Preloader Screen
+### 1. Page Wrapper & Technical Header
+- **Page Wrapper**: A centered `1100px` container with vertical borders (`border-left`/`border-right`) on desktop that frames all sections.
+- **Technical Header**: A 12-column grid-based header divided into:
+  - Column 1 (span 3): Branding logo (`AYAN.DEV`).
+  - Column 2 (span 6): Technical title (`PORTFOLIO MK. II // 2026`).
+  - Column 3 (span 3): Active status indicator (`AVAILABLE FOR WORK`) with a pulsing coral dot.
+- **Section Dividers**: Every main section is set to span the full width of the wrapper, separated by a thin horizontal border line (`border-bottom`).
+
+### 2. Preloader Screen
 - Cycles through multiple language greeting words (`Hello`, `Bonjour`, `Ciao`, etc.) with keyframe word fade-ins and a pulsing progress dot.
 
 ### 2. Hero Section
 - A borderless layout with the visual banner on top, and details underneath with natural visual spacing.
-- **Top Block (Visual Card)**: A wide banner image card displaying `/hero.jpg` with the original `realm` interactive Lens zoom effect, and an overlapping circular avatar (`/profpic-animated.webp` with fallback) shunted to the left.
+- **Top Block (Visual Card)**: A wide banner image card displaying `/hero.gif` with the original `realm` interactive Lens zoom effect, and an overlapping circular avatar (`/profpic-animated.webp` with fallback) shunted to the left.
 - **Middle Block (Details Row)**: Spacious left-aligned details containing a monospaced section tag (`// PORTFOLIO START`), large title ("I am Ayan"), tagline, and horizontal social buttons on the right.
 - **Bottom Block (Footer)**: A monospaced footer tag (`not_ayan. / 23 y.o. student`) separated by a bottom divider hairline.
 
@@ -42,19 +50,16 @@ The single-page application is structured within [App.tsx](file:///d:/portfolio-
   - **Box 4 (span 9)**: Project automation logs and AOSP customROM channel/chat link badges.
   - **Box 5 (span 3)**: Music widget showing current active last.fm listening status ("babydoll" by boywithuke) with a spinning vinyl record animation.
 
-### 4. Works / Projects Section
-- Interactive desktop layout with paginated preview blocks.
-- **Left Panel**: Pagination controls, logo badge, and descriptions of featured projects:
-  1. *Wallwidgy*
-  2. *Axion OS*
-  3. *Design Hub*
-- **Right Panel**: A 3D stacked mock-up preview using cards that rotate/animate when hovering the stack.
+### 4. Works / Projects Section ("stuff i have worked on")
+- **Active Projects Panel**: Interactive layout with paginated preview blocks:
+  - **Left Panel**: Pagination controls, logo badge, and descriptions of featured projects (*Wallwidgy*, *Axion OS*, *Design Hub*).
+  - **Right Panel**: A 3D stacked mock-up preview using cards that rotate/animate when hovering.
+- **Creative Redirect Banner**: A minimal, compact banner designed for high-conversion:
+  - **Left Info**: Clean copy ("Looking for my design & photography?") alongside a monospaced tag (`// CREATIVE WORK`) and description.
+  - **Right Actions**: Clean CTA buttons redirecting visitors to `Photography ↗` (transparent layout button) and `Graphic Design ↗` (solid dark layout button).
+  - Built with responsive column styling that collapses vertically on mobile/tablet screens.
 
-### 5. Designs Dock Redirection
-- Fanned-out cards representing creative visual domains: Photography (Landscapes, Street/Monochrome) and Graphic Design (Poster Art, branding/monograms).
-- Features a bottom sticky pill-shaped redirectional navigation dock.
-
-### 6. Skills Section
+### 5. Skills Section
 - Two-column detail checklist:
   - **Left**: Core design philosophy statement.
   - **Right**: Categorized skills lists (Frontend/Dev, Design/Creative, Systems/Core) using bullet indicators.

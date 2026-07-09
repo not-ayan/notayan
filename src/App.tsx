@@ -3,6 +3,11 @@ import { ReactLenis } from 'lenis/react'
 import { PaperTexture } from '@paper-design/shaders-react'
 import { FAB } from './components/FAB'
 import { Hero } from './components/Hero'
+import { CustomCursor } from './components/CustomCursor'
+import { useGitHubData } from './hooks/useGitHubData'
+import { AboutPage } from './components/AboutPage'
+import { ProjectsPage } from './components/ProjectsPage'
+import { BlogsPage } from './components/BlogsPage'
 import './App.css'
 
 const WORDS = [
@@ -31,7 +36,7 @@ const PROJECTS = [
         title: 'Explore Categories',
         items: [
           { name: 'Nature', gradient: 'linear-gradient(135deg, #1f4068, #162447)' },
-          { name: 'Anime', gradient: 'linear-gradient(135deg, #e05a5a, #4e1a3d)' },
+          { name: 'Anime', gradient: 'linear-gradient(135deg, #F1A5A0, #4e1a3d)' },
           { name: 'Art', gradient: 'linear-gradient(135deg, #ffd369, #393e46)' }
         ]
       },
@@ -113,9 +118,9 @@ const PROJECTS = [
   }
 ]
 
-const LASTFM_API_KEY = 'c0a8e935644458896a1bda5e8468ec52'
-const LASTFM_USER = 'Not_ayan'
-const LASTFM_PROFILE_URL = `https://www.last.fm/user/${LASTFM_USER}`
+const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY || ''
+const LASTFM_USER = import.meta.env.VITE_LASTFM_USER || ''
+const LASTFM_PROFILE_URL = LASTFM_USER ? `https://www.last.fm/user/${LASTFM_USER}` : ''
 
 type MusicTrack = {
   title: string
@@ -129,7 +134,7 @@ const FALLBACK_MUSIC_TRACK: MusicTrack = {
   title: 'babydoll',
   artist: 'boywithuke',
   url: LASTFM_PROFILE_URL,
-  imageUrl: '/babydoll.png',
+  imageUrl: '/gradient.png',
   isNowPlaying: false
 }
 
@@ -159,6 +164,9 @@ async function getItunesArtwork(title: string, artist: string, signal: AbortSign
 }
 
 async function getLatestMusicTrack(signal: AbortSignal): Promise<MusicTrack> {
+  if (!LASTFM_USER || !LASTFM_API_KEY) {
+    return FALLBACK_MUSIC_TRACK
+  }
   const params = new URLSearchParams({
     method: 'user.getrecenttracks',
     user: LASTFM_USER,
@@ -267,6 +275,53 @@ function App() {
   const [localTime, setLocalTime] = useState('')
   const [musicTrack, setMusicTrack] = useState<MusicTrack>(FALLBACK_MUSIC_TRACK)
   const [musicError, setMusicError] = useState(false)
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
+  const gh = useGitHubData()
+  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects' | 'blogs'>(() => {
+    const hash = window.location.hash.replace('#', '')
+    if (hash === 'about' || hash === 'projects' || hash === 'blogs') {
+      return hash
+    }
+    return 'home'
+  })
+
+  const handlePageChange = (page: 'home' | 'about' | 'projects' | 'blogs') => {
+    setCurrentPage(page)
+    window.location.hash = page === 'home' ? '' : page
+    window.scrollTo({ top: 0, behavior: 'instant' as any })
+  }
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash.replace('#', '')
+      if (hash === 'about' || hash === 'projects' || hash === 'blogs') {
+        setCurrentPage(hash)
+      } else {
+        setCurrentPage('home')
+      }
+    }
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    if (!document.startViewTransition) {
+      setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
+      return
+    }
+    document.startViewTransition(() => {
+      setTheme((prev) => (prev === 'light' ? 'dark' : 'light'))
+    })
+  }
 
   useEffect(() => {
     const updateTime = () => {
@@ -379,7 +434,7 @@ function App() {
     return () => {
       targets.forEach((target) => observer.unobserve(target))
     }
-  }, [showContent])
+  }, [showContent, currentPage])
 
   return (
     <ReactLenis root>
@@ -417,618 +472,430 @@ function App() {
         </div>
       )}
 
-      {/* Main Home Page Section */}
-      <main className="hero-section" id="home">
-        <Hero showContent={showContent} />
-      </main>
-
-      {/* About Info Grid Section */}
-      <section className="about-section" id="about">
-        <div className="about-header reveal-on-scroll delay-1">
-          <h2 className="about-title-small">now you might wonder</h2>
-          <h3 className="about-title-large">who is this guy even...</h3>
-        </div>
-
-        <div className="info-grid">
-          {/* Box 1: Location & Bio */}
-          <div className="grid-box box-1 reveal-on-scroll reveal-left delay-2">
-            <h4 className="box-title">I am from Assam, India</h4>
-            <p className="box-subtitle">
-              <span className="cursive-text">&</span> i am a <span className="cursive-text">23 y.o</span>
-            </p>
-            <div className="badge-row">
-              <span className="badge">student</span>
-              <span className="badge">web designer</span>
-              <span className="badge">web dev</span>
-              <span className="badge">graphic designer</span>
-            </div>
-            <p className="and-more-text">and much more...</p>
+      {/* Page Wrapper matching WallWidgy's blueprint layout */}
+      <div className="page-wrapper">
+        {/* Technical Header */}
+        <header className="tech-header">
+          <div className="tech-header-col col-1">
+            <a href="#home" onClick={(e) => { e.preventDefault(); handlePageChange('home'); }} className="tech-logo" style={{ cursor: 'pointer' }}>not_ayan</a>
           </div>
-
-          {/* Box 2: Education Timeline */}
-          <div className="grid-box box-2 reveal-on-scroll delay-3">
-            <div className="timeline">
-              <div className="timeline-item">
-                <div className="timeline-left">
-                  <div className="timeline-badge badge-coral">
-                    <img src="/edu.svg" alt="Education" className="edu-icon" />
-                  </div>
-                  <div className="timeline-connector">
-                    <span className="diamond top-diamond"></span>
-                    <span className="line"></span>
-                    <span className="diamond bottom-diamond"></span>
-                  </div>
-                </div>
-                <div className="timeline-content">
-                  <h5>Tezpur University</h5>
-                  <p className="degree">MCA | 2025 - present</p>
-                </div>
-              </div>
-
-              <div className="timeline-item">
-                <div className="timeline-left">
-                  <div className="timeline-badge badge-gray">
-                    <img src="/edu.svg" alt="Education" className="edu-icon" />
-                  </div>
-                  <div className="timeline-connector last-connector">
-                    <span className="diamond top-diamond"></span>
-                    <span className="line"></span>
-                  </div>
-                </div>
-                <div className="timeline-content">
-                  <h5>Chaiduar College</h5>
-                  <p className="degree">B. Sc | 2021 - 2024</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Box 3: Mesh Gradient Circle */}
-          <div className="box-3-wrapper reveal-on-scroll reveal-scale delay-4">
-            <div className="gradient-circle"></div>
-          </div>
-
-          {/* Box 4: Project automation & AOSP */}
-          <div className="grid-box box-4 reveal-on-scroll delay-2">
-            <h4 className="box-title">I automate stuff and maintain Axion AOSP</h4>
-            <p className="box-subtitle-project">
-              i also maintain <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="highlight-link">wallwidgy</a> and a lot of other stuff
-            </p>
-            
-            <div className="project-cards-row">
-              <div className="project-card">
-                <h6>Design community</h6>
-                <div className="project-links">
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
-                </div>
-              </div>
-
-              <div className="project-card">
-                <h6>Tech and stuff</h6>
-                <div className="project-links">
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
-                </div>
-              </div>
-
-              <div className="project-card">
-                <h6>Wallpapers</h6>
-                <div className="project-links">
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
-                </div>
-              </div>
-
-              <div className="project-card">
-                <h6>Music Dump</h6>
-                <div className="project-links">
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Box 5: Last.fm listening activity */}
-          <div className="grid-box box-5 reveal-on-scroll reveal-right delay-3">
-            <div className="music-content">
-              <div className="music-text-top">
-                <p className="music-label">
-                  {musicError ? 'last played' : musicTrack.isNowPlaying ? 'now playing' : 'last played'}
-                </p>
-                <h4 className="music-title">{musicTrack.title}</h4>
-                <p className="music-artist">{musicTrack.artist}</p>
-              </div>
-              <a href={musicTrack.url} target="_blank" rel="noopener noreferrer" className="music-link">lastfm ↗</a>
-            </div>
-            <div className="vinyl-container">
-              <img
-                src={musicTrack.imageUrl}
-                alt={`${musicTrack.title} cover`}
-                className="vinyl-disc-img"
-                onError={(event) => {
-                  event.currentTarget.src = FALLBACK_MUSIC_TRACK.imageUrl
-                }}
-              />
-              <div className="vinyl-gloss"></div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Works/Projects Section */}
-      <section className="works-section" id="projects">
-        <h2 className="works-section-title reveal-on-scroll reveal-left delay-1">stuff i have worked on</h2>
-
-        <div className="works-container reveal-on-scroll delay-2">
-          {/* Left Panel: Project Info */}
-          <div className="project-info-panel">
-            <div className="project-top-row">
-              <span className="project-index">
-                {String(activeProjectIndex + 1).padStart(2, '0')} of {String(PROJECTS.length).padStart(2, '0')}
-              </span>
-            </div>
-
-            <div className="project-title-row">
-              <h3 className="project-name">{project.title}</h3>
-              <span className="project-logo-badge">{project.logo}</span>
-            </div>
-
-            <p className="project-desc">{project.description}</p>
-
-            <div className="project-tech-section">
-              <p className="tech-title">Made with:</p>
-              <div className="tech-icons-row">
-                {project.tech.map((techKey) => (
-                  <div className="tech-icon-wrapper" key={techKey} title={techKey}>
-                    <TechIcon type={techKey} />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="project-actions-row">
-              <div className="action-buttons">
-                <a href={project.visitUrl} target="_blank" rel="noopener noreferrer" className="btn-visit">
-                  VISIT SITE <span className="arrow">↗</span>
-                </a>
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-github">
-                  GITHUB REPO <span className="arrow">↗</span>
-                </a>
-              </div>
-
-              <div className="pagination-buttons">
-                <button onClick={handlePrev} className="pag-btn" aria-label="Previous project">
-                  &lt;
-                </button>
-                <button onClick={handleNext} className="pag-btn" aria-label="Next project">
-                  &gt;
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Right Panel: Interactive 3D Stack Mockup */}
-          <div className="project-preview-panel">
-            <div className="mockup-stack">
-              {/* Back Card */}
-              <div className="mockup-card card-back">
-                <div className="mockup-header-bar">
-                  <span className="mockup-dot"></span>
-                  <span className="mockup-dot"></span>
-                  <span className="mockup-dot"></span>
-                </div>
-                <div className="mockup-body">
-                  <h6 className="mockup-card-title">{project.mockups.back.title}</h6>
-                  <div className="mockup-categories">
-                    {project.mockups.back.items.map((item, idx) => (
-                      <div className="category-item" key={idx}>
-                        <span className="cat-gradient" style={{ background: item.gradient }}></span>
-                        <span className="cat-name">{item.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-
-              {/* Middle Card */}
-              <div className="mockup-card card-middle">
-                <div className="mockup-header-bar">
-                  <span className="mockup-dot"></span>
-                  <span className="mockup-dot"></span>
-                  <span className="mockup-dot"></span>
-                </div>
-                <div className="mockup-body mockup-body-full" style={{ background: project.mockups.middle.gradient }}>
-                  <div className="mockup-abstract-design"></div>
-                </div>
-              </div>
-
-              {/* Front Card */}
-              <div className="mockup-card card-front">
-                <div className="mockup-header-bar">
-                  <span className="mockup-dot"></span>
-                  <span className="mockup-dot"></span>
-                  <span className="mockup-dot"></span>
-                </div>
-                <div className="mockup-body">
-                  <h6 className="mockup-logo-text">{project.mockups.front.title}</h6>
-                  <div className="mockup-wallpapers-grid">
-                    {project.mockups.front.walls.map((wallBg, idx) => (
-                      <div className="mockup-wall-thumb" key={idx} style={{ background: wallBg }}></div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Fanned-Out Designs Dock Redirection Section */}
-      <section className="designs-dock-section">
-        <div className="designs-dock-container">
-          <div className="dock-cards-stack reveal-on-scroll delay-1">
-            {/* Card 1: Photography - Landscape */}
-            <a href="/photography" className="dock-card card-1-photo">
-              <div className="card-inner">
-                <div className="card-header-info">
-                  <span className="card-tag">Photography</span>
-                  <h4 className="card-title">light & <span className="cursive-title-text">landscapes</span></h4>
-                </div>
-                <div className="card-visual visual-landscape">
-                  <div className="visual-shimmer"></div>
-                  <div className="camera-viewfinder">
-                    <span className="viewfinder-corner top-left"></span>
-                    <span className="viewfinder-corner top-right"></span>
-                    <span className="viewfinder-corner bottom-left"></span>
-                    <span className="viewfinder-corner bottom-right"></span>
-                    <div className="viewfinder-center">
-                      <span className="center-cross"></span>
-                      <span className="center-circle"></span>
-                    </div>
-                  </div>
-                  <div className="visual-landscape-peak"></div>
-                </div>
-              </div>
-            </a>
-
-            {/* Card 2: Graphic Design - Typographic Poster */}
-            <a href="/design" className="dock-card card-2-poster">
-              <div className="card-inner">
-                <div className="card-header-info">
-                  <span className="card-tag">Poster Art</span>
-                  <h4 className="card-title">visual <span className="cursive-title-text">identities</span></h4>
-                </div>
-                <div className="card-visual visual-poster">
-                  <div className="poster-red-dot"></div>
-                  <div className="poster-large-num">01</div>
-                  <div className="poster-cross">＋</div>
-                  <div className="poster-lines">
-                    <span className="line-sm"></span>
-                    <span className="line-md"></span>
-                    <span className="line-lg"></span>
-                  </div>
-                </div>
-              </div>
-            </a>
-
-            {/* Card 3: UI/UX Design - Interactive App (Center Card) */}
-            <a href="/design" className="dock-card card-3-ui">
-              <div className="card-inner">
-                <div className="card-header-info">
-                  <span className="card-tag">UI/UX Design</span>
-                  <h4 className="card-title">interactive <span className="cursive-title-text">systems</span></h4>
-                </div>
-                <div className="card-visual visual-ui">
-                  <div className="ui-mock-screen">
-                    <div className="ui-mock-header">
-                      <div className="ui-mock-dots">
-                        <span className="mock-dot-red"></span>
-                        <span className="mock-dot-yellow"></span>
-                        <span className="mock-dot-green"></span>
-                      </div>
-                      <div className="ui-mock-address-bar"></div>
-                    </div>
-                    <div className="ui-mock-body">
-                      <div className="ui-mock-hero-bar"></div>
-                      <div className="ui-mock-row">
-                        <div className="ui-mock-circle"></div>
-                        <div className="ui-mock-text-block"></div>
-                      </div>
-                      <div className="ui-mock-row">
-                        <div className="ui-mock-circle"></div>
-                        <div className="ui-mock-text-block"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </a>
-
-            {/* Card 4: Graphic Design - Branding Monogram */}
-            <a href="/design" className="dock-card card-4-brand">
-              <div className="card-inner">
-                <div className="card-header-info">
-                  <span className="card-tag">Branding</span>
-                  <h4 className="card-title">modern <span className="cursive-title-text">logos</span></h4>
-                </div>
-                <div className="card-visual visual-brand">
-                  <div className="brand-monogram-circle">
-                    <div className="brand-monogram-text">AD</div>
-                    <div className="brand-monogram-orbit"></div>
-                  </div>
-                  <div className="brand-grid-pattern"></div>
-                </div>
-              </div>
-            </a>
-
-            {/* Card 5: Photography - Street / Monochrome */}
-            <a href="/photography" className="dock-card card-5-street">
-              <div className="card-inner">
-                <div className="card-header-info">
-                  <span className="card-tag">Street Photography</span>
-                  <h4 className="card-title">shadow & <span className="cursive-title-text">spaces</span></h4>
-                </div>
-                <div className="card-visual visual-street">
-                  <div className="street-guidelines">
-                    <span className="guide-line horiz-1"></span>
-                    <span className="guide-line horiz-2"></span>
-                    <span className="guide-line vert-1"></span>
-                    <span className="guide-line vert-2"></span>
-                  </div>
-                  <div className="street-shadow-cast"></div>
-                  <div className="street-sun-spot"></div>
-                </div>
-              </div>
-            </a>
-          </div>
-
-          {/* The Pill-shaped Redirection Dock Bar */}
-          <div className="dock-pill reveal-on-scroll reveal-scale delay-2">
-            <div className="dock-pill-prompt">
-              <span className="prompt-sparkle">✦</span>
-              <span className="prompt-text">checkout the designs</span>
-            </div>
-            <div className="dock-pill-actions">
-              <a href="/photography" className="dock-pill-btn btn-pill-photography">
-                <span>Photography</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="btn-icon-svg">
-                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
-                  <circle cx="12" cy="13" r="4" />
+          <div className="tech-header-col col-3">
+            <button onClick={toggleTheme} className="theme-toggle-btn" aria-label="Toggle theme">
+              {theme === 'light' ? (
+                <svg className="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
                 </svg>
+              ) : (
+                <svg className="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="5" />
+                  <line x1="12" y1="1" x2="12" y2="3" />
+                  <line x1="12" y1="21" x2="12" y2="23" />
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                  <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                  <line x1="1" y1="12" x2="3" y2="12" />
+                  <line x1="21" y1="12" x2="23" y2="12" />
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                  <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                </svg>
+              )}
+              <span className="theme-toggle-text">{theme === 'light' ? 'DARK' : 'LIGHT'}</span>
+            </button>
+          </div>
+        </header>
+
+        {currentPage === 'home' && (
+          <>
+            {/* Main Home Page Section */}
+            <main className="hero-section" id="home">
+          <Hero showContent={showContent} />
+        </main>
+
+        {/* About Info Grid Section */}
+        <section className="about-section" id="about">
+          <div className="about-header reveal-on-scroll delay-1">
+            <h2 className="about-title-small">now you might wonder</h2>
+            <h3 className="about-title-large">who is this guy even...</h3>
+          </div>
+
+          <div className="info-grid">
+            {/* Box 1: Location & Bio */}
+            <div className="grid-box box-1 reveal-on-scroll reveal-left delay-2">
+              <h4 className="box-title">I am from Assam, India</h4>
+              <p className="box-subtitle">
+                <span className="cursive-text">&</span> i am a <span className="cursive-text">23 y.o</span>
+              </p>
+              <div className="badge-row">
+                <span className="badge">student</span>
+                <span className="badge">web designer</span>
+                <span className="badge">web dev</span>
+                <span className="badge">graphic designer</span>
+              </div>
+              <p className="and-more-text">and much more...</p>
+            </div>
+
+            {/* Box 2: Education Timeline */}
+            <div className="grid-box box-2 reveal-on-scroll delay-3">
+              <div className="timeline">
+                <div className="timeline-item">
+                  <div className="timeline-left">
+                    <div className="timeline-badge badge-coral">
+                      <img src="/edu.svg" alt="Education" className="edu-icon" />
+                    </div>
+                    <div className="timeline-connector">
+                      <span className="diamond top-diamond"></span>
+                      <span className="line"></span>
+                      <span className="diamond bottom-diamond"></span>
+                    </div>
+                  </div>
+                  <div className="timeline-content">
+                    <h5>Tezpur University</h5>
+                    <p className="degree">MCA | 2025 - present</p>
+                  </div>
+                </div>
+
+                <div className="timeline-item">
+                  <div className="timeline-left">
+                    <div className="timeline-badge badge-gray">
+                      <img src="/edu.svg" alt="Education" className="edu-icon" />
+                    </div>
+                    <div className="timeline-connector last-connector">
+                      <span className="diamond top-diamond"></span>
+                      <span className="line"></span>
+                    </div>
+                  </div>
+                  <div className="timeline-content">
+                    <h5>Chaiduar College</h5>
+                    <p className="degree">B. Sc | 2021 - 2024</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Box 3: Mesh Gradient Circle */}
+            <div className="box-3-wrapper reveal-on-scroll reveal-scale delay-4">
+              <div className="gradient-circle"></div>
+            </div>
+
+            {/* Box 4: Project automation & AOSP */}
+            <div className="grid-box box-4 reveal-on-scroll delay-2">
+              <h4 className="box-title">I automate stuff and maintain Axion AOSP</h4>
+              <p className="box-subtitle-project">
+                i also maintain <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="highlight-link">wallwidgy</a> and a lot of other stuff
+              </p>
+
+              <div className="project-cards-row">
+                <div className="project-card">
+                  <h6>Design community</h6>
+                  <div className="project-links">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
+                  </div>
+                </div>
+
+                <div className="project-card">
+                  <h6>Tech and stuff</h6>
+                  <div className="project-links">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
+                  </div>
+                </div>
+
+                <div className="project-card">
+                  <h6>Wallpapers</h6>
+                  <div className="project-links">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
+                  </div>
+                </div>
+
+                <div className="project-card">
+                  <h6>Music Dump</h6>
+                  <div className="project-links">
+                    <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Box 5: Last.fm listening activity */}
+            <div className="grid-box box-5 reveal-on-scroll reveal-right delay-3">
+              <div className="music-content">
+                <div className="music-text-top">
+                  <p className="music-label">
+                    {musicError ? 'last played' : musicTrack.isNowPlaying ? 'now playing' : 'last played'}
+                  </p>
+                  <h4 className="music-title">{musicTrack.title}</h4>
+                  <p className="music-artist">{musicTrack.artist}</p>
+                </div>
+                <a href={musicTrack.url} target="_blank" rel="noopener noreferrer" className="music-link">lastfm ↗</a>
+              </div>
+              <div className="vinyl-container">
+                <img
+                  src={musicTrack.imageUrl}
+                  alt={`${musicTrack.title} cover`}
+                  className="vinyl-disc-img"
+                  onError={(event) => {
+                    event.currentTarget.src = FALLBACK_MUSIC_TRACK.imageUrl
+                  }}
+                />
+                <div className="vinyl-gloss"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Works/Projects Section */}
+        <section className="works-section" id="projects">
+          <h2 className="works-section-title reveal-on-scroll reveal-left delay-1">stuff i have worked on</h2>
+
+          <div className="works-container reveal-on-scroll delay-2">
+            {/* Left Panel: Project Info */}
+            <div className="project-info-panel">
+              <div className="project-top-row">
+                <span className="project-index">
+                  {String(activeProjectIndex + 1).padStart(2, '0')} of {String(PROJECTS.length).padStart(2, '0')}
+                </span>
+              </div>
+
+              <div className="project-title-row">
+                <h3 className="project-name">{project.title}</h3>
+                <span className="project-logo-badge">{project.logo}</span>
+              </div>
+
+              <p className="project-desc">{project.description}</p>
+
+              <div className="project-tech-section">
+                <p className="tech-title">Made with:</p>
+                <div className="tech-icons-row">
+                  {project.tech.map((techKey) => (
+                    <div className="tech-icon-wrapper" key={techKey} title={techKey}>
+                      <TechIcon type={techKey} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="project-actions-row">
+                <div className="action-buttons">
+                  <a href={project.visitUrl} target="_blank" rel="noopener noreferrer" className="btn-visit">
+                    VISIT SITE <span className="arrow">↗</span>
+                  </a>
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-github">
+                    GITHUB REPO <span className="arrow">↗</span>
+                  </a>
+                </div>
+
+                <div className="pagination-buttons">
+                  <button onClick={handlePrev} className="pag-btn" aria-label="Previous project">
+                    &lt;
+                  </button>
+                  <button onClick={handleNext} className="pag-btn" aria-label="Next project">
+                    &gt;
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Panel: Interactive 3D Stack Mockup */}
+            <div className="project-preview-panel">
+              <div className="mockup-stack">
+                {/* Back Card */}
+                <div className="mockup-card card-back">
+                  <div className="mockup-header-bar">
+                    <span className="mockup-dot"></span>
+                    <span className="mockup-dot"></span>
+                    <span className="mockup-dot"></span>
+                  </div>
+                  <div className="mockup-body">
+                    <h6 className="mockup-card-title">{project.mockups.back.title}</h6>
+                    <div className="mockup-categories">
+                      {project.mockups.back.items.map((item, idx) => (
+                        <div className="category-item" key={idx}>
+                          <span className="cat-gradient" style={{ background: item.gradient }}></span>
+                          <span className="cat-name">{item.name}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Middle Card */}
+                <div className="mockup-card card-middle">
+                  <div className="mockup-header-bar">
+                    <span className="mockup-dot"></span>
+                    <span className="mockup-dot"></span>
+                    <span className="mockup-dot"></span>
+                  </div>
+                  <div className="mockup-body mockup-body-full" style={{ background: project.mockups.middle.gradient }}>
+                    <div className="mockup-abstract-design"></div>
+                  </div>
+                </div>
+
+                {/* Front Card */}
+                <div className="mockup-card card-front">
+                  <div className="mockup-header-bar">
+                    <span className="mockup-dot"></span>
+                    <span className="mockup-dot"></span>
+                    <span className="mockup-dot"></span>
+                  </div>
+                  <div className="mockup-body">
+                    <h6 className="mockup-logo-text">{project.mockups.front.title}</h6>
+                    <div className="mockup-wallpapers-grid">
+                      {project.mockups.front.walls.map((wallBg, idx) => (
+                        <div className="mockup-wall-thumb" key={idx} style={{ background: wallBg }}></div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="works-divider"></div>
+
+          <div className="design-redirect-banner reveal-on-scroll delay-1">
+            <div className="design-redirect-info">
+              <span className="design-redirect-tag">// CREATIVE WORK</span>
+              <h3 className="design-redirect-title">Looking for my design & photography?</h3>
+              <p className="design-redirect-desc">
+                Explore a compiled gallery of typography poster experiments, vector branding, interactive user interface systems, and street photography.
+              </p>
+            </div>
+            <div className="design-redirect-actions">
+              <a href="/photography" className="design-redirect-btn btn-photography">
+                Photography <span className="arrow">↗</span>
               </a>
-              <a href="/design" className="dock-pill-btn btn-pill-design">
-                <span>Graphic Design</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="btn-icon-svg">
-                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-                </svg>
+              <a href="/design" className="design-redirect-btn btn-design">
+                Graphic Design <span className="arrow">↗</span>
               </a>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Skills Section */}
-      <section className="skills-section" id="skills">
-        <div className="skills-container">
-          {/* Left Column: Narrative & CTA */}
-          <div className="skills-left reveal-on-scroll reveal-left delay-1">
-            <span className="skills-sub">my expertise</span>
-            <h2 className="skills-main-title">
-              crafting digital <span className="cursive-title-text">experiences</span> & solid code.
-            </h2>
-            <p className="skills-philosophy">
-              Specializing in building premium frontends, optimizing user interfaces, and custom OS development. I focus on details that make software unforgettable.
-            </p>
-            <div className="skills-cta-box">
-              <span className="cta-spark">✦</span>
-              <p className="cta-text">Always open to learning new technologies and hacking on interesting projects.</p>
+        {/* Skills Section */}
+        <section className="skills-section" id="skills">
+          <div className="skills-container">
+            {/* Left Column: Narrative & CTA */}
+            <div className="skills-left reveal-on-scroll reveal-left delay-1">
+              <span className="skills-sub">my expertise</span>
+              <h2 className="skills-main-title">
+                crafting digital <span className="cursive-title-text">experiences</span> & solid code.
+              </h2>
+              <p className="skills-philosophy">
+                Specializing in building premium frontends, optimizing user interfaces, and custom OS development. I focus on details that make software unforgettable.
+              </p>
+              <div className="skills-cta-box">
+                <span className="cta-spark">✦</span>
+                <p className="cta-text">Always open to learning new technologies and hacking on interesting projects.</p>
+              </div>
+            </div>
+
+            {/* Right Column: Skills Categories */}
+            <div className="skills-right">
+              <div className="skills-category reveal-on-scroll delay-2">
+                <h3 className="category-title">01 / Frontend & Dev</h3>
+                <ul className="skills-list">
+                  <li className="skill-item">
+                    <span className="skill-num">01</span>
+                    <span className="skill-name">React & React Native</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">02</span>
+                    <span className="skill-name">TypeScript / JavaScript</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">03</span>
+                    <span className="skill-name">TailwindCSS & CSS Grid</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">04</span>
+                    <span className="skill-name">HTML5 / Semantic Web</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="skills-category reveal-on-scroll delay-3">
+                <h3 className="category-title">02 / Design & Creative</h3>
+                <ul className="skills-list">
+                  <li className="skill-item">
+                    <span className="skill-num">05</span>
+                    <span className="skill-name">UI/UX Design Systems</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">06</span>
+                    <span className="skill-name">Figma prototyping</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">07</span>
+                    <span className="skill-name">Graphic Design & Vectors</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">08</span>
+                    <span className="skill-name">Typography & Layouts</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="skills-category reveal-on-scroll delay-4">
+                <h3 className="category-title">03 / Systems & Core</h3>
+                <ul className="skills-list">
+                  <li className="skill-item">
+                    <span className="skill-num">09</span>
+                    <span className="skill-name">Android ROMs & AOSP</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">10</span>
+                    <span className="skill-name">C++ / Java development</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">11</span>
+                    <span className="skill-name">Git & Command Line</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                  <li className="skill-item">
+                    <span className="skill-num">12</span>
+                    <span className="skill-name">Automation & Scripting</span>
+                    <span className="skill-dot"></span>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-          
-          {/* Right Column: Skills Categories */}
-          <div className="skills-right">
-            <div className="skills-category reveal-on-scroll delay-2">
-              <h3 className="category-title">01 / Frontend & Dev</h3>
-              <ul className="skills-list">
-                <li className="skill-item">
-                  <span className="skill-num">01</span>
-                  <span className="skill-name">React & React Native</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">02</span>
-                  <span className="skill-name">TypeScript / JavaScript</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">03</span>
-                  <span className="skill-name">TailwindCSS & CSS Grid</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">04</span>
-                  <span className="skill-name">HTML5 / Semantic Web</span>
-                  <span className="skill-dot"></span>
-                </li>
-              </ul>
-            </div>
+        </section>
 
-            <div className="skills-category reveal-on-scroll delay-3">
-              <h3 className="category-title">02 / Design & Creative</h3>
-              <ul className="skills-list">
-                <li className="skill-item">
-                  <span className="skill-num">05</span>
-                  <span className="skill-name">UI/UX Design Systems</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">06</span>
-                  <span className="skill-name">Figma prototyping</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">07</span>
-                  <span className="skill-name">Graphic Design & Vectors</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">08</span>
-                  <span className="skill-name">Typography & Layouts</span>
-                  <span className="skill-dot"></span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="skills-category reveal-on-scroll delay-4">
-              <h3 className="category-title">03 / Systems & Core</h3>
-              <ul className="skills-list">
-                <li className="skill-item">
-                  <span className="skill-num">09</span>
-                  <span className="skill-name">Android ROMs & AOSP</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">10</span>
-                  <span className="skill-name">C++ / Java development</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">11</span>
-                  <span className="skill-name">Git & Command Line</span>
-                  <span className="skill-dot"></span>
-                </li>
-                <li className="skill-item">
-                  <span className="skill-num">12</span>
-                  <span className="skill-name">Automation & Scripting</span>
-                  <span className="skill-dot"></span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* GitHub Contribution Graph Section */}
-      <section className="github-section">
-        <div className="github-container">
-          <h2 className="github-title reveal-on-scroll reveal-left delay-1">github activity.</h2>
-          <div className="github-graph-wrapper reveal-on-scroll reveal-scale delay-2">
-            {/* DESKTOP LAYOUT */}
-            <div className="github-desktop-layout">
-              <div className="github-graph-header">
-                <div className="github-graph-header-left">
-                  <span className="github-graph-dot-indicator"></span>
-                  <span className="github-graph-user">github / ayanbiswas</span>
-                </div>
-                <div className="github-graph-header-right">
-                  <span className="github-graph-badge">active contributions</span>
-                </div>
-              </div>
-              
-              <div className="github-graph-main">
-                <div className="github-graph-days">
-                  <span className="day-empty"></span>
-                  <span>Mon</span>
-                  <span className="day-empty"></span>
-                  <span>Wed</span>
-                  <span className="day-empty"></span>
-                  <span>Fri</span>
-                  <span className="day-empty"></span>
-                </div>
-                <div className="github-graph-scroll-container">
-                  <div className="github-graph-inner">
-                    <div className="github-graph-months">
-                      <span>Jan</span>
-                      <span>Feb</span>
-                      <span>Mar</span>
-                      <span>Apr</span>
-                      <span>May</span>
-                      <span>Jun</span>
-                      <span>Jul</span>
-                      <span>Aug</span>
-                      <span>Sep</span>
-                      <span>Oct</span>
-                      <span>Nov</span>
-                      <span>Dec</span>
-                    </div>
-                    <div className="github-graph">
-                      {Array.from({ length: 7 * 53 }).map((_, i) => {
-                        const hash = (i * 37 + (i % 7) * 23 + (i % 13) * 17) % 100;
-                        let level = 0;
-                        if (hash < 14) level = 1;
-                        else if (hash < 25) level = 2;
-                        else if (hash < 33) level = 3;
-                        else if (hash < 39) level = 4;
-                        return (
-                          <span
-                            key={i}
-                            className={`contrib-square level-${level}`}
-                            title={`Contribution index: ${i}`}
-                          ></span>
-                        );
-                      })}
-                    </div>
+        {/* GitHub Contribution Graph Section */}
+        <section className="github-section">
+          <div className="github-container">
+            <h2 className="github-title reveal-on-scroll reveal-left delay-1">github activity.</h2>
+            <div className={`github-graph-wrapper reveal-on-scroll reveal-scale delay-2${gh.loading ? ' github-loading' : ''}`}>
+              {/* DESKTOP LAYOUT */}
+              <div className="github-desktop-layout">
+                <div className="github-graph-header">
+                  <div className="github-graph-header-left">
+                    <span className="github-graph-dot-indicator"></span>
+                    <span className="github-graph-user">github / not-ayan</span>
+                  </div>
+                  <div className="github-graph-header-right">
+                    {gh.loading
+                      ? <span className="github-graph-badge">loading…</span>
+                      : gh.error
+                        ? <span className="github-graph-badge">unavailable</span>
+                        : <span className="github-graph-badge">active contributions</span>
+                    }
                   </div>
                 </div>
-              </div>
 
-              <div className="github-graph-footer">
-                <span className="contrib-total">2,345 contributions in the last year</span>
-                <div className="github-graph-legend">
-                  <span>Less</span>
-                  <span className="contrib-square level-0"></span>
-                  <span className="contrib-square level-1"></span>
-                  <span className="contrib-square level-2"></span>
-                  <span className="contrib-square level-3"></span>
-                  <span className="contrib-square level-4"></span>
-                  <span>More</span>
-                </div>
-              </div>
-            </div>
-
-            {/* MOBILE LAYOUT */}
-            <div className="github-mobile-layout">
-              <div className="github-mobile-header">
-                <div className="github-profile-row">
-                  <div className="github-avatar-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mobile-github-svg">
-                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                    </svg>
-                  </div>
-                  <div className="github-username-info">
-                    <span className="github-mobile-user">ayanbiswas</span>
-                    <span className="github-mobile-status"><span className="status-dot"></span>Active</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="github-stats-grid">
-                <div className="github-stat-card">
-                  <span className="stat-label">Contributions</span>
-                  <span className="stat-value">2,345</span>
-                  <span className="stat-sub">past year</span>
-                </div>
-                <div className="github-stat-card">
-                  <span className="stat-label">Current Streak</span>
-                  <span className="stat-value">12 days</span>
-                  <span className="stat-sub">active now</span>
-                </div>
-                <div className="github-stat-card">
-                  <span className="stat-label">Daily Avg</span>
-                  <span className="stat-value">6.4</span>
-                  <span className="stat-sub">commits/day</span>
-                </div>
-                <div className="github-stat-card">
-                  <span className="stat-label">Main Language</span>
-                  <span className="stat-value">TypeScript</span>
-                  <span className="stat-sub">94% of repos</span>
-                </div>
-              </div>
-
-              <div className="github-mobile-graph-section">
-                <div className="mobile-graph-title">Recent Activity (Last 12 Weeks)</div>
-                <div className="github-mobile-graph-container">
+                <div className="github-graph-main">
                   <div className="github-graph-days">
                     <span className="day-empty"></span>
                     <span>Mon</span>
@@ -1041,166 +908,274 @@ function App() {
                   <div className="github-graph-scroll-container">
                     <div className="github-graph-inner">
                       <div className="github-graph-months">
-                        <span>Oct</span>
-                        <span>Nov</span>
-                        <span>Dec</span>
+                        {(() => {
+                          const months = []
+                          const date = new Date()
+                          for (let i = 11; i >= 0; i--) {
+                            const d = new Date(date.getFullYear(), date.getMonth() - i, 1)
+                            months.push(d.toLocaleString('en-US', { month: 'short' }))
+                          }
+                          return months.map(m => (
+                            <span key={m}>{m}</span>
+                          ))
+                        })()}
                       </div>
-                      <div className="github-graph mobile-only-grid">
-                        {Array.from({ length: 7 * 12 }).map((_, i) => {
-                          const hash = (i * 47 + (i % 7) * 19 + (i % 11) * 23) % 100;
-                          let level = 0;
-                          if (hash < 18) level = 1;
-                          else if (hash < 32) level = 2;
-                          else if (hash < 44) level = 3;
-                          else if (hash < 52) level = 4;
-                          return (
+                      <div className="github-graph">
+                        {(() => {
+                          // Build a 53-week grid (371 cells) from real data, padded if needed
+                          const cells = gh.contributions.length >= 7
+                            ? gh.contributions.slice(-7 * 53)
+                            : gh.contributions
+                          const padded = Array.from({ length: 7 * 53 }, (_, i) => {
+                            const c = cells[cells.length - (7 * 53) + i]
+                            return c ?? { level: 0, count: 0, date: '' }
+                          })
+                          return padded.map((day, i) => (
                             <span
                               key={i}
-                              className={`contrib-square level-${level}`}
+                              className={`contrib-square level-${day.level}`}
+                              title={day.date ? `${day.date}: ${day.count} contribution${day.count !== 1 ? 's' : ''}` : undefined}
                             ></span>
-                          );
-                        })}
+                          ))
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="github-graph-footer">
+                  <span className="contrib-total">
+                    {gh.loading ? '— contributions in the last 12 months' : gh.error ? 'could not load contributions' : `${gh.totalContributions.toLocaleString()} contributions in the last 12 months`}
+                  </span>
+                  <div className="github-graph-legend">
+                    <span className="contrib-square level-0"></span>
+                    <span className="contrib-square level-1"></span>
+                    <span className="contrib-square level-2"></span>
+                    <span className="contrib-square level-3"></span>
+                    <span className="contrib-square level-4"></span>
+                  </div>
+                </div>
+              </div>
+
+              {/* MOBILE LAYOUT */}
+              <div className="github-mobile-layout">
+                <div className="github-mobile-header">
+                  <div className="github-profile-row">
+                    <div className="github-avatar-icon">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mobile-github-svg">
+                        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                      </svg>
+                    </div>
+                    <div className="github-username-info">
+                      <span className="github-mobile-user">not-ayan</span>
+                      <span className="github-mobile-status"><span className="status-dot"></span>{gh.loading ? 'Loading…' : gh.error ? 'Unavailable' : 'Active'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="github-stats-grid">
+                  <div className="github-stat-card">
+                    <span className="stat-label">Contributions</span>
+                    <span className="stat-value">{gh.loading ? '—' : gh.error ? '—' : gh.totalContributions.toLocaleString()}</span>
+                    <span className="stat-sub">past year</span>
+                  </div>
+                  <div className="github-stat-card">
+                    <span className="stat-label">Current Streak</span>
+                    <span className="stat-value">{gh.loading ? '—' : gh.error ? '—' : `${gh.streak} day${gh.streak !== 1 ? 's' : ''}`}</span>
+                    <span className="stat-sub">active now</span>
+                  </div>
+                  <div className="github-stat-card">
+                    <span className="stat-label">Daily Avg</span>
+                    <span className="stat-value">{gh.loading ? '—' : gh.error ? '—' : gh.dailyAvg}</span>
+                    <span className="stat-sub">commits/day</span>
+                  </div>
+                  <div className="github-stat-card">
+                    <span className="stat-label">Public Repos</span>
+                    <span className="stat-value">{gh.loading ? '—' : gh.error ? '—' : gh.publicRepos}</span>
+                    <span className="stat-sub">on GitHub</span>
+                  </div>
+                </div>
+
+                <div className="github-mobile-graph-section">
+                  <div className="mobile-graph-title">Recent Activity (Last 12 Weeks)</div>
+                  <div className="github-mobile-graph-container">
+                    <div className="github-graph-days">
+                      <span className="day-empty"></span>
+                      <span>Mon</span>
+                      <span className="day-empty"></span>
+                      <span>Wed</span>
+                      <span className="day-empty"></span>
+                      <span>Fri</span>
+                      <span className="day-empty"></span>
+                    </div>
+                    <div className="github-graph-scroll-container">
+                      <div className="github-graph-inner">
+                        <div className="github-graph-months">
+                          {(() => {
+                            const last12 = gh.contributions.slice(-84)
+                            const monthSet = new Set<string>()
+                            return last12.map(d => {
+                              const m = new Date(d.date).toLocaleString('en-US', { month: 'short' })
+                              if (!monthSet.has(m)) { monthSet.add(m); return m }
+                              return null
+                            }).filter(Boolean).map(m => <span key={m as string}>{m}</span>)
+                          })()}
+                        </div>
+                        <div className="github-graph mobile-only-grid">
+                          {(() => {
+                            const last84 = gh.contributions.slice(-84)
+                            const padded = Array.from({ length: 84 }, (_, i) => {
+                              const c = last84[last84.length - 84 + i]
+                              return c ?? { level: 0, count: 0, date: '' }
+                            })
+                            return padded.map((day, i) => (
+                              <span
+                                key={i}
+                                className={`contrib-square level-${day.level}`}
+                                title={day.date ? `${day.date}: ${day.count}` : undefined}
+                              ></span>
+                            ))
+                          })()}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
 
-              <div className="github-recent-pushes">
-                <div className="push-feed-header">Latest Commits</div>
-                <div className="push-item">
-                  <span className="push-time">2 hours ago</span>
-                  <p className="push-message">feat: added lenis smooth scrolling</p>
+        {/* Contact Section */}
+        <section className="contact-section" id="contact">
+          <div className="contact-container">
+            <div className="contact-header reveal-on-scroll reveal-left delay-1">
+              <h2 className="contact-main-title">get in touch.</h2>
+            </div>
+
+            <div className="contact-grid">
+              {/* Box 1: Collaboration */}
+              <div className="contact-box contact-box-collab reveal-on-scroll reveal-left delay-2">
+                <h3 className="contact-box-title">let's build something.</h3>
+                <p className="contact-box-desc">
+                  Looking for a premium frontend interface, custom Android OS optimization, or a striking digital design? Let's collaborate.
+                </p>
+                <div className="contact-info-tags">
+                  <span className="info-tag">Freelance</span>
+                  <span className="info-tag">Contracts</span>
+                  <span className="info-tag">Full-time Roles</span>
                 </div>
-                <div className="push-item">
-                  <span className="push-time">1 day ago</span>
-                  <p className="push-message">refactor: optimized mobile layout grid</p>
+              </div>
+
+              {/* Box 2: Status & Location */}
+              <div className="contact-box contact-box-status reveal-on-scroll delay-3">
+                <span className="status-label">CURRENT STATUS</span>
+                <div className="status-indicator-row">
+                  <span className="pulse-dot"></span>
+                  <span className="status-text">Available for new opportunities</span>
                 </div>
-            </div>
-          </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section - Modern Digital Grid */}
-      <section className="contact-section" id="contact">
-        <div className="contact-grid-overlay"></div>
-        
-        <div className="contact-container">
-          <div className="contact-header reveal-on-scroll reveal-left delay-1">
-            <h2 className="contact-main-title">get in touch.</h2>
-          </div>
-
-          <div className="contact-grid">
-            {/* Box 1: Collaboration */}
-            <div className="contact-box contact-box-collab reveal-on-scroll reveal-left delay-2">
-              <h3 className="contact-box-title">let's build something.</h3>
-              <p className="contact-box-desc">
-                Looking for a premium frontend interface, custom Android OS optimization, or a striking digital design? Let's collaborate.
-              </p>
-              <div className="contact-info-tags">
-                <span className="info-tag">Freelance</span>
-                <span className="info-tag">Contracts</span>
-                <span className="info-tag">Full-time Roles</span>
+                <div className="location-info">
+                  <span className="location-label">BASED IN</span>
+                  <p className="location-text">Assam, India 🇮🇳</p>
+                </div>
               </div>
-            </div>
 
-            {/* Box 2: Status & Location */}
-            <div className="contact-box contact-box-status reveal-on-scroll delay-3">
-              <span className="status-label">CURRENT STATUS</span>
-              <div className="status-indicator-row">
-                <span className="pulse-dot"></span>
-                <span className="status-text">Available for new opportunities</span>
-              </div>
-              <div className="location-info">
-                <span className="location-label">BASED IN</span>
-                <p className="location-text">Assam, India 🇮🇳</p>
-              </div>
-            </div>
-
-            {/* Box 3: Direct Email */}
-            <div className="contact-box contact-box-email reveal-on-scroll delay-2">
-              <h4 className="email-label">DIRECT EMAIL</h4>
-              <a href="mailto:ayan98542@gmail.com" className="email-address-link">
-                ayan98542@gmail.com
-              </a>
-              <div className="email-actions">
-                <a href="mailto:ayan98542@gmail.com" className="email-btn-send">
-                  SEND MESSAGE <span className="arrow">↗</span>
+              {/* Box 3: Direct Email */}
+              <div className="contact-box contact-box-email reveal-on-scroll delay-2">
+                <h4 className="email-label">DIRECT EMAIL</h4>
+                <a href="mailto:ayan98542@gmail.com" className="email-address-link">
+                  ayan98542@gmail.com
                 </a>
+                <div className="email-actions">
+                  <a href="mailto:ayan98542@gmail.com" className="email-btn-send">
+                    SEND MESSAGE <span className="arrow">↗</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Box 4: Social Channels */}
+              <div className="contact-box contact-box-socials reveal-on-scroll reveal-right delay-3">
+                <h4 className="socials-label">DIGITAL SPACES</h4>
+                <div className="socials-grid-links">
+                  <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                    <span className="social-name">Twitter / X</span>
+                    <span className="social-arrow">↗</span>
+                  </a>
+                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                    <span className="social-name">Instagram</span>
+                    <span className="social-arrow">↗</span>
+                  </a>
+                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                    <span className="social-name">GitHub</span>
+                    <span className="social-arrow">↗</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </>
+    )}
+
+    {currentPage === 'about' && <AboutPage username={LASTFM_USER} apiKey={LASTFM_API_KEY} />}
+    {currentPage === 'projects' && <ProjectsPage />}
+    {currentPage === 'blogs' && <BlogsPage />}
+
+    {/* Blueprint Layout Footer Section */}
+        <footer className="footer-section">
+          <div className="footer-container">
+            {/* Column 1: System Info */}
+            <div className="footer-column-item">
+              <span className="column-label">Made by</span>
+              <div className="column-value">
+                not_ayan<br />
+                ALL RIGHTS SALVAGED.
               </div>
             </div>
 
-            {/* Box 4: Social Channels */}
-            <div className="contact-box contact-box-socials reveal-on-scroll reveal-right delay-3">
-              <h4 className="socials-label">DIGITAL SPACES</h4>
-              <div className="socials-grid-links">
-                <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
-                  <span className="social-name">Twitter / X</span>
-                  <span className="social-arrow">↗</span>
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
-                  <span className="social-name">Instagram</span>
-                  <span className="social-arrow">↗</span>
-                </a>
-                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
-                  <span className="social-name">GitHub</span>
-                  <span className="social-arrow">↗</span>
-                </a>
+            {/* Column 2: Tech Engine */}
+            <div className="footer-column-item">
+              <span className="column-label">STACK ENGINE</span>
+              <div className="column-value">
+                POWERED BY VITE + REACT<br />
+                (and a lot of food)
               </div>
             </div>
-          </div>
-        </div>
-      </section>
 
-      {/* Dark Editorial Footer Section */}
-      <footer className="footer-section">
-        <div className="footer-watermark">THANK YOU</div>
-        
-        <div className="footer-container">
-          <div className="footer-left">
-            <div className="footer-logo-badge">
-              <span className="logo-text">av</span>
-            </div>
-            <h3 className="footer-name">ayan biswas</h3>
-            <p className="footer-copyright">all rights reserved.</p>
-          </div>
-
-          <div className="footer-right">
-            <div className="footer-column">
-              <span className="column-label">Pages</span>
-              <a href="#" className="footer-link">Home</a>
-              <a href="#projects" className="footer-link">Projects</a>
+            {/* Column 3: Site Navigation */}
+            <div className="footer-column-item">
+              <span className="column-label">NAVIGATION</span>
+              <div className="footer-links-grid">
+                <a href="#home" onClick={(e) => { e.preventDefault(); handlePageChange('home'); }} className="footer-nav-link">// HOME</a>
+                <a href="#about" onClick={(e) => { e.preventDefault(); handlePageChange('about'); }} className="footer-nav-link">// ABOUT</a>
+                <a href="#projects" onClick={(e) => { e.preventDefault(); handlePageChange('projects'); }} className="footer-nav-link">// PROJECTS</a>
+                <a href="#blogs" onClick={(e) => { e.preventDefault(); handlePageChange('blogs'); }} className="footer-nav-link">// BLOGS</a>
+              </div>
             </div>
 
-            <div className="footer-column">
-              <span className="column-label">Navigation</span>
-              <a href="#" className="footer-link back-to-top">
-                Back to Top <span className="arrow-up">↑</span>
-              </a>
-            </div>
-            
-            <div className="footer-column">
-              <span className="column-label">Contact</span>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-link">Instagram</a>
-              <a href="mailto:ayan98542@gmail.com" className="footer-link">Email</a>
+            {/* Column 4: Access Status */}
+            <div className="footer-column-item status-col">
+              <span className="column-label">Arigato</span>
+              <span className="status-badge">Cya!</span>
             </div>
           </div>
-        </div>
 
-        <div className="footer-bottom-row">
-          <div className="footer-status">
-            <span className="status-dot"></span>
-            <span>Available for freelance, contracts & full-time roles</span>
+          <div className="footer-bottom-row">
+            <div className="footer-status">
+              <span className="status-dot"></span>
+              <span>Available for freelance, contracts & full-time roles</span>
+            </div>
+            <div className="footer-time">
+              <span>Assam, India — {localTime}</span>
+            </div>
           </div>
-          <div className="footer-time">
-            <span>Assam, India — {localTime}</span>
-          </div>
-        </div>
-      </footer>
+        </footer>
+
+      </div> {/* Close page-wrapper */}
 
       {/* Floating Action Button Quick Navigation */}
-      <FAB />
+      <FAB currentPage={currentPage} onPageChange={handlePageChange} />
+      <CustomCursor />
     </ReactLenis>
   )
 }
