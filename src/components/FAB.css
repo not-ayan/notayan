@@ -1,0 +1,263 @@
+/* --- Floating Action Button System --- */
+.fab-container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: var(--sans);
+}
+
+.fab-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  background-color: rgba(255, 255, 255, 0.55);
+  color: var(--text-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  outline: none;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(8, 6, 13, 0.06);
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.fab-btn:hover {
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: var(--text-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(8, 6, 13, 0.1);
+}
+
+.fab-btn:active {
+  transform: translateY(-1px);
+}
+
+.fab-icon {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2.25px;
+}
+
+/* Scroll-to-Top specific styles */
+.scroll-top-btn {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: opacity 0.35s cubic-bezier(0.25, 1, 0.5, 1),
+              transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.scroll-top-btn.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0) translateX(0);
+}
+
+/* When FAB menu opens: slide button to the LEFT of the main FAB button */
+.scroll-top-btn.visible.menu-open {
+  /* translateX: move left by FAB width + gap; translateY: drop down to same row as FAB */
+  transform: translateX(calc(-1 * (46px + 10px))) translateY(calc(46px + 10px));
+  animation: slide-left-in 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes slide-left-in {
+  from {
+    opacity: 0.4;
+    transform: translateX(calc(-1 * (46px + 10px - 18px))) translateY(calc(46px + 10px));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(calc(-1 * (46px + 10px))) translateY(calc(46px + 10px));
+  }
+}
+
+
+/* Main FAB toggle button behavior */
+.main-fab-btn.open {
+  background-color: var(--text-dark);
+  color: var(--bg-tan);
+  border-color: var(--text-dark);
+}
+
+.toggle-icon {
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.main-fab-btn.open .toggle-icon {
+  transform: rotate(135deg); /* morphs the plus '+' into an 'x' icon */
+}
+
+.main-fab-btn:hover .toggle-icon {
+  transform: scale(1.08);
+}
+
+.main-fab-btn.open:hover .toggle-icon {
+  transform: scale(1.08) rotate(135deg);
+}
+
+/* Popover Menu Card */
+.fab-menu-card {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  width: 240px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 12px 32px rgba(8, 6, 13, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transform-origin: bottom right;
+  animation: scale-in-popover 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes scale-in-popover {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Header inside popover */
+.fab-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(8, 6, 13, 0.1);
+}
+
+.menu-header-logo {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  width: 20px;
+  height: 16px;
+  border: 1px solid rgba(8, 6, 13, 0.4);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-header-title {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-dark);
+}
+
+/* Navigation Links inside popover */
+.fab-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fab-menu-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-dark);
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.fab-menu-link:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding-left: 14px;
+  color: #e05a5a;
+}
+
+.link-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0.65;
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.fab-menu-link:hover .link-icon {
+  opacity: 1;
+  transform: scale(1.08);
+}
+
+.link-arrow {
+  margin-left: auto;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  font-size: 12px;
+}
+
+.fab-menu-link:hover .link-arrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Popover Footer Links */
+.fab-menu-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 8px;
+  border-top: 1px solid rgba(8, 6, 13, 0.1);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.footer-social-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-social-link:hover {
+  color: var(--text-dark);
+}
+
+.footer-divider {
+  opacity: 0.3;
+}
+
+/* Responsiveness adjustments */
+@media (max-width: 600px) {
+  .fab-container {
+    bottom: 20px;
+    right: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fab-menu-card {
+    width: min(240px, calc(100vw - 56px));
+    right: 0;
+  }
+
+  .fab-container {
+    bottom: 16px;
+    right: 16px;
+  }
+}
+

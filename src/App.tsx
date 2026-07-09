@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import { ReactLenis } from 'lenis/react'
+import { PaperTexture } from '@paper-design/shaders-react'
+import { FAB } from './components/FAB'
 import './App.css'
 
 const WORDS = [
@@ -109,6 +112,85 @@ const PROJECTS = [
   }
 ]
 
+const LASTFM_API_KEY = 'c0a8e935644458896a1bda5e8468ec52'
+const LASTFM_USER = 'Not_ayan'
+const LASTFM_PROFILE_URL = `https://www.last.fm/user/${LASTFM_USER}`
+
+type MusicTrack = {
+  title: string
+  artist: string
+  url: string
+  imageUrl: string
+  isNowPlaying: boolean
+}
+
+const FALLBACK_MUSIC_TRACK: MusicTrack = {
+  title: 'babydoll',
+  artist: 'boywithuke',
+  url: LASTFM_PROFILE_URL,
+  imageUrl: '/babydoll.png',
+  isNowPlaying: false
+}
+
+function getBestLastFmImage(images?: Array<{ '#text': string; size: string }>) {
+  const image = [...(images ?? [])]
+    .reverse()
+    .find((item) => item['#text'] && !item['#text'].includes('2a96cbd8b46e442fc41c2b86b821562f'))
+
+  return image?.['#text'] ?? ''
+}
+
+async function getItunesArtwork(title: string, artist: string, signal: AbortSignal) {
+  const params = new URLSearchParams({
+    term: `${artist} ${title}`,
+    media: 'music',
+    entity: 'song',
+    limit: '1'
+  })
+
+  const response = await fetch(`https://itunes.apple.com/search?${params.toString()}`, { signal })
+  if (!response.ok) return ''
+
+  const data = await response.json()
+  const artworkUrl = data?.results?.[0]?.artworkUrl100
+
+  return typeof artworkUrl === 'string' ? artworkUrl.replace('100x100bb', '600x600bb') : ''
+}
+
+async function getLatestMusicTrack(signal: AbortSignal): Promise<MusicTrack> {
+  const params = new URLSearchParams({
+    method: 'user.getrecenttracks',
+    user: LASTFM_USER,
+    api_key: LASTFM_API_KEY,
+    format: 'json',
+    limit: '1'
+  })
+
+  const response = await fetch(`https://ws.audioscrobbler.com/2.0/?${params.toString()}`, { signal })
+  if (!response.ok) throw new Error('Could not load Last.fm recent tracks')
+
+  const data = await response.json()
+  const recentTrack = data?.recenttracks?.track
+  const track = Array.isArray(recentTrack) ? recentTrack[0] : recentTrack
+
+  if (!track?.name) {
+    return FALLBACK_MUSIC_TRACK
+  }
+
+  const artist = track.artist?.['#text'] || track.artist?.name || 'unknown artist'
+  const title = track.name
+  const lastFmImage = getBestLastFmImage(track.image)
+  const itunesImage = lastFmImage ? '' : await getItunesArtwork(title, artist, signal)
+
+  return {
+    title,
+    artist,
+    url: track.url || LASTFM_PROFILE_URL,
+    imageUrl: lastFmImage || itunesImage || FALLBACK_MUSIC_TRACK.imageUrl,
+    isNowPlaying: track['@attr']?.nowplaying === 'true'
+  }
+}
+
 function TechIcon({ type }: { type: string }) {
   switch (type) {
     case 'react':
@@ -182,6 +264,8 @@ function App() {
   const [showContent, setShowContent] = useState(false)
   const [activeProjectIndex, setActiveProjectIndex] = useState(0)
   const [localTime, setLocalTime] = useState('')
+  const [musicTrack, setMusicTrack] = useState<MusicTrack>(FALLBACK_MUSIC_TRACK)
+  const [musicError, setMusicError] = useState(false)
 
   useEffect(() => {
     const updateTime = () => {
@@ -197,6 +281,33 @@ function App() {
     updateTime()
     const interval = setInterval(updateTime, 1000)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const controller = new AbortController()
+    let isMounted = true
+
+    const updateMusicTrack = async () => {
+      try {
+        const track = await getLatestMusicTrack(controller.signal)
+        if (!isMounted) return
+
+        setMusicTrack(track)
+        setMusicError(false)
+      } catch {
+        if (!isMounted || controller.signal.aborted) return
+        setMusicError(true)
+      }
+    }
+
+    updateMusicTrack()
+    const interval = setInterval(updateMusicTrack, 60_000)
+
+    return () => {
+      isMounted = false
+      controller.abort()
+      clearInterval(interval)
+    }
   }, [])
 
   const handleNext = () => {
@@ -242,8 +353,57 @@ function App() {
     }
   }, [loading])
 
+  // Set up Intersection Observer for scroll animations
+  useEffect(() => {
+    if (!showContent) return
+
+    const observerOptions = {
+      root: null, // viewport
+      rootMargin: '0px 0px -10% 0px', // trigger slightly before entering viewport fully
+      threshold: 0.1 // trigger when 10% of element is visible
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-reveal')
+          observer.unobserve(entry.target)
+        }
+      })
+    }, observerOptions)
+
+    const targets = document.querySelectorAll('.reveal-on-scroll')
+    targets.forEach((target) => observer.observe(target))
+
+    return () => {
+      targets.forEach((target) => observer.unobserve(target))
+    }
+  }, [showContent])
+
   return (
-    <>
+    <ReactLenis root>
+      {/* Global Tactile Paper Texture Overlay */}
+      <div className="global-paper-overlay">
+        <PaperTexture
+          width="100%"
+          height="100%"
+          colorBack="#ffffff"
+          colorFront="#cdc8c5"
+          contrast={0.25}
+          roughness={0.35}
+          fiber={0.25}
+          fiberSize={0.15}
+          crumples={0.2}
+          crumpleSize={0.3}
+          folds={0.4}
+          foldCount={4}
+          drops={0.1}
+          fade={0}
+          seed={12.5}
+          scale={0.8}
+          fit="cover"
+        />
+      </div>
       {/* Hello Languages Loader */}
       {loading && (
         <div className={`preloader ${exiting ? 'exiting' : ''}`}>
@@ -257,7 +417,7 @@ function App() {
       )}
 
       {/* Main Home Page Section */}
-      <main className="hero-section">
+      <main className="hero-section" id="home">
         <div className="hero-main">
           <div className="hero-content">
             <h1
@@ -310,7 +470,7 @@ function App() {
           </div>
 
           <div
-            className={`avatar-container reveal-item ${
+            className={`avatar-container reveal-item reveal-scale ${
               showContent ? 'animate-reveal delay-4' : ''
             }`}
           >
@@ -329,15 +489,15 @@ function App() {
       </main>
 
       {/* About Info Grid Section */}
-      <section className="about-section">
-        <div className={`about-header reveal-item ${showContent ? 'animate-reveal delay-5' : ''}`}>
+      <section className="about-section" id="about">
+        <div className="about-header reveal-on-scroll delay-1">
           <h2 className="about-title-small">now you might wonder</h2>
           <h3 className="about-title-large">who is this guy even...</h3>
         </div>
 
         <div className="info-grid">
           {/* Box 1: Location & Bio */}
-          <div className={`grid-box box-1 reveal-item ${showContent ? 'animate-reveal delay-6' : ''}`}>
+          <div className="grid-box box-1 reveal-on-scroll reveal-left delay-2">
             <h4 className="box-title">I am from Assam, India</h4>
             <p className="box-subtitle">
               <span className="cursive-text">&</span> i am a <span className="cursive-text">23 y.o</span>
@@ -352,7 +512,7 @@ function App() {
           </div>
 
           {/* Box 2: Education Timeline */}
-          <div className={`grid-box box-2 reveal-item ${showContent ? 'animate-reveal delay-7' : ''}`}>
+          <div className="grid-box box-2 reveal-on-scroll delay-3">
             <div className="timeline">
               <div className="timeline-item">
                 <div className="timeline-left">
@@ -390,12 +550,12 @@ function App() {
           </div>
 
           {/* Box 3: Mesh Gradient Circle */}
-          <div className={`box-3-wrapper reveal-item ${showContent ? 'animate-reveal delay-8' : ''}`}>
+          <div className="box-3-wrapper reveal-on-scroll reveal-scale delay-4">
             <div className="gradient-circle"></div>
           </div>
 
           {/* Box 4: Project automation & AOSP */}
-          <div className={`grid-box box-4 reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
+          <div className="grid-box box-4 reveal-on-scroll delay-2">
             <h4 className="box-title">I automate stuff and maintain Axion AOSP</h4>
             <p className="box-subtitle-project">
               i also maintain <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="highlight-link">wallwidgy</a> and a lot of other stuff
@@ -435,21 +595,26 @@ function App() {
             </div>
           </div>
 
-          {/* Box 5: Now Listening to babydoll */}
-          <div className={`grid-box box-5 reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
+          {/* Box 5: Last.fm listening activity */}
+          <div className="grid-box box-5 reveal-on-scroll reveal-right delay-3">
             <div className="music-content">
               <div className="music-text-top">
-                <p className="music-label">listening to</p>
-                <h4 className="music-title">babydoll</h4>
-                <p className="music-artist">boywithuke</p>
+                <p className="music-label">
+                  {musicError ? 'last played' : musicTrack.isNowPlaying ? 'now playing' : 'last played'}
+                </p>
+                <h4 className="music-title">{musicTrack.title}</h4>
+                <p className="music-artist">{musicTrack.artist}</p>
               </div>
-              <a href="https://last.fm" target="_blank" rel="noopener noreferrer" className="music-link">lastfm ↗</a>
+              <a href={musicTrack.url} target="_blank" rel="noopener noreferrer" className="music-link">lastfm ↗</a>
             </div>
             <div className="vinyl-container">
               <img
-                src="/babydoll.png"
-                alt="babydoll cover"
+                src={musicTrack.imageUrl}
+                alt={`${musicTrack.title} cover`}
                 className="vinyl-disc-img"
+                onError={(event) => {
+                  event.currentTarget.src = FALLBACK_MUSIC_TRACK.imageUrl
+                }}
               />
               <div className="vinyl-gloss"></div>
             </div>
@@ -458,10 +623,10 @@ function App() {
       </section>
 
       {/* Works/Projects Section */}
-      <section className={`works-section reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
-        <h2 className="works-section-title">stuff i have worked on</h2>
+      <section className="works-section" id="projects">
+        <h2 className="works-section-title reveal-on-scroll reveal-left delay-1">stuff i have worked on</h2>
 
-        <div className="works-container">
+        <div className="works-container reveal-on-scroll delay-2">
           {/* Left Panel: Project Info */}
           <div className="project-info-panel">
             <div className="project-top-row">
@@ -566,9 +731,9 @@ function App() {
       </section>
 
       {/* Fanned-Out Designs Dock Redirection Section */}
-      <section className={`designs-dock-section reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
+      <section className="designs-dock-section">
         <div className="designs-dock-container">
-          <div className="dock-cards-stack">
+          <div className="dock-cards-stack reveal-on-scroll delay-1">
             {/* Card 1: Photography - Landscape */}
             <a href="/photography" className="dock-card card-1-photo">
               <div className="card-inner">
@@ -685,7 +850,7 @@ function App() {
           </div>
 
           {/* The Pill-shaped Redirection Dock Bar */}
-          <div className="dock-pill">
+          <div className="dock-pill reveal-on-scroll reveal-scale delay-2">
             <div className="dock-pill-prompt">
               <span className="prompt-sparkle">✦</span>
               <span className="prompt-text">checkout the designs</span>
@@ -710,10 +875,10 @@ function App() {
       </section>
 
       {/* Skills Section */}
-      <section className={`skills-section reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
+      <section className="skills-section" id="skills">
         <div className="skills-container">
           {/* Left Column: Narrative & CTA */}
-          <div className="skills-left">
+          <div className="skills-left reveal-on-scroll reveal-left delay-1">
             <span className="skills-sub">my expertise</span>
             <h2 className="skills-main-title">
               crafting digital <span className="cursive-title-text">experiences</span> & solid code.
@@ -729,7 +894,7 @@ function App() {
           
           {/* Right Column: Skills Categories */}
           <div className="skills-right">
-            <div className="skills-category">
+            <div className="skills-category reveal-on-scroll delay-2">
               <h3 className="category-title">01 / Frontend & Dev</h3>
               <ul className="skills-list">
                 <li className="skill-item">
@@ -755,7 +920,7 @@ function App() {
               </ul>
             </div>
 
-            <div className="skills-category">
+            <div className="skills-category reveal-on-scroll delay-3">
               <h3 className="category-title">02 / Design & Creative</h3>
               <ul className="skills-list">
                 <li className="skill-item">
@@ -781,7 +946,7 @@ function App() {
               </ul>
             </div>
 
-            <div className="skills-category">
+            <div className="skills-category reveal-on-scroll delay-4">
               <h3 className="category-title">03 / Systems & Core</h3>
               <ul className="skills-list">
                 <li className="skill-item">
@@ -811,166 +976,243 @@ function App() {
       </section>
 
       {/* GitHub Contribution Graph Section */}
-      <section className={`github-section reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
+      <section className="github-section">
         <div className="github-container">
-          <h2 className="github-title">github activity.</h2>
-          <div className="github-graph-wrapper">
-            <div className="github-graph-header">
-              <div className="github-graph-header-left">
-                <span className="github-graph-dot-indicator"></span>
-                <span className="github-graph-user">github / ayanbiswas</span>
+          <h2 className="github-title reveal-on-scroll reveal-left delay-1">github activity.</h2>
+          <div className="github-graph-wrapper reveal-on-scroll reveal-scale delay-2">
+            {/* DESKTOP LAYOUT */}
+            <div className="github-desktop-layout">
+              <div className="github-graph-header">
+                <div className="github-graph-header-left">
+                  <span className="github-graph-dot-indicator"></span>
+                  <span className="github-graph-user">github / ayanbiswas</span>
+                </div>
+                <div className="github-graph-header-right">
+                  <span className="github-graph-badge">active contributions</span>
+                </div>
               </div>
-              <div className="github-graph-header-right">
-                <span className="github-graph-badge">active contributions</span>
+              
+              <div className="github-graph-main">
+                <div className="github-graph-days">
+                  <span className="day-empty"></span>
+                  <span>Mon</span>
+                  <span className="day-empty"></span>
+                  <span>Wed</span>
+                  <span className="day-empty"></span>
+                  <span>Fri</span>
+                  <span className="day-empty"></span>
+                </div>
+                <div className="github-graph-scroll-container">
+                  <div className="github-graph-inner">
+                    <div className="github-graph-months">
+                      <span>Jan</span>
+                      <span>Feb</span>
+                      <span>Mar</span>
+                      <span>Apr</span>
+                      <span>May</span>
+                      <span>Jun</span>
+                      <span>Jul</span>
+                      <span>Aug</span>
+                      <span>Sep</span>
+                      <span>Oct</span>
+                      <span>Nov</span>
+                      <span>Dec</span>
+                    </div>
+                    <div className="github-graph">
+                      {Array.from({ length: 7 * 53 }).map((_, i) => {
+                        const hash = (i * 37 + (i % 7) * 23 + (i % 13) * 17) % 100;
+                        let level = 0;
+                        if (hash < 14) level = 1;
+                        else if (hash < 25) level = 2;
+                        else if (hash < 33) level = 3;
+                        else if (hash < 39) level = 4;
+                        return (
+                          <span
+                            key={i}
+                            className={`contrib-square level-${level}`}
+                            title={`Contribution index: ${i}`}
+                          ></span>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            
-            <div className="github-graph-months">
-              <span>Jan</span>
-              <span>Feb</span>
-              <span>Mar</span>
-              <span>Apr</span>
-              <span>May</span>
-              <span>Jun</span>
-              <span>Jul</span>
-              <span>Aug</span>
-              <span>Sep</span>
-              <span>Oct</span>
-              <span>Nov</span>
-              <span>Dec</span>
+
+              <div className="github-graph-footer">
+                <span className="contrib-total">2,345 contributions in the last year</span>
+                <div className="github-graph-legend">
+                  <span>Less</span>
+                  <span className="contrib-square level-0"></span>
+                  <span className="contrib-square level-1"></span>
+                  <span className="contrib-square level-2"></span>
+                  <span className="contrib-square level-3"></span>
+                  <span className="contrib-square level-4"></span>
+                  <span>More</span>
+                </div>
+              </div>
             </div>
 
-            <div className="github-graph-main">
-              <div className="github-graph-days">
-                <span>Mon</span>
-                <span>Wed</span>
-                <span>Fri</span>
+            {/* MOBILE LAYOUT */}
+            <div className="github-mobile-layout">
+              <div className="github-mobile-header">
+                <div className="github-profile-row">
+                  <div className="github-avatar-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="mobile-github-svg">
+                      <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                    </svg>
+                  </div>
+                  <div className="github-username-info">
+                    <span className="github-mobile-user">ayanbiswas</span>
+                    <span className="github-mobile-status"><span className="status-dot"></span>Active</span>
+                  </div>
+                </div>
               </div>
-              <div className="github-graph">
-                {Array.from({ length: 7 * 53 }).map((_, i) => {
-                  // Generate an organic, realistic contribution pattern
-                  const hash = (i * 37 + (i % 7) * 23 + (i % 13) * 17) % 100;
-                  let level = 0;
-                  if (hash < 14) level = 1;
-                  else if (hash < 25) level = 2;
-                  else if (hash < 33) level = 3;
-                  else if (hash < 39) level = 4;
-                  return (
-                    <span
-                      key={i}
-                      className={`contrib-square level-${level}`}
-                      title={`Contribution index: ${i}`}
-                    ></span>
-                  );
-                })}
-              </div>
-            </div>
 
-            <div className="github-graph-footer">
-              <span className="contrib-total">2,345 contributions in the last year</span>
-              <div className="github-graph-legend">
-                <span>Less</span>
-                <span className="contrib-square level-0"></span>
-                <span className="contrib-square level-1"></span>
-                <span className="contrib-square level-2"></span>
-                <span className="contrib-square level-3"></span>
-                <span className="contrib-square level-4"></span>
-                <span>More</span>
+              <div className="github-stats-grid">
+                <div className="github-stat-card">
+                  <span className="stat-label">Contributions</span>
+                  <span className="stat-value">2,345</span>
+                  <span className="stat-sub">past year</span>
+                </div>
+                <div className="github-stat-card">
+                  <span className="stat-label">Current Streak</span>
+                  <span className="stat-value">12 days</span>
+                  <span className="stat-sub">active now</span>
+                </div>
+                <div className="github-stat-card">
+                  <span className="stat-label">Daily Avg</span>
+                  <span className="stat-value">6.4</span>
+                  <span className="stat-sub">commits/day</span>
+                </div>
+                <div className="github-stat-card">
+                  <span className="stat-label">Main Language</span>
+                  <span className="stat-value">TypeScript</span>
+                  <span className="stat-sub">94% of repos</span>
+                </div>
               </div>
+
+              <div className="github-mobile-graph-section">
+                <div className="mobile-graph-title">Recent Activity (Last 12 Weeks)</div>
+                <div className="github-mobile-graph-container">
+                  <div className="github-graph-days">
+                    <span className="day-empty"></span>
+                    <span>Mon</span>
+                    <span className="day-empty"></span>
+                    <span>Wed</span>
+                    <span className="day-empty"></span>
+                    <span>Fri</span>
+                    <span className="day-empty"></span>
+                  </div>
+                  <div className="github-graph-scroll-container">
+                    <div className="github-graph-inner">
+                      <div className="github-graph-months">
+                        <span>Oct</span>
+                        <span>Nov</span>
+                        <span>Dec</span>
+                      </div>
+                      <div className="github-graph mobile-only-grid">
+                        {Array.from({ length: 7 * 12 }).map((_, i) => {
+                          const hash = (i * 47 + (i % 7) * 19 + (i % 11) * 23) % 100;
+                          let level = 0;
+                          if (hash < 18) level = 1;
+                          else if (hash < 32) level = 2;
+                          else if (hash < 44) level = 3;
+                          else if (hash < 52) level = 4;
+                          return (
+                            <span
+                              key={i}
+                              className={`contrib-square level-${level}`}
+                            ></span>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="github-recent-pushes">
+                <div className="push-feed-header">Latest Commits</div>
+                <div className="push-item">
+                  <span className="push-time">2 hours ago</span>
+                  <p className="push-message">feat: added lenis smooth scrolling</p>
+                </div>
+                <div className="push-item">
+                  <span className="push-time">1 day ago</span>
+                  <p className="push-message">refactor: optimized mobile layout grid</p>
+                </div>
             </div>
+          </div>
           </div>
         </div>
       </section>
 
-      {/* Contact Lined-Paper Cards Section */}
-      <section className={`contact-section reveal-item ${showContent ? 'animate-reveal delay-9' : ''}`}>
+      {/* Contact Section - Modern Digital Grid */}
+      <section className="contact-section" id="contact">
         <div className="contact-grid-overlay"></div>
-        <div className="contact-backdrop-shape"></div>
         
         <div className="contact-container">
-          <div className="contact-left-info">
-            <h2 className="contact-title">get in touch:</h2>
+          <div className="contact-header reveal-on-scroll reveal-left delay-1">
+            <h2 className="contact-main-title">get in touch.</h2>
           </div>
 
-          <div className="contact-cards-stack">
-            {/* Card 1: The Torn Sketchbook Sheet (Inquiries) */}
-            <div className="paper-note card-sketchbook">
-              <div className="vertical-margin-line"></div>
-              <div className="spiral-binding">
-                {Array.from({ length: 8 }).map((_, idx) => (
-                  <div className="spiral-ring" key={idx} style={{ top: `${20 + idx * 44}px` }}>
-                    <span className="hole"></span>
-                    <span className="ring-wire"></span>
-                  </div>
-                ))}
-              </div>
-              <div className="paper-content">
-                <h3 className="paper-cursive-title">Inquiry</h3>
-                <p className="paper-handwritten-text">
-                  Work together? Let's build something premium.
-                  <br /><br />
-                  Available for freelance, contracts, and full-time creative roles.
-                </p>
+          <div className="contact-grid">
+            {/* Box 1: Collaboration */}
+            <div className="contact-box contact-box-collab reveal-on-scroll reveal-left delay-2">
+              <h3 className="contact-box-title">let's build something.</h3>
+              <p className="contact-box-desc">
+                Looking for a premium frontend interface, custom Android OS optimization, or a striking digital design? Let's collaborate.
+              </p>
+              <div className="contact-info-tags">
+                <span className="info-tag">Freelance</span>
+                <span className="info-tag">Contracts</span>
+                <span className="info-tag">Full-time Roles</span>
               </div>
             </div>
 
-            {/* Card 2: The Vintage Postcard (Socials) */}
-            <div className="paper-note card-postcard">
-              <div className="postcard-left">
-                <h3 className="paper-cursive-title">Socials</h3>
-                <div className="paper-links">
-                  <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="paper-link-item">
-                    x/twitter ↗
-                  </a>
-                  <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="paper-link-item">
-                    instagram ↗
-                  </a>
-                  <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="paper-link-item">
-                    github ↗
-                  </a>
-                </div>
+            {/* Box 2: Status & Location */}
+            <div className="contact-box contact-box-status reveal-on-scroll delay-3">
+              <span className="status-label">CURRENT STATUS</span>
+              <div className="status-indicator-row">
+                <span className="pulse-dot"></span>
+                <span className="status-text">Available for new opportunities</span>
               </div>
-              <div className="postcard-divider"></div>
-              <div className="postcard-right">
-                <div className="post-stamp">
-                  <div className="stamp-inner">
-                    <span className="stamp-monogram">ab</span>
-                  </div>
-                </div>
-                <div className="postmark-seal">
-                  <svg viewBox="0 0 100 100" className="postmark-svg">
-                    <circle cx="50" cy="50" r="40" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="3,3" />
-                    <text x="50" y="44" textAnchor="middle" fontSize="7" fontWeight="bold">ASSAM, IN</text>
-                    <text x="50" y="58" textAnchor="middle" fontSize="5.5" letterSpacing="0.05em">CREATIVE DEVS</text>
-                  </svg>
-                </div>
-                <div className="postcard-address-lines">
-                  <div className="address-line address-line-name">Ayan Biswas</div>
-                  <div className="address-line">Assam, India</div>
-                  <div className="address-line">Creative Tech & Design</div>
-                </div>
+              <div className="location-info">
+                <span className="location-label">BASED IN</span>
+                <p className="location-text">Assam, India 🇮🇳</p>
               </div>
             </div>
 
-            {/* Card 3: The Taped Graph Note (Email) */}
-            <div className="paper-note card-graph-note">
-              <div className="masking-tape"></div>
-              <div className="paper-content">
-                <h3 className="paper-cursive-title">Email</h3>
-                <p className="paper-handwritten-text">
-                  drop a message directly here:
-                </p>
-                <div className="email-address-row">
-                  <a href="mailto:ayan98542@gmail.com" className="email-link">
-                    ayan98542@gmail.com
-                  </a>
-                  <a href="mailto:ayan98542@gmail.com" className="email-icon-btn" aria-label="Send email">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="envelope-svg">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </a>
-                </div>
+            {/* Box 3: Direct Email */}
+            <div className="contact-box contact-box-email reveal-on-scroll delay-2">
+              <h4 className="email-label">DIRECT EMAIL</h4>
+              <a href="mailto:ayan98542@gmail.com" className="email-address-link">
+                ayan98542@gmail.com
+              </a>
+              <div className="email-actions">
+                <a href="mailto:ayan98542@gmail.com" className="email-btn-send">
+                  SEND MESSAGE <span className="arrow">↗</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Box 4: Social Channels */}
+            <div className="contact-box contact-box-socials reveal-on-scroll reveal-right delay-3">
+              <h4 className="socials-label">DIGITAL SPACES</h4>
+              <div className="socials-grid-links">
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                  <span className="social-name">Twitter / X</span>
+                  <span className="social-arrow">↗</span>
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                  <span className="social-name">Instagram</span>
+                  <span className="social-arrow">↗</span>
+                </a>
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                  <span className="social-name">GitHub</span>
+                  <span className="social-arrow">↗</span>
+                </a>
               </div>
             </div>
           </div>
@@ -1022,9 +1264,11 @@ function App() {
           </div>
         </div>
       </footer>
-    </>
+
+      {/* Floating Action Button Quick Navigation */}
+      <FAB />
+    </ReactLenis>
   )
 }
 
 export default App
-
