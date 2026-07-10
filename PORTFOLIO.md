@@ -91,6 +91,19 @@ The single-page application is structured inside a centered blueprint page-wrapp
 
 ---
 
+## 2.1 Projects Page View (Dedicated Page)
+
+The dedicated Projects page ([ProjectsPage.tsx](file:///d:/portfolio-new/src/components/ProjectsPage.tsx)) is rendered when the user navigates to the Projects view and is divided into four major visual blocks:
+1. **Technical Header & Section Nav**: Header displaying the section title and anchor nav buttons linking to the subsections with smooth scrolling.
+2. **Web Projects Section (`#dev-projects`)**: Shows featured websites and core software projects with status indicators, tech tags, and codebase links.
+3. **Logos & Branding Section (`#logo-design`)**: Compact grid of logo cards featuring abstract inline SVG branding marks on a coordinate blueprint overlay.
+4. **Graphic Design Section (`#graphic-design`)**:
+   - **Posters**: Typography design poster layouts designed natively with vertical headers, Swiss layouts, and geometric grids.
+   - **Ads**: Layout advertisements featuring specs rows and call-to-action cards.
+5. **Photography Section (`#photography`)**: Masonry grid showing high-contrast photographs (Tokyo street scene and Brutalist concrete architecture) loaded from `public/images/`.
+
+---
+
 ## 3. Maintenance Procedures
 
 When editing code, follow these validation steps:

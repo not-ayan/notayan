@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="2">
+  <path d="M50 20 L80 38 L80 68 L50 86 L20 68 L20 38 Z" />
+  <path d="M50 20 L50 86" />
+  <path d="M20 38 L50 53 L80 38" />
+  <path d="M20 68 L50 53 L80 68" stroke-dasharray="2 2" />
+</svg>

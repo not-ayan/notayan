@@ -1,0 +1,9 @@
+{
+  "title": "Realm UI",
+  "category": "Library",
+  "description": "A premium component library featuring dark mode, glassmorphism UI blocks, and highly fluid micro-animations for developer efficiency.",
+  "tech": ["Next.js", "Jotai", "Tailwind CSS", "Radix UI"],
+  "visitUrl": "https://github.com",
+  "githubUrl": "https://github.com",
+  "status": "Active"
+}
