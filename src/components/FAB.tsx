@@ -79,10 +79,9 @@ export function FAB({
       {/* Popover Menu Card */}
       {open && (
         <div className="fab-menu-card">
-          {/* Top Banner Grid */}
+          {/* Top Banner Image */}
           <div className="fab-menu-banner">
-            <div className="fab-menu-banner-pattern" />
-            <span className="fab-menu-banner-logo">ab</span>
+            <img src="/menu.webp" alt="Menu banner" className="fab-menu-banner-img" />
           </div>
 
           <div className="fab-menu-header">

@@ -31,6 +31,10 @@
   --contrib-bg-4: #F1A5A0;
   --sans: 'Aspekta', system-ui, -apple-system, sans-serif;
   --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* FAB opaque overrides */
+  --fab-surface: #ffffff;
+  --fab-surface-hover: #f0ece8;
+  --fab-card-bg: #f7f4f1;
 }
 
 :root.dark {
@@ -56,6 +60,10 @@
   --contrib-bg-2: rgba(241, 165, 160, 0.42);
   --contrib-bg-3: rgba(241, 165, 160, 0.68);
   --contrib-bg-4: #F1A5A0;
+  /* FAB opaque overrides */
+  --fab-surface: #111111;
+  --fab-surface-hover: #1a1a1a;
+  --fab-card-bg: #0c0c0c;
 }
 
 * {

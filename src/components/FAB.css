@@ -16,21 +16,19 @@
   height: 46px;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  background-color: var(--surface-raised);
+  background-color: var(--fab-surface);
   color: var(--text-dark);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   outline: none;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 16px rgba(8, 6, 13, 0.06);
   transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .fab-btn:hover {
-  background-color: var(--surface-raised-hover);
+  background-color: var(--fab-surface-hover);
   border-color: var(--accent-border);
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(8, 6, 13, 0.1);
@@ -109,13 +107,11 @@
   bottom: 60px;
   right: 0;
   width: 240px;
-  background-color: var(--card-bg);
+  background-color: var(--fab-card-bg);
   border: 1px solid var(--border-color);
   border-radius: 20px;
   padding: 16px;
   box-shadow: 0 12px 32px rgba(8, 6, 13, 0.08);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -139,34 +135,18 @@
 .fab-menu-banner {
   margin: -16px -16px 4px -16px;
   height: 80px;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-soft) 100%);
   border-bottom: 1px solid var(--border-color);
   overflow: hidden;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-radius: 4px 4px 0 0;
 }
 
-.fab-menu-banner-pattern {
-  position: absolute;
-  inset: 0;
-  opacity: 0.15;
-  background-size: 12px 12px;
-  background-image: 
-    linear-gradient(to right, var(--text-dark) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--text-dark) 1px, transparent 1px);
-}
-
-.fab-menu-banner-logo {
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--text-dark);
-  font-family: 'Playfair Display', serif;
-  font-style: italic;
-  letter-spacing: -0.05em;
-  opacity: 0.85;
-  z-index: 1;
+.fab-menu-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
 }
 
 /* Header inside popover */
