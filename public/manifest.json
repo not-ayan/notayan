@@ -1,63 +1,6 @@
 {
   "projects": [
     {
-      "id": "axion-os",
-      "title": "Axion OS",
-      "category": "System",
-      "description": "A custom Android Open Source Project operating system focused on performance, battery life, and clean UI configurations. Rebuilt kernel optimizations.",
-      "tech": [
-        "Android",
-        "C++",
-        "Java",
-        "Linux"
-      ],
-      "visitUrl": "https://github.com",
-      "githubUrl": "https://github.com",
-      "status": "Maintained",
-      "photos": [
-        "/projects/axion-os/hero.jpg",
-        "/projects/axion-os/hero.webp"
-      ]
-    },
-    {
-      "id": "design-hub",
-      "title": "Design Hub",
-      "category": "Design Platform",
-      "description": "A platform connecting web designers and developers to share mockups, feedback, and assets in a collaborative blueprint workspace.",
-      "tech": [
-        "Figma",
-        "React",
-        "CSS3",
-        "Node.js"
-      ],
-      "visitUrl": "https://github.com",
-      "githubUrl": "https://github.com",
-      "status": "Completed",
-      "photos": [
-        "/projects/design-hub/gradient.png",
-        "/projects/design-hub/gradient.webp"
-      ]
-    },
-    {
-      "id": "realm-ui",
-      "title": "Realm UI",
-      "category": "Library",
-      "description": "A premium component library featuring dark mode, glassmorphism UI blocks, and highly fluid micro-animations for developer efficiency.",
-      "tech": [
-        "Next.js",
-        "Jotai",
-        "Tailwind CSS",
-        "Radix UI"
-      ],
-      "visitUrl": "https://github.com",
-      "githubUrl": "https://github.com",
-      "status": "Active",
-      "photos": [
-        "/projects/realm-ui/architecture.png",
-        "/projects/realm-ui/architecture.webp"
-      ]
-    },
-    {
       "id": "wallwidgy",
       "title": "Wallwidgy",
       "category": "Web App",
@@ -68,142 +11,414 @@
         "Tailwind CSS",
         "Framer Motion"
       ],
-      "visitUrl": "https://github.com",
-      "githubUrl": "https://github.com",
+      "visitUrl": "https://wallwidgy.app",
+      "githubUrl": "https://github.com/not-ayan/wallwidgy",
       "status": "Active",
       "photos": [
-        "/projects/wallwidgy/tokyo_street.png",
-        "/projects/wallwidgy/tokyo_street.webp"
+        "/projects/wallwidgy/wallwidgy.png"
       ]
     }
   ],
   "designs": {
-    "ads": [
-      "/designs/ads/Desktop 1-alt.webp",
-      "/designs/ads/Desktop 2.webp",
-      "/designs/ads/Desktop 3.webp",
-      "/designs/ads/Frame 12.webp",
-      "/designs/ads/Frame 160.webp",
-      "/designs/ads/Frame 170.webp",
-      "/designs/ads/Frame 248.webp",
-      "/designs/ads/Frame 49.webp",
-      "/designs/ads/Frame 50.webp",
-      "/designs/ads/Frame 51.webp",
-      "/designs/ads/Frame 68.webp",
-      "/designs/ads/Frame 70.webp",
-      "/designs/ads/Frame 71.webp",
-      "/designs/ads/Frame 73.webp",
-      "/designs/ads/Frame 74.webp",
-      "/designs/ads/Frame 75.webp",
-      "/designs/ads/Frame 76.webp"
+    "ads & misc": [
+      {
+        "path": "/designs/ads & misc/Desktop 1-alt.webp",
+        "aspect": 3.415
+      },
+      {
+        "path": "/designs/ads & misc/Desktop 2.webp",
+        "aspect": 3.415
+      },
+      {
+        "path": "/designs/ads & misc/Desktop 3.webp",
+        "aspect": 3.415
+      },
+      {
+        "path": "/designs/ads & misc/Frame 12.webp",
+        "aspect": 1.8023
+      },
+      {
+        "path": "/designs/ads & misc/Frame 160.webp",
+        "aspect": 0.8
+      },
+      {
+        "path": "/designs/ads & misc/Frame 170.webp",
+        "aspect": 0.78
+      },
+      {
+        "path": "/designs/ads & misc/Frame 248.webp",
+        "aspect": 0.7028
+      },
+      {
+        "path": "/designs/ads & misc/Frame 49.webp",
+        "aspect": 3.0168
+      },
+      {
+        "path": "/designs/ads & misc/Frame 50.webp",
+        "aspect": 3.0168
+      },
+      {
+        "path": "/designs/ads & misc/Frame 51.webp",
+        "aspect": 3.0168
+      },
+      {
+        "path": "/designs/ads & misc/Frame 68.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/ads & misc/Frame 70.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/ads & misc/Frame 71.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/ads & misc/Frame 73.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/ads & misc/Frame 74.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/ads & misc/Frame 75.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/ads & misc/Frame 76.webp",
+        "aspect": 1
+      }
     ],
     "posters": [
-      "/designs/posters/Frame 1-1.webp",
-      "/designs/posters/Frame 1-2.webp",
-      "/designs/posters/Frame 1.webp",
-      "/designs/posters/Frame 118.webp",
-      "/designs/posters/Frame 156.webp",
-      "/designs/posters/Frame 256.webp",
-      "/designs/posters/Frame 4.webp",
-      "/designs/posters/Frame 48.webp",
-      "/designs/posters/Frame 5.webp",
-      "/designs/posters/Frame 7.webp",
-      "/designs/posters/Frame 73.webp",
-      "/designs/posters/Frame 9.webp",
-      "/designs/posters/Frame 99.webp",
-      "/designs/posters/image 136.webp",
-      "/designs/posters/Rectangle 60.webp",
-      "/designs/posters/Rectangle 63.webp",
-      "/designs/posters/Rectangle 75.webp",
-      "/designs/posters/Rectangle 76.webp",
-      "/designs/posters/Rectangle 77.webp",
-      "/designs/posters/Rectangle 78.webp",
-      "/designs/posters/Rectangle 79.webp",
-      "/designs/posters/Rectangle 80.webp",
-      "/designs/posters/Rectangle 81.webp",
-      "/designs/posters/Rectangle 82.webp",
-      "/designs/posters/Rectangle 83.webp"
+      {
+        "path": "/designs/posters/Frame 1-1.webp",
+        "aspect": 1.9899
+      },
+      {
+        "path": "/designs/posters/Frame 1-2.webp",
+        "aspect": 2
+      },
+      {
+        "path": "/designs/posters/Frame 1.webp",
+        "aspect": 1.6829
+      },
+      {
+        "path": "/designs/posters/Frame 118.webp",
+        "aspect": 0.7398
+      },
+      {
+        "path": "/designs/posters/Frame 156.webp",
+        "aspect": 2.1212
+      },
+      {
+        "path": "/designs/posters/Frame 256.webp",
+        "aspect": 1.8224
+      },
+      {
+        "path": "/designs/posters/Frame 4.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/posters/Frame 48.webp",
+        "aspect": 1.7788
+      },
+      {
+        "path": "/designs/posters/Frame 5.webp",
+        "aspect": 2.0353
+      },
+      {
+        "path": "/designs/posters/Frame 7.webp",
+        "aspect": 1.8658
+      },
+      {
+        "path": "/designs/posters/Frame 73.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/posters/Frame 9.webp",
+        "aspect": 1.8666
+      },
+      {
+        "path": "/designs/posters/Frame 99.webp",
+        "aspect": 1.7992
+      },
+      {
+        "path": "/designs/posters/image 136.webp",
+        "aspect": 1.382
+      },
+      {
+        "path": "/designs/posters/Rectangle 60.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/posters/Rectangle 63.webp",
+        "aspect": 1
+      },
+      {
+        "path": "/designs/posters/Rectangle 75.webp",
+        "aspect": 1.9986
+      },
+      {
+        "path": "/designs/posters/Rectangle 76.webp",
+        "aspect": 1.5993
+      },
+      {
+        "path": "/designs/posters/Rectangle 77.webp",
+        "aspect": 1.5993
+      },
+      {
+        "path": "/designs/posters/Rectangle 78.webp",
+        "aspect": 1.7421
+      },
+      {
+        "path": "/designs/posters/Rectangle 79.webp",
+        "aspect": 2.0014
+      },
+      {
+        "path": "/designs/posters/Rectangle 80.webp",
+        "aspect": 2.0734
+      },
+      {
+        "path": "/designs/posters/Rectangle 81.webp",
+        "aspect": 2.0014
+      },
+      {
+        "path": "/designs/posters/Rectangle 82.webp",
+        "aspect": 2.0014
+      },
+      {
+        "path": "/designs/posters/Rectangle 83.webp",
+        "aspect": 1.6012
+      }
     ]
   },
   "logos": [
     {
-      "id": "axion",
-      "title": "Axion OS",
-      "tag": "// BRAND SYMBOL",
-      "desc": "Minimalist delta shape focusing on structural stability and clean interfaces.",
-      "imagePath": "/logos/axion/logo.svg"
+      "id": "ayan",
+      "title": "Ayan",
+      "tag": "// BRAND MARK",
+      "desc": "A minimalist personal monogram that subtly embeds my name through abstract geometry, reflecting my identity as a designer and developer.",
+      "imagePath": "/logos/ayan/logo.png"
     },
     {
-      "id": "ayan-monogram",
-      "title": "AYAN.DEV",
-      "tag": "// MONOGRAM",
-      "desc": "Personal logotype fusing monogram lines with developer geometry constraints.",
-      "imagePath": "/logos/ayan-monogram/logo.svg"
+      "id": "nova",
+      "title": "Nova",
+      "tag": "// BRAND MARK",
+      "desc": "A modern personal logo blending thin elegance with bold geometry, inspired by Marvel's Nova. The cut in the 'O' represents the idea that nothing continues forever, giving the mark both visual balance and personal meaning.",
+      "imagePath": "/logos/nova/logo.png"
     },
     {
-      "id": "realm-ui",
-      "title": "Realm UI",
-      "tag": "// VECTOR ICON",
-      "desc": "Isometric wireframe cube representing dimensional user interfaces.",
-      "imagePath": "/logos/realm-ui/logo.svg"
+      "id": "rising",
+      "title": "Rising",
+      "tag": "// BRAND MARK",
+      "desc": "A modern brand mark that fuses the letter 'R' of Rising with an arrow, representing growth, momentum, and an unwavering drive to move forward.",
+      "imagePath": "/logos/rising/logo.png"
     },
     {
       "id": "wallwidgy",
       "title": "Wallwidgy",
-      "tag": "// DRAFT WORK",
-      "desc": "Abstract window grid with custom anchor points representing layout modules.",
-      "imagePath": "/logos/wallwidgy/logo.svg"
+      "tag": "// BRAND MARK",
+      "desc": "A modern logo that merges the initials of Wallwidgy into a single flowing mark, symbolizing continuity, creativity, and the effortless discovery of wallpapers.",
+      "imagePath": "/logos/wallwidgy/logo.png"
     }
   ],
   "photography": [
-    "/photography/AGC_20251112_214831193.webp",
-    "/photography/IMG-20250909-WA0034.webp",
-    "/photography/IMG-20250916-WA0090.webp",
-    "/photography/IMG-20251224-WA0038.webp",
-    "/photography/IMG-20260228-WA0196.webp",
-    "/photography/IMG_0951.webp",
-    "/photography/IMG_0958.webp",
-    "/photography/IMG_1488.webp",
-    "/photography/IMG_1492.webp",
-    "/photography/IMG_1501.webp",
-    "/photography/IMG_20240212_172443186_MP.webp",
-    "/photography/IMG_20240222_223733842_HDR.webp",
-    "/photography/IMG_20240222_223827845_HDR (1).webp",
-    "/photography/IMG_20251112_215225075_HDR_AE.webp",
-    "/photography/IMG_20251227_194622.webp",
-    "/photography/IMG_20260213_184412345_HDR.webp",
-    "/photography/IMG_20260426_165429 (1).webp",
-    "/photography/PXL_20231122_112404455.webp",
-    "/photography/PXL_20240703_143745_lmc_8.4.webp",
-    "/photography/PXL_20250717_081902834.webp",
-    "/photography/PXL_20250823_145316227.webp",
-    "/photography/PXL_20250823_145705043.webp",
-    "/photography/PXL_20250823_145827327.webp",
-    "/photography/PXL_20250823_170526239.webp",
-    "/photography/PXL_20250823_170648177.webp",
-    "/photography/PXL_20250830_175014516.webp",
-    "/photography/PXL_20250902_174119666.webp",
-    "/photography/PXL_20250907_164619862.webp",
-    "/photography/PXL_20250907_211813463.webp",
-    "/photography/PXL_20250911_142726334 (2).webp",
-    "/photography/PXL_20250930_162218420.webp",
-    "/photography/PXL_20251005_160734026.webp",
-    "/photography/PXL_20251012_113620775 (1).webp",
-    "/photography/PXL_20251021_081910435 (1).webp",
-    "/photography/PXL_20251023_152309999 (1).webp",
-    "/photography/PXL_20251118_165709277.webp",
-    "/photography/PXL_20251201_152811501.webp",
-    "/photography/PXL_20251206_132346331 (2).webp",
-    "/photography/PXL_20251206_132356949.webp",
-    "/photography/PXL_20251211_145745424.webp",
-    "/photography/PXL_20260210_142331510 (2).webp",
-    "/photography/PXL_20260212_085311975 (1).webp",
-    "/photography/PXL_20260213_084138233 (2).webp",
-    "/photography/PXL_20260213_090143495 (1).webp",
-    "/photography/PXL_20260228_090049668.webp",
-    "/photography/PXL_20260309_132507705.webp",
-    "/photography/PXL_20260419_173457039.webp",
-    "/photography/PXL_20260503_212237794.webp",
-    "/photography/PXL_20260507_131954678.webp"
+    {
+      "path": "/photography/AGC_20251112_214831193.webp",
+      "aspect": 1.3339
+    },
+    {
+      "path": "/photography/IMG-20250909-WA0034.webp",
+      "aspect": 1.4817
+    },
+    {
+      "path": "/photography/IMG-20250916-WA0090.webp",
+      "aspect": 1.3333
+    },
+    {
+      "path": "/photography/IMG-20251224-WA0038.webp",
+      "aspect": 0.8095
+    },
+    {
+      "path": "/photography/IMG-20260228-WA0196.webp",
+      "aspect": 1.7778
+    },
+    {
+      "path": "/photography/IMG_0951.webp",
+      "aspect": 0.7928
+    },
+    {
+      "path": "/photography/IMG_0958.webp",
+      "aspect": 0.7143
+    },
+    {
+      "path": "/photography/IMG_1488.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/IMG_1492.webp",
+      "aspect": 0.7502
+    },
+    {
+      "path": "/photography/IMG_1501.webp",
+      "aspect": 0.7596
+    },
+    {
+      "path": "/photography/IMG_20240212_172443186_MP.webp",
+      "aspect": 1.7776
+    },
+    {
+      "path": "/photography/IMG_20240222_223733842_HDR.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/IMG_20240222_223827845_HDR (1).webp",
+      "aspect": 1.7776
+    },
+    {
+      "path": "/photography/IMG_20251112_215225075_HDR_AE.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/IMG_20251227_194622.webp",
+      "aspect": 0.6669
+    },
+    {
+      "path": "/photography/IMG_20260213_184412345_HDR.webp",
+      "aspect": 0.7159
+    },
+    {
+      "path": "/photography/IMG_20260426_165429 (1).webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20231122_112404455.webp",
+      "aspect": 0.5625
+    },
+    {
+      "path": "/photography/PXL_20240703_143745_lmc_8.4.webp",
+      "aspect": 1.1467
+    },
+    {
+      "path": "/photography/PXL_20250717_081902834.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250823_145316227.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250823_145705043.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250823_145827327.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250823_170526239.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250823_170648177.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250830_175014516.webp",
+      "aspect": 1.8208
+    },
+    {
+      "path": "/photography/PXL_20250902_174119666.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250907_164619862.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20250907_211813463.webp",
+      "aspect": 0.7119
+    },
+    {
+      "path": "/photography/PXL_20250911_142726334 (2).webp",
+      "aspect": 0.7727
+    },
+    {
+      "path": "/photography/PXL_20250930_162218420.webp",
+      "aspect": 1.333
+    },
+    {
+      "path": "/photography/PXL_20251005_160734026.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20251012_113620775 (1).webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20251021_081910435 (1).webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20251023_152309999 (1).webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20251118_165709277.webp",
+      "aspect": 0.75
+    },
+    {
+      "path": "/photography/PXL_20251201_152811501.webp",
+      "aspect": 0.713
+    },
+    {
+      "path": "/photography/PXL_20251206_132346331 (2).webp",
+      "aspect": 0.781
+    },
+    {
+      "path": "/photography/PXL_20251206_132356949.webp",
+      "aspect": 0.7128
+    },
+    {
+      "path": "/photography/PXL_20251211_145745424.webp",
+      "aspect": 0.5623
+    },
+    {
+      "path": "/photography/PXL_20260210_142331510 (2).webp",
+      "aspect": 0.7461
+    },
+    {
+      "path": "/photography/PXL_20260212_085311975 (1).webp",
+      "aspect": 1.6007
+    },
+    {
+      "path": "/photography/PXL_20260213_084138233 (2).webp",
+      "aspect": 1.7771
+    },
+    {
+      "path": "/photography/PXL_20260213_090143495 (1).webp",
+      "aspect": 1.0865
+    },
+    {
+      "path": "/photography/PXL_20260228_090049668.webp",
+      "aspect": 1.973
+    },
+    {
+      "path": "/photography/PXL_20260309_132507705.webp",
+      "aspect": 1.3333
+    },
+    {
+      "path": "/photography/PXL_20260419_173457039.webp",
+      "aspect": 0.8408
+    },
+    {
+      "path": "/photography/PXL_20260503_212237794.webp",
+      "aspect": 1.333
+    },
+    {
+      "path": "/photography/PXL_20260507_131954678.webp",
+      "aspect": 0.75
+    }
   ]
 }

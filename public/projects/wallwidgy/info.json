@@ -2,8 +2,13 @@
   "title": "Wallwidgy",
   "category": "Web App",
   "description": "A wallpaper site made to feel premium while providing a curated collection of high quality wallpapers. Features dynamic filtering and custom palettes.",
-  "tech": ["React", "JavaScript", "Tailwind CSS", "Framer Motion"],
-  "visitUrl": "https://github.com",
-  "githubUrl": "https://github.com",
+  "tech": [
+    "React",
+    "JavaScript",
+    "Tailwind CSS",
+    "Framer Motion"
+  ],
+  "visitUrl": "https://wallwidgy.app",
+  "githubUrl": "https://github.com/not-ayan/wallwidgy",
   "status": "Active"
 }

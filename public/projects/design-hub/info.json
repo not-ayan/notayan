@@ -1,9 +1,0 @@
-{
-  "title": "Design Hub",
-  "category": "Design Platform",
-  "description": "A platform connecting web designers and developers to share mockups, feedback, and assets in a collaborative blueprint workspace.",
-  "tech": ["Figma", "React", "CSS3", "Node.js"],
-  "visitUrl": "https://github.com",
-  "githubUrl": "https://github.com",
-  "status": "Completed"
-}

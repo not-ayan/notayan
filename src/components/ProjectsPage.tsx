@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { LazyImage } from './LazyImage';
 
 interface Project {
   id: string;
@@ -21,11 +22,16 @@ interface Logo {
   imagePath: string;
 }
 
+interface GalleryImage {
+  path: string;
+  aspect: number;
+}
+
 interface Manifest {
   projects: Project[];
-  designs: Record<string, string[]>;
+  designs: Record<string, (string | GalleryImage)[]>;
   logos: Logo[];
-  photography: string[];
+  photography: (string | GalleryImage)[];
 }
 
 const LOCAL_DEFAULT_MANIFEST: Manifest = {
@@ -175,7 +181,7 @@ function InlineSVG({ url, className }: { url: string; className?: string }) {
         })
         .then((text) => {
           // Keep only the SVG contents by extracting <svg ... </svg>
-          const svgMatch = text.match(/<svg[\s\S]*?<\/svg>/i);
+          const svgMatch = text.match(/<svg[\s\S]*<\/svg>/i);
           if (svgMatch) {
             // Remove hardcoded width and height attributes to make it responsive
             const cleanSvg = svgMatch[0]
@@ -196,11 +202,11 @@ function InlineSVG({ url, className }: { url: string; className?: string }) {
   }, [url]);
 
   if (!url.endsWith('.svg')) {
-    return <img src={url} alt="" className={className} />;
+    return <img src={url} alt="" className={className} loading="lazy" decoding="async" />;
   }
 
   if (!svgContent) {
-    return <div className={className} style={{ width: '54px', height: '54px', background: 'rgba(8,6,13,0.03)', borderRadius: '50%' }} />;
+    return <div className={`${className} logo-svg-skeleton`} />;
   }
 
   return (
@@ -305,10 +311,9 @@ export function ProjectsPage() {
                     borderRadius: '18px', 
                     marginBottom: '8px',
                     border: '1px solid var(--border-color)',
-                    background: 'var(--surface-raised)'
                   }}
                 >
-                  <img 
+                  <LazyImage 
                     src={project.photos[0]} 
                     alt={project.title} 
                     style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
@@ -339,7 +344,7 @@ export function ProjectsPage() {
                   }}
                 >
                   {project.photos.slice(1).map((photo, pIdx) => (
-                    <img 
+                    <LazyImage 
                       key={pIdx} 
                       src={photo} 
                       alt="" 
@@ -364,6 +369,8 @@ export function ProjectsPage() {
                       src={getTechIconUrl(t)} 
                       alt="" 
                       className="tech-icon-img" 
+                      loading="lazy"
+                      decoding="async"
                       onError={(e) => { e.currentTarget.style.display = 'none'; }}
                       style={{ width: '14px', height: '14px', marginRight: '6px', verticalAlign: 'middle' }}
                     />
@@ -434,12 +441,23 @@ export function ProjectsPage() {
 
                 {/* Designs Masonry Grid */}
                 <div className="masonry-grid">
-                  {manifest.designs[folderName]?.map((imagePath, idx) => {
+                  {manifest.designs[folderName]?.map((imgItem, idx) => {
+                    const isObj = typeof imgItem === 'object' && imgItem !== null;
+                    const imagePath = isObj ? (imgItem as GalleryImage).path : (imgItem as string);
+                    const aspect = isObj ? (imgItem as GalleryImage).aspect : undefined;
                     const fileName = imagePath.split('/').pop()?.split('.')[0]?.replace(/_/g, ' ') || 'Design';
                     return (
-                      <div key={idx} className="photo-card-wrapper masonry-item" onClick={() => setExpandedPhoto(imagePath)}>
-                        <div className="photo-frame masonry-frame">
-                          <img src={imagePath} alt={fileName} className="gallery-photo" />
+                      <div 
+                        key={idx} 
+                        className="photo-card-wrapper masonry-item" 
+                        onClick={() => setExpandedPhoto(imagePath)}
+                        style={aspect ? { aspectRatio: String(aspect) } : undefined}
+                      >
+                        <div 
+                          className="photo-frame masonry-frame"
+                          style={aspect ? { aspectRatio: String(aspect) } : undefined}
+                        >
+                          <LazyImage src={imagePath} alt={fileName} className="gallery-photo" native />
                           <div className="photo-overlay"></div>
                         </div>
                       </div>
@@ -463,12 +481,23 @@ export function ProjectsPage() {
 
         {/* Photography Masonry Grid */}
         <div className="masonry-grid">
-          {manifest.photography.map((imagePath, idx) => {
+          {manifest.photography.map((imgItem, idx) => {
+            const isObj = typeof imgItem === 'object' && imgItem !== null;
+            const imagePath = isObj ? (imgItem as GalleryImage).path : (imgItem as string);
+            const aspect = isObj ? (imgItem as GalleryImage).aspect : undefined;
             const fileName = imagePath.split('/').pop()?.split('.')[0]?.replace(/_/g, ' ') || 'Photo';
             return (
-              <div key={idx} className="photo-card-wrapper masonry-item" onClick={() => setExpandedPhoto(imagePath)}>
-                <div className="photo-frame masonry-frame">
-                  <img src={imagePath} alt={fileName} className="gallery-photo" />
+              <div 
+                key={idx} 
+                className="photo-card-wrapper masonry-item" 
+                onClick={() => setExpandedPhoto(imagePath)}
+                style={aspect ? { aspectRatio: String(aspect) } : undefined}
+              >
+                <div 
+                  className="photo-frame masonry-frame"
+                  style={aspect ? { aspectRatio: String(aspect) } : undefined}
+                >
+                  <LazyImage src={imagePath} alt={fileName} className="gallery-photo" native />
                   <div className="photo-overlay"></div>
                 </div>
               </div>

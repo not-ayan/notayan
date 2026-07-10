@@ -15,7 +15,7 @@ export function Hero({ showContent }: HeroProps) {
       <div className={`hero-visual-card reveal-item reveal-scale ${showContent ? "animate-reveal delay-1" : ""
         }`}>
         <Lens hovering={hovering} setHovering={setHovering} lensSize={180} zoomFactor={1.5}>
-          <img src="/hero.gif" alt="Hero Banner" className="hero-banner-image" />
+          <img src="/hero.gif" alt="Hero Banner" className="hero-banner-image" fetchPriority="high" loading="eager" decoding="sync" />
         </Lens>
       </div>
 
@@ -26,6 +26,9 @@ export function Hero({ showContent }: HeroProps) {
           src="/profpic-animated.webp"
           alt="Ayan Biswas Profile"
           className="hero-avatar-image"
+          fetchPriority="high"
+          loading="eager"
+          decoding="sync"
           onError={(e) => {
             e.currentTarget.src = "/profpic.jpg"; // fallback to static jpg if webp fails to load
           }}

@@ -5,6 +5,14 @@ from pathlib import Path
 from PIL import Image
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
+# Optional JXL support via pillow-jxl-plugin
+# Install with: pip install pillow-jxl-plugin
+try:
+    import pillow_jxl  # noqa: F401 — patches PIL with JXL codec
+    JXL_AVAILABLE = True
+except ImportError:
+    JXL_AVAILABLE = False
+
 def get_size_format(b, factor=1024, suffix="B"):
     """Scale bytes to its proper format (e.g. 1024 -> 1.00KB)"""
     for unit in ["", "K", "M", "G", "T", "P"]:
@@ -79,29 +87,38 @@ def update_code_references(project_root, conversion_map):
     print(f"Updated {total_replacements} references across {updated_files_count} files.")
 
 def convert_single_image(img_path, target_dir, delete_original, quality):
-    """Worker function to convert a single image to WebP format."""
+    """Worker function to convert a single image to WebP (and optionally JXL)."""
+    results = []
     try:
         original_size = img_path.stat().st_size
         webp_path = img_path.with_suffix('.webp')
-        
+
         with Image.open(img_path) as img:
-            img.save(webp_path, format="WEBP", quality=quality, optimize=True)
-            
-        webp_size = webp_path.stat().st_size
-        size_diff = original_size - webp_size
-        savings_pct = (size_diff / original_size) * 100 if original_size > 0 else 0
-        
+            img_rgb = img.convert('RGB') if img.mode not in ('RGB', 'RGBA') else img
+
+            # --- WebP ---
+            img_rgb.save(webp_path, format='WEBP', quality=quality, optimize=True)
+            webp_size = webp_path.stat().st_size
+
+            # --- JPEG XL ---
+            jxl_size = None
+            if JXL_AVAILABLE:
+                jxl_path = img_path.with_suffix('.jxl')
+                img_rgb.save(jxl_path, format='JXL', quality=quality)
+                jxl_size = jxl_path.stat().st_size
+
         if delete_original:
             img_path.unlink()
-            
+
         return {
             'status': 'success',
             'img_path': img_path,
             'webp_path': webp_path,
             'original_size': original_size,
             'webp_size': webp_size,
-            'savings_pct': savings_pct,
-            'deleted': delete_original
+            'jxl_size': jxl_size,
+            'savings_pct': (original_size - webp_size) / original_size * 100 if original_size else 0,
+            'deleted': delete_original,
         }
     except Exception as e:
         return {
@@ -111,11 +128,14 @@ def convert_single_image(img_path, target_dir, delete_original, quality):
         }
 
 def convert_images(delete_original=False, quality=85, update_refs=False):
-    # The target directory is the folder where the script is located
     script_dir = Path(__file__).resolve().parent
     print(f"Scanning directory: {script_dir}")
+    if not JXL_AVAILABLE:
+        print("⚠  JXL support not available. Install with: pip install pillow-jxl-plugin")
+    else:
+        print("✓  JXL support enabled (pillow-jxl-plugin)")
     
-    extensions = {'.png', '.jpg', '.jpeg'}
+    extensions = {'.png', '.jpg', '.jpeg','.webp'}
     image_paths = []
     
     exclude_dirs = {'.git', 'node_modules', 'dist', '.next', 'build'}
@@ -139,6 +159,7 @@ def convert_images(delete_original=False, quality=85, update_refs=False):
     conversion_map = {}
     total_original_size = 0
     total_webp_size = 0
+    total_jxl_size = 0
     converted_count = 0
     failed_count = 0
     deleted_count = 0
@@ -160,17 +181,19 @@ def convert_images(delete_original=False, quality=85, update_refs=False):
                 if res['status'] == 'success':
                     original_size = res['original_size']
                     webp_size = res['webp_size']
+                    jxl_size = res.get('jxl_size')
                     total_original_size += original_size
                     total_webp_size += webp_size
+                    if jxl_size:
+                        total_jxl_size += jxl_size
                     converted_count += 1
                     if res['deleted']:
                         deleted_count += 1
-                    
-                    print(f"Converted: {img_path.relative_to(script_dir)} -> {res['webp_path'].name} "
-                          f"({get_size_format(original_size)} -> {get_size_format(webp_size)}, "
-                          f"Saved {res['savings_pct']:.1f}%)")
-                    
-                    # Store mapping relative to script_dir (usually the project root)
+
+                    jxl_info = f" | JXL {get_size_format(jxl_size)}" if jxl_size else ""
+                    print(f"Converted: {img_path.relative_to(script_dir)} -> WebP {get_size_format(webp_size)}{jxl_info} "
+                          f"(was {get_size_format(original_size)}, saved {res['savings_pct']:.1f}%)")
+
                     conversion_map[str(img_path.relative_to(script_dir))] = str(res['webp_path'].relative_to(script_dir))
                 else:
                     print(f"Failed to convert {img_path.name}: {res['error']}")
@@ -185,13 +208,14 @@ def convert_images(delete_original=False, quality=85, update_refs=False):
     print(f"Successfully converted: {converted_count}/{len(image_paths)}")
     if failed_count > 0:
         print(f"Failed conversions: {failed_count}")
-    print(f"Original total size: {get_size_format(total_original_size)}")
-    print(f"WebP total size:     {get_size_format(total_webp_size)}")
-    
+    print(f"Original total size:  {get_size_format(total_original_size)}")
+    print(f"WebP total size:      {get_size_format(total_webp_size)}")
+    if total_jxl_size:
+        print(f"JXL total size:       {get_size_format(total_jxl_size)}")
     if total_original_size > 0:
         total_savings = total_original_size - total_webp_size
         savings_pct = (total_savings / total_original_size) * 100
-        print(f"Total space saved:   {get_size_format(total_savings)} ({savings_pct:.1f}%)")
+        print(f"Total space saved:    {get_size_format(total_savings)} ({savings_pct:.1f}%)")
         
     if delete_original:
         print(f"Deleted {deleted_count} original files.")

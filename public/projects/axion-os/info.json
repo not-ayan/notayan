@@ -1,9 +1,0 @@
-{
-  "title": "Axion OS",
-  "category": "System",
-  "description": "A custom Android Open Source Project operating system focused on performance, battery life, and clean UI configurations. Rebuilt kernel optimizations.",
-  "tech": ["Android", "C++", "Java", "Linux"],
-  "visitUrl": "https://github.com",
-  "githubUrl": "https://github.com",
-  "status": "Maintained"
-}

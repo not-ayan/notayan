@@ -1,3 +1,37 @@
+/* ============================================================
+   LAZY IMAGE SYSTEM
+   .lazy-img           — invisible until src loads
+   .lazy-img--loaded   — fades in when loaded
+   lazy-shimmer        — keyframe for skeleton containers
+   ============================================================ */
+
+.lazy-img {
+  opacity: 0;
+  transition: opacity 0.45s ease;
+  /* Take up full parent space so layout doesn't collapse */
+  display: block;
+}
+
+.lazy-img--loaded {
+  opacity: 1;
+}
+
+/* Used by picture > img when there's no src yet — keeps the flow height */
+picture {
+  display: contents;
+}
+
+@keyframes lazy-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* ============================================================ */
+
 /* --- Preloader Styles --- */
 .preloader {
   position: fixed;
@@ -674,7 +708,7 @@
   width: 100%;
   aspect-ratio: 1 / 1;
   border-radius: 50%;
-  background-image: url('/gradient.png');
+  background-image: url('/gradient.webp');
   background-size: cover;
   background-position: center;
   border: 1px solid rgba(8, 6, 13, 0.08);
@@ -3723,15 +3757,14 @@
 }
 
 .project-detail-card {
-  background-color: var(--card-bg);
+  /* Using a slightly more opaque background color to avoid expensive real-time backdrop blur on scroll */
+  background-color: var(--card-bg-opaque, rgba(255, 255, 255, 0.92));
   border: 1px solid var(--border-color);
   border-radius: 28px;
   padding: 28px;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -3880,7 +3913,7 @@
 }
 
 .logo-visual-box {
-  height: 180px;
+  height: 220px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3892,10 +3925,24 @@
 }
 
 .logo-svg-mark {
-  width: 54px;
-  height: 54px;
+  width: 96px;
+  height: 96px;
   transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), color 0.3s ease;
   z-index: 2;
+}
+
+.logo-svg-skeleton {
+  width: 96px;
+  height: 96px;
+  background: rgba(8, 6, 13, 0.05);
+  border-radius: 12px;
+  animation: skeleton-pulse 1.5s ease-in-out infinite;
+  z-index: 2;
+}
+
+@keyframes skeleton-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
 }
 
 .logo-design-card:hover .logo-svg-mark {
@@ -4275,10 +4322,53 @@
   }
 }
 
-.photo-frame.masonry-frame {
+.photo-frame.masonry-frame,
+.project-card-banner-frame {
   aspect-ratio: auto;
   width: 100%;
   border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  background-color: rgba(8, 6, 13, 0.04);
+}
+
+[data-theme='dark'] .photo-frame.masonry-frame,
+[data-theme='dark'] .project-card-banner-frame {
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+/* GPU-accelerated shimmer overlay */
+.photo-frame.masonry-frame::after,
+.project-card-banner-frame::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-100%);
+  animation: lazy-shimmer 1.5s infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+
+[data-theme='dark'] .photo-frame.masonry-frame::after,
+[data-theme='dark'] .project-card-banner-frame::after {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.07) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* Stop shimmer once the image is fully loaded */
+.photo-frame.masonry-frame:has(.lazy-img--loaded)::after,
+.project-card-banner-frame:has(.lazy-img--loaded)::after {
+  display: none;
 }
 
 .photo-frame.masonry-frame .gallery-photo {
