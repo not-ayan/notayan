@@ -64,6 +64,17 @@ The single-page application is structured inside a centered blueprint page-wrapp
   - **Left**: Core design philosophy statement.
   - **Right**: Categorized skills lists (Frontend/Dev, Design/Creative, Systems/Core) using bullet indicators.
 
+### 6. My Setup Section
+- Displays a grid layout of daily driver equipment and specifications using a 12-column grid layout:
+  - **Monitor Card (span 7)**: Shows specs for Acer 21.5" monitor (100Hz, 99% sRGB, 1ms).
+  - **Keyboard Card (span 5)**: Details the Aula F75 mechanical keyboard.
+  - **Tablet Card (span 4)**: Shows details for Motorola Pad 60 Neo 5G.
+  - **Phone Card (span 4)**: Displays specs of the Motorola G54 5G.
+  - **Mouse Card (span 4)**: Displays specs of the Logitech G102.
+  - **7Hz x Crinacle Zero:2 IEM Card (span 6)**: Details the tuned 7Hz Zero:2 earbuds with Audiocular C03 upgrade cable.
+  - **GK Kunten IEM Card (span 6)**: Details the 10mm dynamic driver GK Kunten audio gear.
+- Adheres to the digital grid style with custom SVG illustrations, standard border radii, and accent colors.
+
 ### 7. GitHub Contribution Graph
 - Mimics a standard Git contribution grid calendar layout using organic, pre-computed level values (0–4) and custom square colors.
 

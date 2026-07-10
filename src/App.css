@@ -1783,6 +1783,157 @@
   }
 }
 
+/* --- Setup Workstation Section Styles --- */
+.setup-section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+
+.setup-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.setup-header {
+  text-align: left;
+}
+
+.setup-sub {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.setup-main-title {
+  font-size: clamp(1.5rem, 3.2vw, 2.2rem);
+  font-weight: 500;
+  color: var(--text-dark);
+  margin-bottom: 16px;
+  letter-spacing: -0.03em;
+}
+
+.setup-philosophy {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--text-muted);
+  max-width: 600px;
+  margin-bottom: 8px;
+}
+
+.setup-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.setup-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 28px;
+  padding: 24px;
+  box-sizing: border-box;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(8, 6, 13, 0.03);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 200px;
+  transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.setup-card:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-border);
+  box-shadow: 0 12px 40px rgba(224, 90, 90, 0.06), 0 4px 12px rgba(8, 6, 13, 0.03);
+}
+
+/* Card Column Spans */
+.setup-card.span-7 { grid-column: span 7; }
+.setup-card.span-6 { grid-column: span 6; }
+.setup-card.span-5 { grid-column: span 5; }
+.setup-card.span-4 { grid-column: span 4; }
+
+.setup-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.setup-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.setup-icon-wrapper {
+  color: var(--text-muted);
+  transition: all 0.3s ease;
+}
+
+.setup-card:hover .setup-icon-wrapper {
+  color: var(--accent);
+  transform: scale(1.1) rotate(5deg);
+}
+
+.setup-svg {
+  width: 28px;
+  height: 28px;
+}
+
+.setup-card-body {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.setup-item-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--text-dark);
+  margin: 0;
+  text-align: left;
+}
+
+.setup-specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.spec-tag {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: var(--surface-raised);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+}
+
+/* Responsive Rules for Setup Section */
+@media (max-width: 900px) {
+  .setup-grid {
+    grid-template-columns: 1fr;
+  }
+  .setup-card {
+    grid-column: span 12 !important;
+    min-height: auto;
+  }
+}
+
 /* --- GitHub Contribution Graph Styles --- */
 .github-section {
   width: 100%;
@@ -3124,6 +3275,7 @@
 .about-section,
 .works-section,
 .skills-section,
+.setup-section,
 .github-section,
 .contact-section,
 .footer-section {
@@ -3144,6 +3296,7 @@
 .about-header,
 .works-section-title,
 .skills-left,
+.setup-container,
 .github-container,
 .contact-container,
 .footer-container {
@@ -3162,6 +3315,7 @@
   .about-section,
   .works-section,
   .skills-section,
+  .setup-section,
   .github-section,
   .contact-section,
   .footer-section {
