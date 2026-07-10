@@ -1926,11 +1926,43 @@
 /* Responsive Rules for Setup Section */
 @media (max-width: 900px) {
   .setup-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
   }
   .setup-card {
-    grid-column: span 12 !important;
-    min-height: auto;
+    grid-column: span 1 !important;
+    min-height: 125px !important;
+    padding: 16px !important;
+    border-radius: 20px !important;
+  }
+  /* Monitor and IEMs span 2 columns on mobile/tablet */
+  .setup-card.card-monitor,
+  .setup-card.card-iem-1,
+  .setup-card.card-iem-2 {
+    grid-column: span 2 !important;
+  }
+  .setup-card.card-iem-1,
+  .setup-card.card-iem-2 {
+    min-height: 100px !important;
+  }
+  .setup-card-body {
+    margin-top: 14px !important;
+    gap: 8px !important;
+  }
+  .setup-item-title {
+    font-size: 14px !important;
+  }
+  .setup-svg {
+    width: 20px !important;
+    height: 20px !important;
+  }
+  .setup-specs {
+    gap: 6px !important;
+  }
+  .spec-tag {
+    font-size: 10px !important;
+    padding: 3px 8px !important;
+    border-radius: 6px !important;
   }
 }
 

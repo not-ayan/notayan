@@ -920,7 +920,7 @@ function App() {
                       <h3 className="setup-item-title">Aula F75</h3>
                       <div className="setup-specs">
                         <span className="spec-tag">75% Form Factor</span>
-                        <span className="spec-tag">Mechanical Switches</span>
+                        <span className="spec-tag">THOCC</span>
                         <span className="spec-tag">Gasket Mounted</span>
                       </div>
                     </div>
@@ -940,8 +940,8 @@ function App() {
                     <div className="setup-card-body">
                       <h3 className="setup-item-title">Motorola Pad 60 Neo 5G</h3>
                       <div className="setup-specs">
-                        <span className="spec-tag">5G Connectivity</span>
-                        <span className="spec-tag">Media & Sketching</span>
+                        <span className="spec-tag">COC!!!!</span>
+                        <span className="spec-tag">Media & Notes</span>
                       </div>
                     </div>
                   </div>
@@ -961,7 +961,7 @@ function App() {
                       <h3 className="setup-item-title">Motorola G54 5G</h3>
                       <div className="setup-specs">
                         <span className="spec-tag">Primary Driver</span>
-                        <span className="spec-tag">Stock Android UI</span>
+                        <span className="spec-tag">AxionAosp ftw</span>
                       </div>
                     </div>
                   </div>
