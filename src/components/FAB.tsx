@@ -85,7 +85,7 @@ export function FAB({
           </div>
 
           <div className="fab-menu-header">
-            <span className="menu-header-logo">av</span>
+            <img src="/logo.svg" alt="Logo" className="menu-header-logo" style={{ objectFit: 'contain', padding: '1px' }} />
             <span className="menu-header-title">ayan biswas.</span>
           </div>
 
