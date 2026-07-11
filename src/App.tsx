@@ -735,7 +735,7 @@ function App() {
                   <div className="project-tech-section">
                     <p className="tech-title">Made with:</p>
                     <div className="tech-icons-row">
-                      {project.tech.map((techKey) => (
+                      {project.tech.map((techKey: string) => (
                         <div className="tech-icon-wrapper" key={techKey} title={techKey}>
                           <img 
                             src={getTechIconUrl(techKey)} 
