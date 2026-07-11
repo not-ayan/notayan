@@ -218,10 +218,38 @@ function InlineSVG({ url, className }: { url: string; className?: string }) {
   );
 }
 
-export function ProjectsPage() {
+interface ProjectsPageProps {
+  initialScrollTarget?: string;
+  clearScrollTarget?: () => void;
+}
+
+export function ProjectsPage({ initialScrollTarget, clearScrollTarget }: ProjectsPageProps) {
   const [manifest, setManifest] = useState<Manifest>(LOCAL_DEFAULT_MANIFEST);
   const [filter, setFilter] = useState<string>('All');
   const [expandedPhoto, setExpandedPhoto] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialScrollTarget) {
+      const scroll = () => {
+        const el = document.getElementById(initialScrollTarget);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          if (clearScrollTarget) {
+            clearScrollTarget();
+          }
+          return true;
+        }
+        return false;
+      };
+
+      if (!scroll()) {
+        const timer = setTimeout(() => {
+          scroll();
+        }, 100);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [initialScrollTarget, manifest, clearScrollTarget]);
 
   useEffect(() => {
     fetch('/manifest.json')
@@ -298,7 +326,7 @@ export function ProjectsPage() {
         {/* Projects Grid */}
         <div className="projects-list-grid">
           {filteredProjects.map((project) => (
-            <div key={project.id} className="project-detail-card" style={{ overflow: 'hidden' }}>
+            <div key={project.id} id={project.id} className={`project-detail-card ${initialScrollTarget === project.id ? 'highlight-pulse' : ''}`} style={{ overflow: 'hidden' }}>
               {/* Project main preview banner */}
               {project.photos && project.photos.length > 0 && (
                 <div 

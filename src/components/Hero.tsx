@@ -47,7 +47,7 @@ export function Hero({ showContent }: HeroProps) {
 
         <div className="hero-social-row">
           <a
-            href="https://github.com"
+            href="https://github.com/not-ayan"
             target="_blank"
             rel="noopener noreferrer"
             className="hero-social-button"
@@ -56,7 +56,7 @@ export function Hero({ showContent }: HeroProps) {
             <img src="/github.svg" alt="GitHub" />
           </a>
           <a
-            href="https://x.com"
+            href="https://x.com/notayan69"
             target="_blank"
             rel="noopener noreferrer"
             className="hero-social-button"
@@ -65,13 +65,22 @@ export function Hero({ showContent }: HeroProps) {
             <img src="/twitter.svg" alt="Twitter" />
           </a>
           <a
-            href="https://instagram.com"
+            href="https://www.instagram.com/notayan_99"
             target="_blank"
             rel="noopener noreferrer"
             className="hero-social-button"
             aria-label="Instagram"
           >
             <img src="/instagram.png" alt="Instagram" />
+          </a>
+          <a
+            href="https://t.me/not_ayan99"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-social-button"
+            aria-label="Telegram"
+          >
+            <img src="/telegram.svg" alt="Telegram" />
           </a>
         </div>
       </div>

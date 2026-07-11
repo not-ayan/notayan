@@ -1234,6 +1234,10 @@ picture {
   min-height: 440px;
 }
 
+.project-preview-panel:hover .project-preview-image {
+  transform: scale(1.03);
+}
+
 .mockup-stack {
   position: relative;
   width: 100%;
@@ -3754,6 +3758,25 @@ picture {
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 24px;
   width: 100%;
+}
+
+@keyframes projectPulse {
+  0% {
+    box-shadow: 0 0 0 0px var(--accent-soft);
+    border-color: var(--border-color);
+  }
+  50% {
+    box-shadow: 0 0 0 8px var(--accent-soft);
+    border-color: var(--accent);
+  }
+  100% {
+    box-shadow: 0 0 0 0px var(--accent-soft);
+    border-color: var(--border-color);
+  }
+}
+
+.highlight-pulse {
+  animation: projectPulse 2.5s cubic-bezier(0.25, 1, 0.5, 1) 1;
 }
 
 .project-detail-card {

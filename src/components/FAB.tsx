@@ -167,6 +167,8 @@ export function FAB({
             <span className="footer-divider">•</span>
             <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="footer-social-link">Instagram</a>
             <span className="footer-divider">•</span>
+            <a href="https://t.me/not_ayan99" target="_blank" rel="noopener noreferrer" className="footer-social-link">Telegram</a>
+            <span className="footer-divider">•</span>
             <a href="mailto:ayan98542@gmail.com" className="footer-social-link">Email</a>
           </div>
         </div>

@@ -22,15 +22,56 @@ const WORDS = [
   'Hallo'        // German
 ]
 
-const PROJECTS = [
+const LOCAL_DEFAULT_PROJECTS = [
   {
-    id: 1,
+    id: 'wallwidgy',
     title: 'Wallwidgy',
-    logo: 'w',
-    description: 'A wallpaper site made to feel premium while providing a curated collection of high quality wallpapers',
-    tech: ['react', 'js', 'tailwind'],
+    category: 'Web App',
+    description: 'A wallpaper site made to feel premium while providing a curated collection of high quality wallpapers. Features dynamic filtering and custom palettes.',
+    tech: ['React', 'JavaScript', 'Tailwind CSS', 'Framer Motion'],
+    visitUrl: 'https://wallwidgy.app',
+    githubUrl: 'https://github.com/not-ayan/wallwidgy',
+    status: 'Active',
+    photos: ['/projects/wallwidgy/wallwidgy.png']
+  },
+  {
+    id: 'axion-os',
+    title: 'Axion OS',
+    category: 'System',
+    description: 'A custom Android Open Source Project operating system focused on performance, battery life, and clean UI configurations. Rebuilt kernel optimizations.',
+    tech: ['Android', 'C++', 'Java', 'Linux'],
     visitUrl: 'https://github.com',
     githubUrl: 'https://github.com',
+    status: 'Maintained',
+    photos: ['/projects/axion-os/hero.jpg']
+  },
+  {
+    id: 'design-hub',
+    title: 'Design Hub',
+    category: 'Design Platform',
+    description: 'A platform connecting web designers and developers to share mockups, feedback, and assets in a collaborative blueprint workspace.',
+    tech: ['Figma', 'React', 'CSS3', 'Node.js'],
+    visitUrl: 'https://github.com',
+    githubUrl: 'https://github.com',
+    status: 'Completed',
+    photos: ['/projects/design-hub/gradient.png']
+  },
+  {
+    id: 'realm-ui',
+    title: 'Realm UI',
+    category: 'Library',
+    description: 'A premium component library featuring dark mode, glassmorphism UI blocks, and highly fluid micro-animations for developer efficiency.',
+    tech: ['Next.js', 'Jotai', 'Tailwind CSS', 'Radix UI'],
+    visitUrl: 'https://github.com',
+    githubUrl: 'https://github.com',
+    status: 'Active',
+    photos: ['/projects/realm-ui/architecture.png']
+  }
+]
+
+const DEFAULT_MOCKUPS: Record<string, { logo: string; mockups: any }> = {
+  'wallwidgy': {
+    logo: 'w',
     mockups: {
       back: {
         title: 'Explore Categories',
@@ -54,14 +95,8 @@ const PROJECTS = [
       }
     }
   },
-  {
-    id: 2,
-    title: 'Axion OS',
+  'axion-os': {
     logo: 'a',
-    description: 'A custom Android Open Source Project operating system focused on performance, battery life, and clean UI.',
-    tech: ['android', 'cpp', 'java'],
-    visitUrl: 'https://github.com',
-    githubUrl: 'https://github.com',
     mockups: {
       back: {
         title: 'System Settings',
@@ -85,14 +120,8 @@ const PROJECTS = [
       }
     }
   },
-  {
-    id: 3,
-    title: 'Design Hub',
+  'design-hub': {
     logo: 'd',
-    description: 'A platform connecting web designers and developers to share mockups, feedback, and assets.',
-    tech: ['figma', 'react', 'css'],
-    visitUrl: 'https://github.com',
-    githubUrl: 'https://github.com',
     mockups: {
       back: {
         title: 'Community Feed',
@@ -115,8 +144,33 @@ const PROJECTS = [
         ]
       }
     }
+  },
+  'realm-ui': {
+    logo: 'r',
+    mockups: {
+      back: {
+        title: 'Component Docs',
+        items: [
+          { name: 'Buttons', gradient: 'linear-gradient(135deg, #3a1c1c, #6b2d2d)' },
+          { name: 'Cards', gradient: 'linear-gradient(135deg, #1c2a3a, #2d4f6b)' },
+          { name: 'Modals', gradient: 'linear-gradient(135deg, #1c3a27, #2d6b45)' }
+        ]
+      },
+      middle: {
+        gradient: 'linear-gradient(to top, #0f172a, #1e293b)'
+      },
+      front: {
+        title: 'Realm UI',
+        walls: [
+          'linear-gradient(to bottom, #1e293b 0%, #0f172a 100%)',
+          'linear-gradient(120deg, #38bdf8 0%, #0369a1 100%)',
+          'linear-gradient(to top, #ec4899 0%, #be185d 100%)',
+          'linear-gradient(135deg, #818cf8 0%, #4338ca 100%)'
+        ]
+      }
+    }
   }
-]
+}
 
 const LASTFM_API_KEY = import.meta.env.VITE_LASTFM_API_KEY || ''
 const LASTFM_USER = import.meta.env.VITE_LASTFM_USER || ''
@@ -200,70 +254,45 @@ async function getLatestMusicTrack(signal: AbortSignal): Promise<MusicTrack> {
   }
 }
 
-function TechIcon({ type }: { type: string }) {
-  switch (type) {
-    case 'react':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <ellipse cx="50" cy="50" rx="15" ry="40" transform="rotate(0 50 50)" />
-          <ellipse cx="50" cy="50" rx="15" ry="40" transform="rotate(60 50 50)" />
-          <ellipse cx="50" cy="50" rx="15" ry="40" transform="rotate(120 50 50)" />
-          <circle cx="50" cy="50" r="6" fill="currentColor" />
-        </svg>
-      )
-    case 'js':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <rect x="15" y="15" width="70" height="70" rx="10" />
-          <path d="M45 65 c0 5 -4 9 -9 9 c-5 0 -9 -4 -9 -9 M65 45 v20 c0 5 -4 9 -9 9" strokeLinecap="round" />
-        </svg>
-      )
-    case 'tailwind':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <path d="M25 45 C35 30 50 30 60 40 C70 50 80 50 90 40 C80 55 65 55 55 45 C45 35 35 35 25 45 Z" fill="currentColor" />
-          <path d="M10 60 C20 45 35 45 45 55 C55 65 65 65 75 55 C65 70 50 70 40 60 C30 50 20 50 10 60 Z" fill="currentColor" />
-        </svg>
-      )
-    case 'android':
-      return (
-        <svg viewBox="0 0 100 100" fill="currentColor" className="tech-svg">
-          <path d="M50 20 c-12 0 -22 10 -22 22 h44 c0 -12 -10 -22 -22 -22 Z M20 48 h60 v15 c0 6 -5 11 -11 11 h-38 c-6 0 -11 -5 -11 -11 Z M35 12 l-4 6 M65 12 l4 6" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-        </svg>
-      )
-    case 'cpp':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <circle cx="50" cy="50" r="35" />
-          <path d="M45 40 h15 M45 50 h15 M45 60 h15" strokeLinecap="round" />
-        </svg>
-      )
-    case 'java':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <path d="M30 40 c0 15 5 25 20 25 c15 0 20 -10 20 -25 h-40 Z M65 40 c5 0 10 5 10 10 c0 5 -5 10 -10 10 M35 75 c5 -5 20 -5 25 0" strokeLinecap="round" />
-        </svg>
-      )
-    case 'figma':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <circle cx="35" cy="30" r="15" />
-          <circle cx="65" cy="30" r="15" />
-          <circle cx="35" cy="50" r="15" />
-          <circle cx="65" cy="50" r="15" />
-          <path d="M35 70 c0 8 7 15 15 15 c8 0 15 -7 15 -15 V55 H35 v15 Z" />
-        </svg>
-      )
-    case 'css':
-      return (
-        <svg viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="6" className="tech-svg">
-          <rect x="20" y="15" width="60" height="70" rx="5" />
-          <path d="M35 35 h30 M35 50 h25 M35 65 h30" strokeLinecap="round" />
-        </svg>
-      )
-    default:
-      return null
+function getTechIconUrl(tech: string): string {
+  const slug = tech
+    .toLowerCase()
+    .trim()
+    .replace(/\.js$/, 'js')
+    .replace(/\+/g, 'plus')
+    .replace(/#/g, 'sharp')
+    .replace(/\s+/g, '')
+    .replace(/[^a-z0-9]/g, '')
+  
+  const customMapping: Record<string, string> = {
+    'css': 'css3',
+    'css3': 'css3',
+    'html': 'html5',
+    'html5': 'html5',
+    'cpp': 'cplusplus',
+    'cplusplus': 'cplusplus',
+    'c': 'c',
+    'motion': 'framer',
+    'framermotion': 'framer',
+    'framer': 'framer',
+    'designplatform': 'figma',
+    'nextjs': 'nextdotjs',
+    'node': 'nodedotjs',
+    'nodejs': 'nodedotjs',
+    'threejs': 'threedotjs',
+    'vue': 'vuedotjs',
+    'nuxt': 'nuxtdotjs',
+    'tailwind': 'tailwindcss',
+    'tailwindcss': 'tailwindcss',
+    'radix': 'radixui',
+    'radixui': 'radixui',
+    'linux': 'linux',
+    'android': 'android',
+    'java': 'openjdk',
   }
+
+  const finalSlug = customMapping[slug] || slug
+  return `https://cdn.simpleicons.org/${finalSlug}`
 }
 
 function App() {
@@ -284,11 +313,50 @@ function App() {
     }
     return 'home'
   })
+  const [initialScrollTarget, setInitialScrollTarget] = useState<string | undefined>(undefined)
+  const [manifestProjects, setManifestProjects] = useState<any[]>(LOCAL_DEFAULT_PROJECTS)
+
+  useEffect(() => {
+    fetch('/manifest.json')
+      .then((res) => {
+        if (!res.ok) throw new Error('Manifest not found')
+        return res.json()
+      })
+      .then((data) => {
+        if (data.projects && data.projects.length > 0) {
+          setManifestProjects(data.projects)
+        }
+      })
+      .catch((err) => {
+        console.warn('Could not fetch manifest.json, using local fallback:', err)
+      })
+  }, [])
+
+  const displayProjects = manifestProjects.map((p) => {
+    const config = DEFAULT_MOCKUPS[p.id] || {
+      logo: p.title.charAt(0).toLowerCase(),
+      mockups: {
+        back: { title: 'Details', items: [] },
+        middle: { gradient: 'linear-gradient(135deg, #1e293b, #0f172a)' },
+        front: { title: p.title, walls: [] }
+      }
+    }
+    return {
+      ...p,
+      logo: config.logo,
+      mockups: config.mockups
+    }
+  })
 
   const handlePageChange = (page: 'home' | 'about' | 'projects' | 'blogs') => {
     setCurrentPage(page)
     window.location.hash = page === 'home' ? '' : page
     window.scrollTo({ top: 0, behavior: 'instant' as any })
+  }
+
+  const handleViewProjectDetails = (targetId: string) => {
+    setInitialScrollTarget(targetId)
+    handlePageChange('projects')
   }
 
   useEffect(() => {
@@ -367,14 +435,14 @@ function App() {
   }, [])
 
   const handleNext = () => {
-    setActiveProjectIndex((prev) => (prev + 1) % PROJECTS.length)
+    setActiveProjectIndex((prev) => (prev + 1) % displayProjects.length)
   }
 
   const handlePrev = () => {
-    setActiveProjectIndex((prev) => (prev - 1 + PROJECTS.length) % PROJECTS.length)
+    setActiveProjectIndex((prev) => (prev - 1 + displayProjects.length) % displayProjects.length)
   }
 
-  const project = PROJECTS[activeProjectIndex]
+  const project = displayProjects[activeProjectIndex] || displayProjects[0] || LOCAL_DEFAULT_PROJECTS[0]
 
   // Cycle through the greeting words
   useEffect(() => {
@@ -653,13 +721,13 @@ function App() {
                 <div className="project-info-panel">
                   <div className="project-top-row">
                     <span className="project-index">
-                      {String(activeProjectIndex + 1).padStart(2, '0')} of {String(PROJECTS.length).padStart(2, '0')}
+                      {String(activeProjectIndex + 1).padStart(2, '0')} of {String(displayProjects.length).padStart(2, '0')}
                     </span>
                   </div>
 
                   <div className="project-title-row">
-                    <h3 className="project-name">{project.title}</h3>
-                    <span className="project-logo-badge">{project.logo}</span>
+                    <h3 className="project-name" onClick={() => handleViewProjectDetails(project.id)} style={{ cursor: 'pointer' }}>{project.title}</h3>
+                    <span className="project-logo-badge" onClick={() => handleViewProjectDetails(project.id)} style={{ cursor: 'pointer' }}>{project.logo}</span>
                   </div>
 
                   <p className="project-desc">{project.description}</p>
@@ -669,7 +737,12 @@ function App() {
                     <div className="tech-icons-row">
                       {project.tech.map((techKey) => (
                         <div className="tech-icon-wrapper" key={techKey} title={techKey}>
-                          <TechIcon type={techKey} />
+                          <img 
+                            src={getTechIconUrl(techKey)} 
+                            alt={techKey} 
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                            style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                          />
                         </div>
                       ))}
                     </div>
@@ -696,58 +769,33 @@ function App() {
                   </div>
                 </div>
 
-                {/* Right Panel: Interactive 3D Stack Mockup */}
-                <div className="project-preview-panel">
-                  <div className="mockup-stack">
-                    {/* Back Card */}
-                    <div className="mockup-card card-back">
-                      <div className="mockup-header-bar">
-                        <span className="mockup-dot"></span>
-                        <span className="mockup-dot"></span>
-                        <span className="mockup-dot"></span>
-                      </div>
-                      <div className="mockup-body">
-                        <h6 className="mockup-card-title">{project.mockups.back.title}</h6>
-                        <div className="mockup-categories">
-                          {project.mockups.back.items.map((item, idx) => (
-                            <div className="category-item" key={idx}>
-                              <span className="cat-gradient" style={{ background: item.gradient }}></span>
-                              <span className="cat-name">{item.name}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Middle Card */}
-                    <div className="mockup-card card-middle">
-                      <div className="mockup-header-bar">
-                        <span className="mockup-dot"></span>
-                        <span className="mockup-dot"></span>
-                        <span className="mockup-dot"></span>
-                      </div>
-                      <div className="mockup-body mockup-body-full" style={{ background: project.mockups.middle.gradient }}>
-                        <div className="mockup-abstract-design"></div>
-                      </div>
-                    </div>
-
-                    {/* Front Card */}
-                    <div className="mockup-card card-front">
-                      <div className="mockup-header-bar">
-                        <span className="mockup-dot"></span>
-                        <span className="mockup-dot"></span>
-                        <span className="mockup-dot"></span>
-                      </div>
-                      <div className="mockup-body">
-                        <h6 className="mockup-logo-text">{project.mockups.front.title}</h6>
-                        <div className="mockup-wallpapers-grid">
-                          {project.mockups.front.walls.map((wallBg, idx) => (
-                            <div className="mockup-wall-thumb" key={idx} style={{ background: wallBg }}></div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                {/* Right Panel: Project Preview Image */}
+                <div className="project-preview-panel" onClick={() => handleViewProjectDetails(project.id)} style={{ cursor: 'pointer' }}>
+                  {project.photos && project.photos[0] ? (
+                    <img 
+                      src={project.photos[0]} 
+                      alt={`${project.title} Preview`} 
+                      className="project-preview-image"
+                      style={{ 
+                        maxWidth: '100%', 
+                        maxHeight: '100%', 
+                        objectFit: 'contain',
+                        borderRadius: '6px',
+                        transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
+                        boxShadow: '0 8px 30px rgba(8, 6, 13, 0.08)'
+                      }} 
+                    />
+                  ) : (
+                    <div 
+                      className="project-preview-fallback" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        background: project.mockups?.middle?.gradient || 'var(--preview-bg)',
+                        borderRadius: '6px' 
+                      }} 
+                    />
+                  )}
                 </div>
               </div>
 
@@ -762,10 +810,10 @@ function App() {
                   </p>
                 </div>
                 <div className="design-redirect-actions">
-                  <a href="/photography" className="design-redirect-btn btn-photography">
+                  <a href="#projects" onClick={(e) => { e.preventDefault(); handleViewProjectDetails('photography'); }} className="design-redirect-btn btn-photography">
                     Photography <span className="arrow">↗</span>
                   </a>
-                  <a href="/design" className="design-redirect-btn btn-design">
+                  <a href="#projects" onClick={(e) => { e.preventDefault(); handleViewProjectDetails('graphic-design'); }} className="design-redirect-btn btn-design">
                     Graphic Design <span className="arrow">↗</span>
                   </a>
                 </div>
@@ -1271,6 +1319,10 @@ function App() {
                         <span className="social-name">GitHub</span>
                         <span className="social-arrow">↗</span>
                       </a>
+                      <a href="https://t.me/not_ayan99" target="_blank" rel="noopener noreferrer" className="social-grid-item">
+                        <span className="social-name">Telegram</span>
+                        <span className="social-arrow">↗</span>
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -1280,7 +1332,7 @@ function App() {
         )}
 
         {currentPage === 'about' && <AboutPage username={LASTFM_USER} apiKey={LASTFM_API_KEY} />}
-        {currentPage === 'projects' && <ProjectsPage />}
+        {currentPage === 'projects' && <ProjectsPage initialScrollTarget={initialScrollTarget} clearScrollTarget={() => setInitialScrollTarget(undefined)} />}
         {currentPage === 'blogs' && <BlogsPage />}
 
         {/* Blueprint Layout Footer Section */}
@@ -1336,8 +1388,8 @@ function App() {
       </div> {/* Close page-wrapper */}
 
       {/* Floating Action Button Quick Navigation */}
-      <FAB currentPage={currentPage} onPageChange={handlePageChange} />
-      <CustomCursor />
+      {!loading && <FAB currentPage={currentPage} onPageChange={handlePageChange} />}
+      {!loading && <CustomCursor />}
     </ReactLenis>
   )
 }
