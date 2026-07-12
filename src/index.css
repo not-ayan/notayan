@@ -21,6 +21,7 @@
   --surface-raised: rgba(255, 255, 255, 0.34);
   --surface-raised-hover: rgba(255, 255, 255, 0.52);
   --card-bg: rgba(255, 255, 255, 0.45);
+  --card-bg-opaque: rgba(255, 255, 255, 0.92);
   --container-bg: rgba(255, 255, 255, 0.25);
   --preview-bg: rgba(8, 6, 13, 0.04);
   --avatar-shadow: 0 10px 30px rgba(8, 6, 13, 0.08);
@@ -52,6 +53,7 @@
   --surface-raised: #111111;
   --surface-raised-hover: #1a1a1a;
   --card-bg: #0c0c0c;
+  --card-bg-opaque: #0c0c0c;
   --container-bg: #090909;
   --preview-bg: #070707;
   --avatar-shadow: 0 0 0 1px rgba(241, 165, 160, 0.16), 0 14px 38px rgba(241, 165, 160, 0.18);
