@@ -7,7 +7,9 @@
     "dev": "node generate-manifest.js && vite",
     "build": "node generate-manifest.js && tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "preview:cf": "wrangler pages dev dist",
+    "deploy:cf": "npm run build && wrangler pages deploy dist"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.77",
@@ -30,6 +32,7 @@
     "globals": "^17.6.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
-    "vite": "^8.0.12"
+    "vite": "^8.0.12",
+    "wrangler": "^4.110.0"
   }
 }
