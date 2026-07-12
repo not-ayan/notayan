@@ -1,41 +1,7 @@
 {
   "projects": [
     {
-      "id": "Aleem.studio",
-      "title": "Aleem.studio",
-      "category": "Web App",
-      "description": "A portfolio for a interior designer feauturing a minimal yet modern layout",
-      "tech": [
-        "Next.js",
-        "TypeScript",
-        "Tailwind CSS"
-      ],
-      "visitUrl": "https://aleemstudio.netlify.app/",
-      "githubUrl": "",
-      "status": "Active",
-      "photos": [
-        "/projects/Aleem.studio/main.png"
-      ]
-    },
-    {
-      "id": "Atlas",
-      "title": "Atlas",
-      "category": "Web App",
-      "description": "A all in one research agent built to help you write your research papers easily. A work in progress as of now",
-      "tech": [
-        "React",
-        "JavaScript",
-        "Tailwind CSS"
-      ],
-      "visitUrl": "",
-      "githubUrl": "",
-      "status": "Wip",
-      "photos": [
-        "/projects/Atlas/Atlas.png"
-      ]
-    },
-    {
-      "id": "wallwidgy",
+      "id": "01-wallwidgy",
       "title": "Wallwidgy",
       "category": "Web App",
       "description": "A wallpaper site made to feel premium while providing a curated collection of high quality wallpapers. Features dynamic filtering and custom palettes.",
@@ -48,11 +14,28 @@
       "githubUrl": "https://github.com/not-ayan/wallwidgy",
       "status": "Active",
       "photos": [
-        "/projects/wallwidgy/wallwidgy.png"
+        "/projects/01-wallwidgy/wallwidgy.png"
       ]
     },
     {
-      "id": "Wallwidgy android",
+      "id": "02-Atlas",
+      "title": "Atlas",
+      "category": "Web App",
+      "description": "A all in one research agent built to help you write your research papers easily. A work in progress as of now",
+      "tech": [
+        "React",
+        "JavaScript",
+        "Tailwind CSS"
+      ],
+      "visitUrl": "",
+      "githubUrl": "",
+      "status": "Wip",
+      "photos": [
+        "/projects/02-Atlas/Atlas.png"
+      ]
+    },
+    {
+      "id": "03-Wallwidgy android",
       "title": "Wallwidgy Android",
       "category": "Android App",
       "description": "A beautiful Android wallpaper app built with Jetpack Compose featuring dynamic Material You styling,Curated wallpapers , favorites management, and customizable user index sources.",
@@ -65,7 +48,24 @@
       "githubUrl": "https://github.com/not-ayan/wallwidgy_android",
       "status": "Active",
       "photos": [
-        "/projects/Wallwidgy android/main.png"
+        "/projects/03-Wallwidgy android/main.png"
+      ]
+    },
+    {
+      "id": "04-Aleem.studio",
+      "title": "Aleem.studio",
+      "category": "Web App",
+      "description": "A portfolio for a interior designer feauturing a minimal yet modern layout",
+      "tech": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "visitUrl": "https://aleemstudio.netlify.app/",
+      "githubUrl": "",
+      "status": "Active",
+      "photos": [
+        "/projects/04-Aleem.studio/main.png"
       ]
     }
   ],
