@@ -3840,6 +3840,75 @@ picture {
   background-color: #9b51e0;
 }
 
+.project-status-dot.wip::before {
+  background-color: #38bdf8;
+}
+
+/* Premium Project Status Tag/Badge */
+.project-status-tag {
+  font-family: var(--mono), monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  padding: 6px 12px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-hover, rgba(0, 0, 0, 0.03));
+  border: 1px solid var(--border-color, rgba(0, 0, 0, 0.08));
+  color: var(--text-dark);
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.project-status-tag::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  box-shadow: 0 0 8px currentColor;
+}
+
+/* Colors based on status */
+.project-status-tag.active {
+  color: #27c93f;
+  background: rgba(39, 201, 63, 0.06);
+  border-color: rgba(39, 201, 63, 0.15);
+}
+.project-status-tag.active::before {
+  background-color: #27c93f;
+}
+
+.project-status-tag.wip {
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.06);
+  border-color: rgba(56, 189, 248, 0.15);
+}
+.project-status-tag.wip::before {
+  background-color: #38bdf8;
+}
+
+.project-status-tag.maintained {
+  color: #ffbd2e;
+  background: rgba(255, 189, 46, 0.06);
+  border-color: rgba(255, 189, 46, 0.15);
+}
+.project-status-tag.maintained::before {
+  background-color: #ffbd2e;
+}
+
+.project-status-tag.completed {
+  color: #9b51e0;
+  background: rgba(155, 81, 224, 0.06);
+  border-color: rgba(155, 81, 224, 0.15);
+}
+.project-status-tag.completed::before {
+  background-color: #9b51e0;
+}
+
 .project-card-title {
   font-size: 20px;
   font-weight: 500;

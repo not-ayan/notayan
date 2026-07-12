@@ -315,6 +315,7 @@ function App() {
   })
   const [initialScrollTarget, setInitialScrollTarget] = useState<string | undefined>(undefined)
   const [manifestProjects, setManifestProjects] = useState<any[]>(LOCAL_DEFAULT_PROJECTS)
+  const [failedIcons, setFailedIcons] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     fetch('/manifest.json')
@@ -735,27 +736,41 @@ function App() {
                   <div className="project-tech-section">
                     <p className="tech-title">Made with:</p>
                     <div className="tech-icons-row">
-                      {project.tech.map((techKey: string) => (
-                        <div className="tech-icon-wrapper" key={techKey} title={techKey}>
-                          <img 
-                            src={getTechIconUrl(techKey)} 
-                            alt={techKey} 
-                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                            style={{ width: '20px', height: '20px', objectFit: 'contain' }}
-                          />
-                        </div>
-                      ))}
+                      {project.tech
+                        .filter((techKey: string) => !failedIcons[techKey])
+                        .map((techKey: string) => (
+                          <div className="tech-icon-wrapper" key={techKey} title={techKey}>
+                            <img 
+                              src={getTechIconUrl(techKey)} 
+                              alt={techKey} 
+                              onError={() => setFailedIcons(prev => ({ ...prev, [techKey]: true }))}
+                              style={{ width: '20px', height: '20px', objectFit: 'contain' }}
+                            />
+                          </div>
+                        ))}
                     </div>
                   </div>
 
                   <div className="project-actions-row">
                     <div className="action-buttons">
-                      <a href={project.visitUrl} target="_blank" rel="noopener noreferrer" className="btn-visit">
-                        VISIT SITE <span className="arrow">↗</span>
-                      </a>
-                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-github">
-                        GITHUB REPO <span className="arrow">↗</span>
-                      </a>
+                      {project.visitUrl || project.githubUrl ? (
+                        <>
+                          {project.visitUrl && (
+                            <a href={project.visitUrl} target="_blank" rel="noopener noreferrer" className="btn-visit">
+                              VISIT SITE <span className="arrow">↗</span>
+                            </a>
+                          )}
+                          {project.githubUrl && (
+                            <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="btn-github">
+                              GITHUB REPO <span className="arrow">↗</span>
+                            </a>
+                          )}
+                        </>
+                      ) : (
+                        <span className={`project-status-tag ${project.status ? project.status.toLowerCase() : ''}`}>
+                          {project.status}
+                        </span>
+                      )}
                     </div>
 
                     <div className="pagination-buttons">
