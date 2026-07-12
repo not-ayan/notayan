@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "preview:cf": "wrangler pages dev dist",
-    "deploy:cf": "npm run build && wrangler pages deploy dist"
+    "deploy:cf": "npm run build && wrangler pages deploy dist --branch main"
   },
   "dependencies": {
     "@paper-design/shaders-react": "^0.0.77",
