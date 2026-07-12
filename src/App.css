@@ -3422,7 +3422,7 @@ picture {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 120px 24px 80px;
+  padding: 80px 24px 80px;
   box-sizing: border-box;
   min-height: 85vh;
 }
@@ -3651,9 +3651,7 @@ picture {
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  margin-top: 24px;
-  border-top: 1px dashed var(--border-color);
-  padding-top: 24px;
+  margin-top: 16px;
   width: 100%;
 }
 
@@ -3661,21 +3659,20 @@ picture {
   font-family: var(--mono), monospace;
   font-size: 11px;
   color: var(--text-muted);
-  background: none;
-  border: none;
+  background-color: var(--button-bg);
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 8px;
   padding: 6px 12px;
   border-radius: 6px;
-  border: 1px solid transparent;
+  border: 1px solid var(--button-border);
   transition: all 0.2s ease;
 }
 
 .nav-anchor-btn:hover {
   color: var(--text-dark);
-  border-color: var(--border-color);
+  border-color: var(--text-dark);
   background-color: var(--surface-raised);
 }
 
@@ -3694,6 +3691,17 @@ picture {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+.projects-sub-section:first-of-type {
+  margin-top: 0;
+  border-top: none;
+  padding-top: 16px;
+}
+
+.page-view-container .page-header {
+  margin-bottom: 24px;
+  padding-bottom: 16px;
 }
 
 .section-meta-header {
