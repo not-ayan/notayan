@@ -263,7 +263,7 @@ function getTechIconUrl(tech: string): string {
     .replace(/#/g, 'sharp')
     .replace(/\s+/g, '')
     .replace(/[^a-z0-9]/g, '')
-  
+
   const customMapping: Record<string, string> = {
     'css': 'css3',
     'css3': 'css3',
@@ -649,38 +649,38 @@ function App() {
                 <div className="grid-box box-4 reveal-on-scroll delay-2">
                   <h4 className="box-title">I automate stuff and maintain Axion AOSP</h4>
                   <p className="box-subtitle-project">
-                    i also maintain <a href="https://github.com" target="_blank" rel="noopener noreferrer" className="highlight-link">wallwidgy</a> and a lot of other stuff
+                    i also maintain <a href="Wallwidgy.app" target="_blank" rel="noopener noreferrer" className="highlight-link">wallwidgy</a> and a lot of other stuff
                   </p>
 
                   <div className="project-cards-row">
                     <div className="project-card">
                       <h6>Design community</h6>
                       <div className="project-links">
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
+                        <a href="https://t.me/designverse_zero" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                        <a href="https://t.me/designverse_chat" target="_blank" rel="noopener noreferrer">Chat ↗</a>
                       </div>
                     </div>
 
                     <div className="project-card">
                       <h6>Tech and stuff</h6>
                       <div className="project-links">
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
+                        <a href="https://t.me/ayan_rants" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                        <a href="https://t.me/stoopid_ayan" target="_blank" rel="noopener noreferrer">Chat ↗</a>
                       </div>
                     </div>
 
                     <div className="project-card">
                       <h6>Wallpapers</h6>
                       <div className="project-links">
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Chat ↗</a>
+                        <a href="https://t.me/wallwidgy" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                        <a href="https://t.me/+z-9ISn9K-FQ2MzZl" target="_blank" rel="noopener noreferrer">Chat ↗</a>
                       </div>
                     </div>
 
                     <div className="project-card">
                       <h6>Music Dump</h6>
                       <div className="project-links">
-                        <a href="https://github.com" target="_blank" rel="noopener noreferrer">Channel ↗</a>
+                        <a href="https://t.me/ayandumps_music" target="_blank" rel="noopener noreferrer">Channel ↗</a>
                       </div>
                     </div>
                   </div>
@@ -740,9 +740,9 @@ function App() {
                         .filter((techKey: string) => !failedIcons[techKey])
                         .map((techKey: string) => (
                           <div className="tech-icon-wrapper" key={techKey} title={techKey}>
-                            <img 
-                              src={getTechIconUrl(techKey)} 
-                              alt={techKey} 
+                            <img
+                              src={getTechIconUrl(techKey)}
+                              alt={techKey}
                               onError={() => setFailedIcons(prev => ({ ...prev, [techKey]: true }))}
                               style={{ width: '20px', height: '20px', objectFit: 'contain' }}
                             />
@@ -787,28 +787,28 @@ function App() {
                 {/* Right Panel: Project Preview Image */}
                 <div className="project-preview-panel" onClick={() => handleViewProjectDetails(project.id)} style={{ cursor: 'pointer' }}>
                   {project.photos && project.photos[0] ? (
-                    <img 
-                      src={project.photos[0]} 
-                      alt={`${project.title} Preview`} 
+                    <img
+                      src={project.photos[0]}
+                      alt={`${project.title} Preview`}
                       className="project-preview-image"
-                      style={{ 
-                        maxWidth: '100%', 
-                        maxHeight: '100%', 
+                      style={{
+                        maxWidth: '100%',
+                        maxHeight: '100%',
                         objectFit: 'contain',
                         borderRadius: '6px',
                         transition: 'transform 0.4s cubic-bezier(0.25, 1, 0.5, 1)',
                         boxShadow: '0 8px 30px rgba(8, 6, 13, 0.08)'
-                      }} 
+                      }}
                     />
                   ) : (
-                    <div 
-                      className="project-preview-fallback" 
-                      style={{ 
-                        width: '100%', 
-                        height: '100%', 
+                    <div
+                      className="project-preview-fallback"
+                      style={{
+                        width: '100%',
+                        height: '100%',
                         background: project.mockups?.middle?.gradient || 'var(--preview-bg)',
-                        borderRadius: '6px' 
-                      }} 
+                        borderRadius: '6px'
+                      }}
                     />
                   )}
                 </div>
