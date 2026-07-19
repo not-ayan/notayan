@@ -67,6 +67,23 @@
       "photos": [
         "/projects/04-Aleem.studio/main.png"
       ]
+    },
+    {
+      "id": "05-Paradox travels",
+      "title": "Paradox Travels",
+      "category": "Web App",
+      "description": "A modern luxury travel website where refined design meets personalized adventure.",
+      "tech": [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS"
+      ],
+      "visitUrl": "https://paradox-travels.vercel.app",
+      "githubUrl": "",
+      "status": "Active",
+      "photos": [
+        "/projects/05-Paradox travels/main.png"
+      ]
     }
   ],
   "designs": {
