@@ -306,12 +306,22 @@ function App() {
   const [musicError, setMusicError] = useState(false)
   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light')
   const gh = useGitHubData()
-  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects' | 'blogs'>(() => {
-    const hash = window.location.hash.replace('#', '')
-    if (hash === 'about' || hash === 'projects' || hash === 'blogs') {
-      return hash
+  const getPageFromHash = (rawHash: string): 'home' | 'about' | 'projects' | 'blogs' => {
+    const hash = rawHash.replace(/^#\/?/, '').toLowerCase()
+    if (hash === 'blogs' || hash.startsWith('blogs/') || hash.startsWith('blog/')) {
+      return 'blogs'
+    }
+    if (hash === 'projects' || hash.startsWith('projects/')) {
+      return 'projects'
+    }
+    if (hash === 'about') {
+      return 'about'
     }
     return 'home'
+  }
+
+  const [currentPage, setCurrentPage] = useState<'home' | 'about' | 'projects' | 'blogs'>(() => {
+    return getPageFromHash(window.location.hash)
   })
   const [initialScrollTarget, setInitialScrollTarget] = useState<string | undefined>(undefined)
   const [manifestProjects, setManifestProjects] = useState<any[]>(LOCAL_DEFAULT_PROJECTS)
@@ -362,12 +372,7 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      const hash = window.location.hash.replace('#', '')
-      if (hash === 'about' || hash === 'projects' || hash === 'blogs') {
-        setCurrentPage(hash)
-      } else {
-        setCurrentPage('home')
-      }
+      setCurrentPage(getPageFromHash(window.location.hash))
     }
     window.addEventListener('hashchange', handleHashChange)
     return () => window.removeEventListener('hashchange', handleHashChange)
