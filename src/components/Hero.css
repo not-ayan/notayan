@@ -253,7 +253,7 @@
 @media (max-width: 480px) {
   .hero-visual-card {
     height: 180px;
-    border-radius: 28px;
+    border-radius: 35px;
   }
 
   .hero-avatar-wrap {
