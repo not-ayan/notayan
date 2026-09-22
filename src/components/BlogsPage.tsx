@@ -34,6 +34,8 @@ The official driver is a Windows-only Electron/C++ app. It demands administrativ
 
 This is the complete technical story of how we reverse-engineered the AULA F75's proprietary USB protocol from scratch—decompiling the official desktop client, capturing raw USB traffic with Wireshark, decoding the MCU's memory maps and packet structures, fixing deep hardware quirks, and building **OpenAULA Web**, a zero-install WebHID controller that runs entirely inside any modern web browser.
 
+> **Live App**: [openaula.vercel.app](https://openaula.vercel.app) — no install, no driver, open in any Chromium-based browser with your keyboard plugged in.
+
 ---
 
 ## 1. The Target: Hardware & Architecture
