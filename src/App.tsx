@@ -65,7 +65,16 @@ const LOCAL_DEFAULT_PROJECTS = [
     visitUrl: 'https://github.com',
     githubUrl: 'https://github.com',
     status: 'Active',
-    photos: ['/projects/realm-ui/architecture.png']
+  {
+    id: '06-openaula',
+    title: 'OpenAULA',
+    category: 'WebHID App',
+    description: 'A zero-install, cross-platform WebHID controller for the AULA F75 mechanical keyboard. Reverse-engineered proprietary USB HID protocols to control 15 hardware lighting animations, per-key RGB painting, and device parameters directly in the browser.',
+    tech: ['React', 'TypeScript', 'WebHID API', 'Tailwind CSS'],
+    visitUrl: 'https://openaula.vercel.app',
+    githubUrl: 'https://github.com/not-ayan/aula-f75-web',
+    status: 'Active',
+    photos: ['/projects/06-openaula/main.png']
   }
 ]
 
@@ -166,6 +175,31 @@ const DEFAULT_MOCKUPS: Record<string, { logo: string; mockups: any }> = {
           'linear-gradient(120deg, #38bdf8 0%, #0369a1 100%)',
           'linear-gradient(to top, #ec4899 0%, #be185d 100%)',
           'linear-gradient(135deg, #818cf8 0%, #4338ca 100%)'
+        ]
+      }
+    }
+  },
+  '06-openaula': {
+    logo: 'o',
+    mockups: {
+      back: {
+        title: 'Hardware Profiles',
+        items: [
+          { name: 'Wave', gradient: 'linear-gradient(135deg, #00f2fe, #4facfe)' },
+          { name: 'Reactive', gradient: 'linear-gradient(135deg, #f093fb, #f5576c)' },
+          { name: 'Matrix RGB', gradient: 'linear-gradient(135deg, #0575e6, #00f260)' }
+        ]
+      },
+      middle: {
+        gradient: 'linear-gradient(to top, #090a0f, #1b2838)'
+      },
+      front: {
+        title: 'OpenAULA Web',
+        walls: [
+          'linear-gradient(135deg, #00f2fe 0%, #4facfe 100%)',
+          'linear-gradient(135deg, #111827 0%, #1f2937 100%)',
+          'linear-gradient(to top, #10b981 0%, #06b6d4 100%)',
+          'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)'
         ]
       }
     }
