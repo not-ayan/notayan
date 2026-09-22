@@ -65,6 +65,8 @@ const LOCAL_DEFAULT_PROJECTS = [
     visitUrl: 'https://github.com',
     githubUrl: 'https://github.com',
     status: 'Active',
+    photos: ['/projects/realm-ui/architecture.png']
+  },
   {
     id: '06-openaula',
     title: 'OpenAULA',
