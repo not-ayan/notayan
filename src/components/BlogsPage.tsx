@@ -304,7 +304,7 @@ Peripheral hardware should belong to the user who purchased it, not locked behin
         title: 'Upstream Projects',
         links: [
           { label: 'veysiemrah/aula-rgb-controller', href: 'https://github.com/veysiemrah/aula-rgb-controller' },
-          { label: 'rodrigost23/OpenRGB', href: 'https://github.com/rodrigost23/OpenRGB' }
+          { label: 'rodrigost23/OpenRGB', href: 'https://gitlab.com/rodrigost23/OpenRGB' }
         ]
       },
       {
