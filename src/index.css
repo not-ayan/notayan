@@ -74,6 +74,11 @@
   padding: 0;
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 html, body {
   width: 100%;
   max-width: 100%;
@@ -82,6 +87,7 @@ html, body {
   color: var(--text-dark);
   font-family: var(--sans);
   overflow-x: hidden;
+  position: relative;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -93,9 +99,11 @@ body.loading {
 
 #root {
   width: 100%;
+  max-width: 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: clip;
 }
 
 h1, h2, h3, h4, h5, h6 {

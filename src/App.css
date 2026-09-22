@@ -39,6 +39,7 @@ picture {
   left: 0;
   width: 100%;
   height: 100vh;
+  height: 100dvh;
   background-color: var(--bg-tan);
   color: #7b7876;
   display: flex;
@@ -1511,6 +1512,7 @@ picture {
 /* --- Creative Redirect Banner --- */
 .design-redirect-banner {
   width: 100%;
+  max-width: 100%;
   background: var(--card-bg);
   border: 1px solid rgba(8, 6, 13, 0.12);
   border-radius: 12px;
@@ -1525,6 +1527,7 @@ picture {
   box-shadow: 0 8px 32px rgba(8, 6, 13, 0.04);
   transition: border-color 0.3s, box-shadow 0.3s;
   margin-top: 10px;
+  overflow: hidden;
 }
 
 .design-redirect-banner:hover {
@@ -1537,6 +1540,10 @@ picture {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  width: 100%;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .design-redirect-tag {
@@ -1555,6 +1562,8 @@ picture {
   color: var(--text-dark);
   margin: 0 0 8px 0;
   letter-spacing: -0.02em;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .design-redirect-desc {
@@ -1563,12 +1572,15 @@ picture {
   max-width: 540px;
   line-height: 1.45;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .design-redirect-actions {
   display: flex;
   gap: 12px;
   flex-shrink: 0;
+  max-width: 100%;
 }
 
 .design-redirect-btn {
@@ -1585,6 +1597,7 @@ picture {
   text-decoration: none;
   transition: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .btn-photography {
@@ -1628,11 +1641,51 @@ picture {
 
   .design-redirect-actions {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
   }
 
   .design-redirect-btn {
-    flex: 1;
+    flex: 1 1 200px;
     text-align: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .design-redirect-banner {
+    padding: 20px 16px;
+    gap: 16px;
+    border-radius: 12px;
+  }
+
+  .design-redirect-title {
+    font-size: 19px;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+
+  .design-redirect-desc {
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .design-redirect-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .design-redirect-btn {
+    width: 100%;
+    flex: none;
+    height: 44px;
+    padding: 0 16px;
+    font-size: 11px;
+    box-sizing: border-box;
+    white-space: nowrap;
+    text-align: center;
+    justify-content: center;
   }
 }
 
@@ -1972,6 +2025,9 @@ picture {
     min-height: 125px !important;
     padding: 16px !important;
     border-radius: 20px !important;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
   }
   /* Monitor and IEMs span 2 columns on mobile/tablet */
   .setup-card.card-monitor,
@@ -1986,9 +2042,12 @@ picture {
   .setup-card-body {
     margin-top: 14px !important;
     gap: 8px !important;
+    min-width: 0;
+    width: 100%;
   }
   .setup-item-title {
     font-size: 14px !important;
+    word-break: break-word;
   }
   .setup-svg {
     width: 20px !important;
@@ -1996,11 +2055,31 @@ picture {
   }
   .setup-specs {
     gap: 6px !important;
+    max-width: 100%;
   }
   .spec-tag {
     font-size: 10px !important;
     padding: 3px 8px !important;
     border-radius: 6px !important;
+    max-width: 100%;
+    word-break: break-word;
+  }
+}
+
+@media (max-width: 520px) {
+  .setup-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  .setup-card {
+    grid-column: span 1 !important;
+    min-height: auto !important;
+    padding: 18px 16px !important;
+  }
+  .setup-card.card-monitor,
+  .setup-card.card-iem-1,
+  .setup-card.card-iem-2 {
+    grid-column: span 1 !important;
   }
 }
 
@@ -3275,6 +3354,7 @@ picture {
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
+  overflow-x: clip;
 }
 
 /* Technical Header */
@@ -3408,6 +3488,40 @@ picture {
 
   .tech-header-col.col-3 {
     justify-content: flex-end !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-section,
+  .about-section,
+  .works-section,
+  .skills-section,
+  .setup-section,
+  .github-section,
+  .contact-section,
+  .footer-section {
+    padding: 44px 16px !important;
+  }
+
+  .tech-header-col {
+    padding: 10px 14px !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .hero-section,
+  .about-section,
+  .works-section,
+  .skills-section,
+  .setup-section,
+  .github-section,
+  .contact-section,
+  .footer-section {
+    padding: 36px 12px !important;
+  }
+
+  .tech-header-col {
+    padding: 8px 10px !important;
   }
 }
 
@@ -3763,7 +3877,7 @@ picture {
 
 .projects-list-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 24px;
   width: 100%;
 }
@@ -4601,11 +4715,22 @@ picture {
 }
 
 @media (max-width: 600px) {
+  .page-view-container {
+    padding: 40px 16px 60px !important;
+  }
   .projects-section-nav {
     gap: 10px;
   }
   .nav-anchor-btn {
     padding: 4px 8px;
+  }
+  .projects-list-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .project-detail-card {
+    padding: 20px 16px;
+    border-radius: 18px;
   }
   .logo-designs-grid {
     grid-template-columns: 1fr;
