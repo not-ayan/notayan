@@ -13,6 +13,7 @@ interface LensProps {
   isFocusing?: () => void;
   hovering?: boolean;
   setHovering?: (hovering: boolean) => void;
+  borderRadius?: string;
 }
 
 export const Lens: React.FC<LensProps> = ({
@@ -23,6 +24,7 @@ export const Lens: React.FC<LensProps> = ({
   position = { x: 200, y: 150 },
   hovering,
   setHovering,
+  borderRadius = "inherit",
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [localIsHovering, setLocalIsHovering] = useState(false);
@@ -44,7 +46,7 @@ export const Lens: React.FC<LensProps> = ({
       style={{
         position: "relative",
         overflow: "hidden",
-        borderRadius: "28px",
+        borderRadius: borderRadius,
         zIndex: 20,
         width: "100%",
         height: "100%"

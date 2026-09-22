@@ -19,6 +19,9 @@
   overflow: hidden;
   background: var(--bg-tan);
   box-shadow: 0 8px 30px rgba(8, 6, 13, 0.04);
+  isolation: isolate;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
 }
 
 @media (max-width: 767px) {
@@ -36,6 +39,7 @@
   display: block;
   user-select: none;
   pointer-events: none;
+  border-radius: inherit;
 }
 
 @media (max-width: 767px) {
